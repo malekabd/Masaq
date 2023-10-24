@@ -3,12 +3,19 @@ import { app } from "../firebase";
 /* import { useDispatch } from "react-redux";
 import { signInSuccess } from "../redux/user/userSlice"; */
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 export default function OAuth() {
   //const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleGoogleClick = async () => {
     try {
+      dispatch(signInStart());
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
 
@@ -25,11 +32,11 @@ export default function OAuth() {
           avatar: result.user.photoURL,
         }),
       });
-      //const data = await res.json();
-      //dispatch(signInSuccess(data));
+      const data = await res.json();
+      dispatch(signInSuccess(data));
       navigate("/home");
     } catch (error) {
-      console.log("could not sign in with google", error);
+      dispatch(signInFailure(error.message));
     }
   };
   return (

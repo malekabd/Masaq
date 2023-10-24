@@ -1,22 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 export default function Login() {
   const { register, handleSubmit, formState, watch } = useForm(); //first step
   const { errors } = formState;
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
- 
+  const dispatch = useDispatch();
+
   const [email, password] = watch(["email", "password"]);
 
   async function onSubmit() {
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -27,19 +32,16 @@ export default function Login() {
       const data = await res.json(); //this to see it in the console
       //console.log(data);
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(signInSuccess(data));
       navigate("/home");
     } catch (error) {
       toast.error("Wrong Credential!", {
         position: toast.POSITION.TOP_RIGHT,
       });
-      setLoading(false);
-      setError(error.message);
+      dispatch(signInFailure(error.message));
     }
   }
   //third Step
@@ -48,12 +50,12 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300">
+    <div className=" flex flex-col items-center justify-center bg-gray-300">
       <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
         <div className="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">
           Login To Your Account
         </div>
-        <OAuth/>
+        <OAuth />
         <div className="relative mt-10 h-px bg-gray-300">
           <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
             <span className="bg-white px-4 text-xs text-gray-500 uppercase">
