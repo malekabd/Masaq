@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.listen(3000, () => {
   console.log("Server is running on port 3000!");
 });
-app.use("/api/auth", authRouter);
+app.use("/api/user", authRouter);
 
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");

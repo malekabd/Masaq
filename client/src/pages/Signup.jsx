@@ -1,48 +1,60 @@
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import OAuth from "../components/OAuth";
+import React from "react";
+import axios from "axios";
+import UserContext from "./userContext";
+import toast from "react-hot-toast";
 export default function Login() {
+  const userContext = useContext(UserContext);
   const { register, handleSubmit, formState, watch } = useForm(); //first step
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { errors } = formState;
   const navigate = useNavigate();
-  console.log(register().email);
-  const [email, password, passwordConfirm] = watch([
+  const [username, email, password, passwordConfirm] = watch([
+    "username",
     "email",
     "password",
     "passwordConfirm",
   ]);
+  /*   console.log(username);
   console.log(email);
   console.log(password);
   console.log(passwordConfirm);
-
+ */
   async function onSubmit() {
-    alert("data was submitted");
-    console.log(register().email);
+    console.log("data was submitted");
+    //console.log(register().email);
     console.log("done");
 
     try {
       setLoading(true);
-      const res = await fetch("/api/auth/signup", {
+      console.log(password, passwordConfirm);
+      if (password !== passwordConfirm)
+        return toast.error("password is not matched");
+      const res = await fetch("/api/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }), // it's a much secure way
+        body: JSON.stringify({ username, email, password, passwordConfirm }), // it's a much secure way
       });
       const data = await res.json(); //this to see it in the console
-      console.log(data);
+      //console.log(data);
+      if (data.code === "409") toast.error(data.message);
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
         return;
       }
-      setLoading(false);
-      setError(null);
-      navigate("/login");
+      if (data.status === "success") {
+        console.log("hello");
+        setLoading(false);
+        setError(null);
+        navigate("/");
+      }
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -69,6 +81,29 @@ export default function Login() {
         </div>
         <div className="mt-10">
           <form onSubmit={handleSubmit(onSubmit, onError)}>
+            <div className="flex flex-col mb-6">
+              <label
+                htmlFor="username"
+                className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
+              >
+                User Name
+              </label>
+              <div className="relative">
+                <input
+                  //type="email"
+                  name="username"
+                  placeholder="My name is Jeff"
+                  className="text-sm sm:text-base placeholder-gray-500 pl-3 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
+                  {...register("username", {
+                    required: "User Name is required",
+                  })}
+                />
+              </div>
+              {errors?.username && (
+                <span className="text-red-500">{errors.username.message}</span>
+              )}
+            </div>
+
             <div className="flex flex-col mb-6">
               <label
                 htmlFor="email"
@@ -104,7 +139,7 @@ export default function Login() {
                 />
               </div>
               {errors?.email && (
-                <span className="text-danger">{errors.email.message}</span>
+                <span className="text-red-500">{errors.email.message}</span>
               )}
             </div>
             <div className="flex flex-col mb-6">
@@ -152,25 +187,25 @@ export default function Login() {
                 />
               </div>
               {errors?.password && errors.password.type === "length" && (
-                <span className="text-danger">
+                <span className="text-red-500">
                   Please fill at least 10 character{" "}
                 </span>
               )}
               {errors?.password &&
                 errors.password.type === "hasLowerLetter" && (
-                  <span className="text-danger">
+                  <span className="text-red-500">
                     Password must have a lower alphabet{" "}
                   </span>
                 )}
               {errors?.password &&
                 errors.password.type === "hasUpperLetter" && (
-                  <span className="text-danger">
+                  <span className="text-red-500">
                     Password must have an Upper alphabet{" "}
                   </span>
                 )}
               {errors?.password &&
                 errors.password.type === "hasSpecialChar" && (
-                  <span className="text-danger">
+                  <span className="text-red-500">
                     Password must have a SpecialChart{" "}
                   </span>
                 )}
@@ -222,25 +257,25 @@ export default function Login() {
               </div>
               {errors?.passwordConfirm &&
                 errors.passwordConfirm.type === "length" && (
-                  <span className="text-danger">
+                  <span className="text-red-500">
                     Please fill at least 10 character{" "}
                   </span>
                 )}
               {errors?.passwordConfirm &&
                 errors.passwordConfirm.type === "hasLowerLetter" && (
-                  <span className="text-danger">
+                  <span className="text-red-500">
                     Password must have a lower alphabet{" "}
                   </span>
                 )}
               {errors?.passwordConfirm &&
                 errors.passwordConfirm.type === "hasUpperLetter" && (
-                  <span className="text-danger">
+                  <span className="text-red-500">
                     Password must have an Upper alphabet{" "}
                   </span>
                 )}
               {errors?.passwordConfirm &&
                 errors.passwordConfirm.type === "hasSpecialChar" && (
-                  <span className="text-danger">
+                  <span className="text-red-500">
                     Password must have a SpecialChart{" "}
                   </span>
                 )}

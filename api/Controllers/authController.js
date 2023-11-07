@@ -1,19 +1,49 @@
 import User from "../models/userModal.js";
 import bcryptjs from "bcryptjs";
 
-import JsonWebTokenError from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { errorHandler } from "../utils/error.js";
 
 export const signup = async (req, res, next) => {
-  const { email, password } = req.body;
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ email, password: hashedPassword });
+  const { username, email, password, passwordConfirm } = req.body;
+  console.log(req.body);
   try {
+    const validUserName = await User.findOne({ username });
+    if (validUserName)
+      return res.status(409).json({
+        code: "409",
+        status: "Fail",
+        message: "User Name already exist",
+      });
+    const validEmailUser = await User.findOne({ email });
+    if (validEmailUser)
+      return res
+        .status(409)
+        .json({ code: "409", status: "Fail", message: "Email already exist" });
+    if (password != passwordConfirm) {
+      console.log(password, passwordConfirm);
+      return res.status(409).json({
+        code: "409",
+        status: "Fail",
+        message: "Password is not matched",
+      });
+    }
+    const newUser = new User({ username, email, password });
     await newUser.save();
-    res.status(201).json("User created successfully!");
+    const token = jwt.sign(
+      { id: newUser._id.toString() },
+      process.env.JWT_SECRET
+    );
+    const { password: pass, ...rest } = newUser._doc; //this destructering is to sen the uer data without the encrypted password
+    res
+      .cookie(process.env.TOKEN_NAME, token, {
+        //this is the way how to define a session
+        httpOnly: true,
+      })
+      .status(201)
+      .json({ status: "success", token, data: { user: rest } });
   } catch (error) {
-    const message = `Invalid input data. ${errors.join(". ")}`;
-    return errorHandler(message, 400);
+    next(error);
   }
 };
 
@@ -26,12 +56,11 @@ export const login = async (req, res, next) => {
     const validPassword = bcryptjs.compareSync(password, validUser.password);
 
     if (!validPassword) {
-      return next(errorHandler("Invalid credential !", 401));
+      return res
+        .status(404)
+        .json({ code: "404", status: "Fail", message: "UWrong Credentials" });
     }
-    const token = JsonWebTokenError.sign(
-      { id: validUser._id },
-      process.env.JWT_SECRET
-    );
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc; //this destructering is to sen the uer data without the encrypted password
     res
       .cookie("access_token", token, {
@@ -49,10 +78,7 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      const token = JsonWebTokenError.sign(
-        { id: user._id },
-        process.env.JWT_SECRET
-      );
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       res
         .cookie("access_token", token, { httpOnly: true })
@@ -64,17 +90,14 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
-        username:
+        /*  username:
           req.body.name.split(" ").join("").toLowerCase() +
-          Math.random().toString(36).slice(-4),
+          Math.random().toString(36).slice(-4), */
         email: req.body.email,
         password: hashedPassword,
       });
       await newUser.save();
-      const token = JsonWebTokenError.sign(
-        { id: newUser._id },
-        process.env.JWT_SECRET
-      );
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
       res
         .cookie("access_token", token, { httpOnly: true })
