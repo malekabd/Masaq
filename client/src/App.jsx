@@ -8,7 +8,11 @@ import LayOut from "./pages/LayOut";
 import UserContext from "./pages/userContext";
 import { Toaster } from "react-hot-toast";
 export default function App() {
-  const isLoggedIn = false;
+  let _user = localStorage.getItem("user");
+  let isLoggedIn = false;
+  if (_user){
+    isLoggedIn = true;
+  }
   const [user, setUser] = useState({ isAuthenticated: isLoggedIn });
 
   return (

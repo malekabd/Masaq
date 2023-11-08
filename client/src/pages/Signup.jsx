@@ -13,18 +13,30 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { errors } = formState;
   const navigate = useNavigate();
+
   const [username, email, password, passwordConfirm] = watch([
     "username",
     "email",
     "password",
     "passwordConfirm",
   ]);
-  /*   console.log(username);
-  console.log(email);
-  console.log(password);
-  console.log(passwordConfirm);
- */
-  async function onSubmit() {
+  const [values, setValues] = useState({
+    showPassword: false,
+    isLoggedIn: false,
+  });
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword,
+    });
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  async function onSubmit(e) {
+    event.preventDefault();
+
     console.log("data was submitted");
     //console.log(register().email);
     console.log("done");
@@ -50,7 +62,16 @@ export default function Login() {
         return;
       }
       if (data.status === "success") {
+        const _user = {
+          email: data.data.user.email,
+          token: data.token,
+        };
+        localStorage.setItem("user", JSON.stringify(_user));
+
+        console.log(data.token);
         console.log("hello");
+        userContext.setUser({ isAuthenticated: true });
+
         setLoading(false);
         setError(null);
         navigate("/");
