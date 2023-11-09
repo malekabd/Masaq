@@ -28,7 +28,9 @@ export const signup = async (req, res, next) => {
         message: "Password is not matched",
       });
     }
-    const newUser = new User({ username, email, password });
+
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
     const token = jwt.sign(
       { id: newUser._id.toString() },
@@ -52,7 +54,10 @@ export const login = async (req, res, next) => {
 
   try {
     const validUser = await User.findOne({ email });
-    if (!validUser) return next(errorHandler("User not found!", 404));
+    if (!validUser)
+      return res
+        .status(404)
+        .json({ code: "404", status: "Fail", message: "Email does noteq `1 exist" });
     const validPassword = bcryptjs.compareSync(password, validUser.password);
 
     if (!validPassword) {
@@ -68,7 +73,7 @@ export const login = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json(rest);
+      .json({ status: "success", token, data: { user: rest } });
   } catch (error) {
     next(error);
   }

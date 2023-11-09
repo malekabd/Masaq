@@ -34,9 +34,7 @@ export default function Login() {
     event.preventDefault();
   };
 
-  async function onSubmit(e) {
-    event.preventDefault();
-
+  async function onSubmit() {
     console.log("data was submitted");
     //console.log(register().email);
     console.log("done");
@@ -322,7 +320,7 @@ export default function Login() {
             </div>
           </form>
         </div>
-        <Link to="/login">
+        <Link to="/signin">
           <div className="flex justify-center items-center mt-6">
             <div
               target="_blank"
