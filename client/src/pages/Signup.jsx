@@ -1,9 +1,9 @@
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useContext, useState } from "react";
 import OAuth from "../components/OAuth";
-import React from "react";
-import axios from "axios";
+
+import { useContext, useState } from "react";
 import UserContext from "./userContext";
 import toast from "react-hot-toast";
 export default function Login() {
@@ -51,8 +51,9 @@ export default function Login() {
         },
         body: JSON.stringify({ username, email, password, passwordConfirm }), // it's a much secure way
       });
+      
       const data = await res.json(); //this to see it in the console
-      //console.log(data);
+      console.log(data);
       if (data.code === "409") toast.error(data.message);
       if (data.success === false) {
         setLoading(false);
