@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRoutes.js";
+import trainRouter from "./routes/trainRoutes.js";
 import AppError from "./utils/appError.js";
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.listen(3000, () => {
   console.log("Server is running on port 3000!");
 });
 app.use("/api/user", authRouter);
+app.use("/api/train", trainRouter);
 
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
@@ -38,5 +40,8 @@ process.on("unhandledRejection", (err) => {
 });
 
 app.all("*", (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+  res
+    .status(404)
+    .json({ msg: `Can't find ${req.originalUrl} on this server!` });
+  next();
 });

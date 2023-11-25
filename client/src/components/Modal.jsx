@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { HiXMark } from "react-icons/hi2";
+import SignUp from "../pages/signup"
 const StyledModal = styled.div`
   position: fixed;
   top: 50%;

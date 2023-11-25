@@ -203,8 +203,9 @@ export default function Login() {
             <div className="flex w-full">
               <button
                 type="submit"
-                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in"
-              >
+                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded-full py-2 w-full transition duration-150 ease-in"
+             
+             >
                 <span className="mr-2 uppercase">SIGN IN</span>
                 <span>
                   <svg
@@ -220,11 +221,11 @@ export default function Login() {
             </div>
           </form>
         </div>
-        <Link to="/signup">
-          <div className="flex justify-center items-center mt-6">
+        <Link to="/signup" className="">
+          <div className="flex justify-center items-center mt-6 ">
             <div
               target="_blank"
-              className="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center"
+              className="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center "
             >
               <span>
                 <svg

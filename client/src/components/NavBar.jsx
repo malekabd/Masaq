@@ -15,6 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../pages/userContext";
 const pages = ["Products", "Pricing", "Blog"];
 import { Link } from "react-router-dom";
+import Modal from "./Modal";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar() {
@@ -172,7 +173,13 @@ function NavBar() {
                     </Typography>
                   </MenuItem>
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Profile</Typography>
+                    <Typography
+                      textAlign="center"
+                      onClick={() => console.log("hello")}
+                    >
+                      Profile
+                    </Typography>
+                
                   </MenuItem>
                 </>
               ) : (

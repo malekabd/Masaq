@@ -1,8 +1,6 @@
 import User from "../models/userModal.js";
 import bcryptjs from "bcryptjs";
-
 import jwt from "jsonwebtoken";
-import { errorHandler } from "../utils/error.js";
 
 export const signup = async (req, res, next) => {
   const { username, email, password, passwordConfirm } = req.body;
@@ -57,7 +55,7 @@ export const login = async (req, res, next) => {
       return res.status(404).json({
         code: "404",
         status: "Fail",
-        message: "Email does noteq `1 exist",
+        message: "Email does not  exist",
       });
     const validPassword = bcryptjs.compareSync(password, validUser.password);
 
@@ -111,6 +109,31 @@ export const google = async (req, res, next) => {
         .json({ status: "success", token, data: { user: rest } });
     }
   } catch (error) {
+  
     next(error);
+  }
+};
+export const protect = async (req, res, next) => {
+  try {
+    let token;
+    if (req.headers.cookie.startsWith(process.env.TOKEN_NAME)) {
+      token = req.headers.cookie.split("=")[1]+0;
+    }
+    if (!token) {
+      res.status(401).json({ message: "Unauthorized access" });
+      next();
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const freshUser = await User.findById(decoded.id);
+  console.log(freshUser);
+    if (!freshUser) {
+      res
+        .status(403)
+        .json({ message: "The user belonging to this token does not exist" });
+    }
+    next();
+  } catch (error) {
+    res.status(403 ).json({ message:error.message });
+    next()
   }
 };

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 
@@ -59,11 +59,15 @@ export default function OAuth() {
     <>
       <button
         onClick={handleGoogleClick}
-        className="relative mt-6 border rounded-md py-2 text-sm text-gray-800 bg-gray-100 hover:bg-gray-200"
+        className="relative mt-6 border rounded-full py-2 text-sm text-gray-800 bg-gray-100 hover:bg-gray-200"
       >
         <span className="absolute left-0 top-0 flex items-center justify-center h-full w-10 text-blue-500"></span>
 
-        <span>Continue with google</span>
+        <div className="flex items-center justify-center ml-5 font-bold">
+          {" "}
+          <span className="flex">Continue with Google</span>
+          <FcGoogle className="flex h-10 w-10 ml-5" />
+        </div>
       </button>
     </>
   );
