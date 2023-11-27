@@ -2,20 +2,21 @@ import mongoose from "mongoose";
 
 const registrationOfTrainee = new mongoose.Schema(
   {
-    programNumber: {
+    number: {
       type: Number,
       required: true,
       unique: true,
     },
-    employeeNumber: {
+    programNumber:{ type: mongoose.Schema.ObjectId, ref: "ImplementedProgram" },
+    TodayTraining: {
       type: Number,
-      required: true,
-      unique: true,
     },
+    employeeNumber: [{ type: mongoose.Schema.ObjectId, ref: "Employee" }],
+
     present: {
       type: Number,
       required: true,
-    }
+    },
   },
   { timestamps: true }
 );

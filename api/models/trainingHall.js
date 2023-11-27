@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const trainingHall = new mongoose.Schema(
   {
-    number: { type: Number },
+    hallNumber: { type: Number, unique: true },
     name: {
       type: String,
       required: true,
@@ -16,10 +16,9 @@ const trainingHall = new mongoose.Schema(
     attendanceNumber: {
       type: Number,
       required: true,
-      unique: true,
     },
-    equipment: {
-      type: String,
+    equipments: {
+      type: [String],
     },
   },
   { timestamps: true }

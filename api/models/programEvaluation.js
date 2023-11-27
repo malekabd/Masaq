@@ -2,17 +2,13 @@ import mongoose from "mongoose";
 
 const programEvaluation = new mongoose.Schema(
   {
+    evaluationNumber: { type: Number, required: true },
     executedProgramNumber: {
-      type: Number,
-      required: true,
-      unique: true,
+      type: mongoose.Schema.ObjectId,
+      ref: "ImplementedProgram",
     },
-    traineeNumber: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
-    traineeEvaluation: {
+    traineeNumber: { type: mongoose.Schema.ObjectId, ref: "Employee" },
+    trainerEvaluation: {
       type: Number,
       required: true,
     },
