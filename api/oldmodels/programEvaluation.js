@@ -23,16 +23,6 @@ const programEvaluation = new mongoose.Schema(
   },
   { timestamps: true }
 );
-programEvaluation.pre(/^find/, function(next){
-  this.populate({
-    path:"executedProgramNumber",
-    select:"programNumber",
-  }).populate({
-    path:"traineeNumber",
-    select:"jobNumber",
-  })
-  next()
-})
 
 const ProgramEvaluation = mongoose.model(
   "ProgramEvaluation",

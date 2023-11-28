@@ -14,7 +14,7 @@ export default function Login() {
   const { errors } = formState;
   const navigate = useNavigate();
 
-  const [email, password] = watch(["email", "password"]);
+  const [jobNumber, password] = watch(["jobNumber", "password"]);
   const [values, setValues] = useState({
     showPassword: false,
     isLoggedIn: false,
@@ -30,10 +30,6 @@ export default function Login() {
   };
 
   async function onSubmit() {
-    console.log("data was submitted");
-    //console.log(register().email);
-    console.log("done");
-
     try {
       setLoading(true);
 
@@ -42,7 +38,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }), // it's a much secure way
+        body: JSON.stringify({ jobNumber, password }), // it's a much secure way
       });
       const data = await res.json(); //this to see it in the console
       console.log(data);
@@ -54,14 +50,15 @@ export default function Login() {
       }
       if (data.status === "success") {
         const _user = {
-          email: data.data.user.email,
+          jobNumber: data.data.user.jobNumber,
           token: data.token,
         };
+        console.log(data.data.user.jobNumber);
         localStorage.setItem("user", JSON.stringify(_user));
 
-        console.log(data.token);
         console.log("hello");
         userContext.setUser({ isAuthenticated: true });
+        userContext.setUserRole({ role: "admin" });
 
         setLoading(false);
         setError(null);
@@ -78,18 +75,10 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300">
-      <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
+    <div className="min-h-screen flex bg-slate-100 items-center justify-around">
+      <div className="flex flex-col bg-white  shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
         <div className="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">
           SIGN IN To Your Account
-        </div>
-        <OAuth />
-        <div className="relative mt-10 h-px bg-gray-300">
-          <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
-            <span className="bg-white px-4 text-xs text-gray-500 uppercase">
-              Or SIGN IN With Email
-            </span>
-          </div>
         </div>
         <div className="mt-10">
           <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -98,7 +87,7 @@ export default function Login() {
                 htmlFor="email"
                 className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
               >
-                E-Mail Address:
+                Job Number:
               </label>
               <div className="relative">
                 <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
@@ -113,22 +102,16 @@ export default function Login() {
                 </div>
 
                 <input
-                  //type="email"
-                  name="email"
+                  name="jobNumber"
                   className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
-                  placeholder="E-Mail Address"
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value:
-                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                      message: "Please enter a valid email",
-                    },
+                  placeholder="Job Number"
+                  {...register("jobNumber", {
+                    required: "Employee number is required",
                   })}
                 />
               </div>
               {errors?.email && (
-                <span className="text-red-500">{errors.email.message}</span>
+                <span className="text-red-500">{errors.jobNumber.message}</span>
               )}
             </div>
             <div className="flex flex-col mb-6">
@@ -204,8 +187,7 @@ export default function Login() {
               <button
                 type="submit"
                 className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded-full py-2 w-full transition duration-150 ease-in"
-             
-             >
+              >
                 <span className="mr-2 uppercase">SIGN IN</span>
                 <span>
                   <svg
@@ -221,7 +203,7 @@ export default function Login() {
             </div>
           </form>
         </div>
-        <Link to="/signup" className="">
+        {/*   <Link to="/signup" className="">
           <div className="flex justify-center items-center mt-6 ">
             <div
               target="_blank"
@@ -240,7 +222,7 @@ export default function Login() {
               <span className="ml-2">You do have an account?</span>
             </div>
           </div>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

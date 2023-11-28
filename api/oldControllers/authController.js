@@ -1,18 +1,18 @@
-import Employee from "../models/employee.js";
+import User from "../models/userModal.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-/* export const signup = async (req, res, next) => {
+export const signup = async (req, res, next) => {
   const { username, email, password, passwordConfirm } = req.body;
   try {
-    const validUserName = await Employee.findOne({ username });
+    const validUserName = await User.findOne({ username });
     if (validUserName)
       return res.status(409).json({
         code: "409",
         status: "Fail",
         message: "User Name already exist",
       });
-    const validEmailUser = await Employee.findOne({ email });
+    const validEmailUser = await User.findOne({ email });
     if (validEmailUser)
       return res
         .status(409)
@@ -27,7 +27,7 @@ import jwt from "jsonwebtoken";
     }
 
     const hashedPassword = bcryptjs.hashSync(password, 10);
-    const newUser = new Employee({ username, email, password: hashedPassword });
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
     const token = jwt.sign(
       { id: newUser._id.toString() },
@@ -45,25 +45,24 @@ import jwt from "jsonwebtoken";
     next(error);
   }
 };
- */
+
 export const login = async (req, res, next) => {
-  const { jobNumber, password } = req.body;
-  console.log(jobNumber ,password);
+  const { email, password } = req.body;
 
   try {
-    const validUser = await Employee.findOne({ jobNumber });
+    const validUser = await User.findOne({ email });
     if (!validUser)
       return res.status(404).json({
         code: "404",
         status: "Fail",
-        message: "User does not  exist",
+        message: "Email does not  exist",
       });
     const validPassword = bcryptjs.compareSync(password, validUser.password);
 
     if (!validPassword) {
       return res
         .status(404)
-        .json({ code: "404", status: "Fail", message: "Wrong Credentials" });
+        .json({ code: "404", status: "Fail", message: "UWrong Credentials" });
     }
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc; //this destructuring is to sen the uer data without the encrypted password
@@ -79,8 +78,7 @@ export const login = async (req, res, next) => {
   }
 };
 
-
-/* export const google = async (req, res, next) => {
+export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
@@ -114,7 +112,7 @@ export const login = async (req, res, next) => {
   
     next(error);
   }
-}; */
+};
 export const protect = async (req, res, next) => {
   try {
     let token;
@@ -126,12 +124,12 @@ export const protect = async (req, res, next) => {
       next();
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const freshUser = await Employee.findById(decoded.id);
+    const freshUser = await User.findById(decoded.id);
   console.log(freshUser);
     if (!freshUser) {
       res
         .status(403)
-        .json({ message: "The Employee belonging to this token does not exist" });
+        .json({ message: "The user belonging to this token does not exist" });
     }
     next();
   } catch (error) {

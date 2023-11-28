@@ -11,7 +11,7 @@ const registrationOfTrainee = new mongoose.Schema(
     TodayTraining: {
       type: Number,
     },
-    employeeNumber: { type: mongoose.Schema.ObjectId, ref: "Employee" },
+    employeeNumber: [{ type: mongoose.Schema.ObjectId, ref: "Employee" }],
 
     present: {
       type: Number,
@@ -20,17 +20,6 @@ const registrationOfTrainee = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-registrationOfTrainee.pre(/^find/, function(next){
-  this.populate({
-    path:"programNumber",
-    select:"programNumber",
-  }).populate({
-    path:"employeeNumber",
-    select:"jobNumber",
-  })
-  next()
-})
 
 const RegistrationOfTrainee = mongoose.model(
   "RegistrationOfTrainee",

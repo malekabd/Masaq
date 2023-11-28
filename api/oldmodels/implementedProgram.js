@@ -7,7 +7,11 @@ const implementedProgram = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    includedProgramNumber: { type: mongoose.Schema.ObjectId, ref: "IncludedProgram" },
+    programName: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     date: {
       type: Date,
       required: true,
@@ -37,21 +41,6 @@ const implementedProgram = new mongoose.Schema(
   },
   { timestamps: true }
 );
-/* The code `implementedProgram.pre(/^find/, function(next){ ... })` is a pre-hook middleware function
-that is executed before any `find` operation is performed on the `ImplementedProgram` model. */
-implementedProgram.pre(/^find/, function(next){
-  this.populate({
-    path:"includedProgramNumber",
-    select:"programNumber",
-  }).populate({
-    path:"hallNumber",
-    select:"hallNumber",
-  }).populate({
-    path:"trainerNumber",
-    select:"jobNumber",
-  })
-  next()
-})
 
 const ImplementedProgram = mongoose.model(
   "ImplementedProgram",

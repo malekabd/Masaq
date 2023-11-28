@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Modal from "./Modal";
-import Login from "../pages/Login";
+import React from "react";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);

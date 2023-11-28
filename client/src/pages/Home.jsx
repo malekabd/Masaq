@@ -6,13 +6,14 @@ import Container from "@mui/material/Container";
 export default function Home() {
   return (
     <>
-      <Container
+     {/*  <Container
         sx={{
           paddingTop: 3,
         }}
       >
         <h1>Home</h1>
-      </Container>
+      </Container> */}
+      <h1>Home</h1>
     </>
   );
 }

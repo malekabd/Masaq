@@ -13,10 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../pages/userContext";
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Company Page", "Gallery", "Contact "];
 import { Link } from "react-router-dom";
-import Modal from "./Modal";
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -108,7 +106,7 @@ function NavBar() {
             component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
-              mr: 2,
+              mr: 1,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
               fontFamily: "monospace",
@@ -135,7 +133,7 @@ function NavBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -154,14 +152,9 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {/*   {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))} */}
               {userContext.user.isAuthenticated ? (
                 <>
-                  <MenuItem onClick={handleCloseUserMenu}>
+                  <MenuItem onClick={handleCloseUserMenu} key="1">
                     <Typography
                       onClick={() => {
                         userContext.setUser({ isAuthenticated: false });
@@ -172,23 +165,22 @@ function NavBar() {
                       Logout
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={handleCloseUserMenu}>
+                  <MenuItem onClick={handleCloseUserMenu}key="2">
                     <Typography
                       textAlign="center"
                       onClick={() => console.log("hello")}
                     >
                       Profile
                     </Typography>
-                
                   </MenuItem>
                 </>
               ) : (
                 <>
-                  <MenuItem onClick={handleCloseUserMenu}>
+                  {/*   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">
                       <Link to="/signup">Sign Up</Link>
                     </Typography>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">
                       <Link to="/signin">Sign In</Link>
