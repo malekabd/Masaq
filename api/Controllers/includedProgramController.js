@@ -1,10 +1,10 @@
 import IncludedProgram from "../models/includedProgram.js";
 
 export const getIncludedProgram = async (req, res, next) => {
-  const { programNumber } = req.body;
+  const { _id } = req.body;
   try {
     const validIncludedProgram = await IncludedProgram.findOne({
-      programNumber,
+      _id,
     });
     if (!validIncludedProgram)
       return res.status(409).json({
@@ -18,7 +18,8 @@ export const getIncludedProgram = async (req, res, next) => {
       data: { includedProgram: validIncludedProgram },
     });
   } catch (error) {
-    next(error);
+    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    next();
   }
 };
 export const getAllIncludedProgram = async (req, res, next) => {
@@ -36,14 +37,15 @@ export const getAllIncludedProgram = async (req, res, next) => {
       data: { includedProgram: validIncludedProgram },
     });
   } catch (error) {
-    next(error);
+    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    next();
   }
 };
 export const addIncludedProgram = async (req, res, next) => {
-  const { programNumber } = req.body;
+  const { _id } = req.body;
   try {
     const validIncludedProgram = await IncludedProgram.findOne({
-      programNumber,
+      _id,
     });
     if (validIncludedProgram)
       return res.status(409).json({
@@ -60,14 +62,15 @@ export const addIncludedProgram = async (req, res, next) => {
       data: { includedProgram: newIncludedProgram },
     });
   } catch (error) {
-    next(error);
+    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    next();
   }
 };
 
 export const deleteIncludedProgramController = async (req, res, next) => {
-  const { programNumber } = req.body;
+  const { _id } = req.body;
   try {
-    const validUser = await IncludedProgram.findOneAndRemove({ programNumber });
+    const validUser = await IncludedProgram.findOneAndRemove({ _id });
     if (!validUser)
       return res.status(404).json({
         code: "404",
@@ -76,26 +79,26 @@ export const deleteIncludedProgramController = async (req, res, next) => {
       });
     res.status(202).json({ status: "success" });
   } catch (error) {
-    next(error);
+    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+
+    next();
   }
 };
 export const EditIncludedProgram = async (req, res, next) => {
-  const { oldProgramNumber, ...rest } = req.body;
-  console.log(oldProgramNumber);
-  console.log(rest);
+  const { _id, ...rest } = req.body;
+
   try {
-    const validUser = await IncludedProgram.findOneAndUpdate(
-      { programNumber: oldProgramNumber },
-      rest
-    );
+    const validUser = await IncludedProgram.findOneAndUpdate({ _id }, rest);
     if (!validUser)
       return res.status(404).json({
         code: "404",
         status: "Fail",
-        message: "program does not  exist",
+        message: "Program does not  exist",
       });
     res.status(202).json({ status: "success" });
   } catch (error) {
-    next(error);
+    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+
+    next();
   }
 };

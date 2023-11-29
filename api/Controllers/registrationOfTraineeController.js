@@ -1,11 +1,13 @@
 import RegistrationOfTrainee from "../models/registrationOfTrainee.js";
 
 export const getRegistrationOfTrainee = async (req, res, next) => {
-  const { number } = req.body;
+  const { _id } = req.body;
   try {
-    const validRegistrationOfTrainee = await RegistrationOfTrainee.findOne({ number }).populate('employeeNumber');
+    const validRegistrationOfTrainee = await RegistrationOfTrainee.findOne({
+      _id,
+    }).populate("employeeNumber");
     if (!validRegistrationOfTrainee)
-      return res.status(409).json({
+      return res.status(404).json({
         code: "404",
         status: "Fail",
         message: "Registration does not  exist",
@@ -13,9 +15,15 @@ export const getRegistrationOfTrainee = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ status: "success", data: { registrationOfTrainee: validRegistrationOfTrainee } });
+      .json({
+        status: "success",
+        data: { registrationOfTrainee: validRegistrationOfTrainee },
+      });
   } catch (error) {
-    next(error);
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
   }
 };
 
@@ -23,21 +31,28 @@ export const getAllRegistrationOfTrainee = async (req, res, next) => {
   try {
     const validRegistrationOfTrainee = await RegistrationOfTrainee.find();
     if (!validRegistrationOfTrainee)
-      return res.status(409).json({
+      return res.status(404).json({
         code: "404",
         status: "Fail",
         message: "Registration Halls do not  exist",
       });
 
-    res.status(200).json({ status: "success", data: validRegistrationOfTrainee });
+    res
+      .status(200)
+      .json({ status: "success", data: validRegistrationOfTrainee });
   } catch (error) {
-    next(error);
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
   }
 };
 export const addRegistrationOfTrainee = async (req, res, next) => {
-  const { number } = req.body;
+  const { _id } = req.body;
   try {
-    const validRegistrationOfTrainee = await RegistrationOfTrainee.findOne({ number });
+    const validRegistrationOfTrainee = await RegistrationOfTrainee.findOne({
+      _id,
+    });
     if (validRegistrationOfTrainee)
       return res.status(409).json({
         code: "409",
@@ -50,36 +65,25 @@ export const addRegistrationOfTrainee = async (req, res, next) => {
 
     res
       .status(201)
-      .json({ status: "success", data: { registrationOfTrainee: newRegistrationOfTrainee } });
+      .json({
+        status: "success",
+        data: { registrationOfTrainee: newRegistrationOfTrainee },
+      });
   } catch (error) {
-    next(error);
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
   }
 };
 export const EditRegistrationOfTrainee = async (req, res, next) => {
-  const { oldNumber, ...rest } = req.body;
-  console.log(oldNumber)
-  console.log(rest)
+  const { _id, ...rest } = req.body;
+
   try {
     const validRegistration = await RegistrationOfTrainee.findOneAndUpdate(
-      {number: oldNumber },
+      { _id },
       rest
     );
-    if (!validRegistration)
-    return res.status(404).json({
-  code: "404",
-  status: "Fail",
-  message: "Registration does not  exist",
-});
-res.status(202).json({ status: "success" });
-} catch (error) {
-  next(error);
-}
-};
-
-export const deleteRegistrationOfTrainee = async (req, res, next) => {
-  const { number } = req.body;
-  try {
-    const validRegistration = await RegistrationOfTrainee.findOneAndRemove({ number });
     if (!validRegistration)
       return res.status(404).json({
         code: "404",
@@ -88,6 +92,30 @@ export const deleteRegistrationOfTrainee = async (req, res, next) => {
       });
     res.status(202).json({ status: "success" });
   } catch (error) {
-    next(error);
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
+  }
+};
+
+export const deleteRegistrationOfTrainee = async (req, res, next) => {
+  const { _id } = req.body;
+  try {
+    const validRegistration = await RegistrationOfTrainee.findOneAndRemove({
+      _id,
+    });
+    if (!validRegistration)
+      return res.status(404).json({
+        code: "404",
+        status: "Fail",
+        message: "Registration does not  exist",
+      });
+    res.status(202).json({ status: "success" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
   }
 };
