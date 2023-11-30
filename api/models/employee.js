@@ -37,15 +37,15 @@ const employee = new mongoose.Schema(
       required: true,
     },
     trainer: {
-      type: Boolean,
+      type: String,
       required: true,
     },
     trainee: {
-      type: Boolean,
+      type: String,
       required: true,
     },
     admin: {
-      type: Boolean,
+      type: String,
       required: true,
     },
     avatar: {

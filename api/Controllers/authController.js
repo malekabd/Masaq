@@ -48,7 +48,7 @@ import jwt from "jsonwebtoken";
  */
 export const login = async (req, res, next) => {
   const { jobNumber, password } = req.body;
-  console.log(jobNumber ,password);
+  console.log(jobNumber, password);
 
   try {
     const validUser = await Employee.findOne({ jobNumber });
@@ -66,19 +66,57 @@ export const login = async (req, res, next) => {
         .json({ code: "404", status: "Fail", message: "Wrong Credentials" });
     }
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    let adminToken = "";
+    let traineeToken = "";
+    let trainerToken = "";
+    if (validUser.admin === "true") {
+      adminToken = jwt.sign({ admin: validUser.admin }, process.env.JWT_SECRET);
+    }
+    if (validUser.trainee === "true") {
+      traineeToken = jwt.sign(
+        { trainee: validUser.trainee },
+        process.env.JWT_SECRET
+      );
+    }
+    if (validUser.trainer === "true") {
+      trainerToken = jwt.sign(
+        { trainer: validUser.trainer },
+        process.env.JWT_SECRET
+      );
+    }
     const { password: pass, ...rest } = validUser._doc; //this destructuring is to sen the uer data without the encrypted password
     res
       .cookie("access_token", token, {
         //this is the way how to define a session
         httpOnly: true,
       })
+      .cookie("admin_token", adminToken, {
+        //this is the way how to define a session
+        httpOnly: true,
+      })
+      .cookie("trainee_token", traineeToken, {
+        //this is the way how to define a session
+        httpOnly: true,
+      })
+      .cookie("trainer_token", trainerToken, {
+        //this is the way how to define a session
+        httpOnly: true,
+      })
       .status(200)
-      .json({ status: "success", token, data: { user: rest } });
+      .json({
+        status: "success",
+        token,
+        roleTokens: {
+          admin: adminToken,
+          trainer: trainerToken,
+          trainee: traineeToken,
+        },
+        data: { user: rest },
+      });
   } catch (error) {
     next(error);
   }
 };
-
 
 /* export const google = async (req, res, next) => {
   try {
@@ -119,7 +157,7 @@ export const protect = async (req, res, next) => {
   try {
     let token;
     if (req.headers.cookie.startsWith(process.env.TOKEN_NAME)) {
-      token = req.headers.cookie.split("=")[1]+0;
+      token = req.headers.cookie.split("=")[1] + 0;
     }
     if (!token) {
       res.status(401).json({ message: "Unauthorized access" });
@@ -127,15 +165,15 @@ export const protect = async (req, res, next) => {
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const freshUser = await Employee.findById(decoded.id);
-  console.log(freshUser);
+    console.log(freshUser);
     if (!freshUser) {
-      res
-        .status(403)
-        .json({ message: "The Employee belonging to this token does not exist" });
+      res.status(403).json({
+        message: "The Employee belonging to this token does not exist",
+      });
     }
     next();
   } catch (error) {
-    res.status(403 ).json({ message:error.message });
-    next()
+    res.status(403).json({ message: error.message });
+    next();
   }
 };

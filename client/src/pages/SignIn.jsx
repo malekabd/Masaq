@@ -52,13 +52,19 @@ export default function Login() {
         const _user = {
           jobNumber: data.data.user.jobNumber,
           token: data.token,
+          roleTokens: data.roleTokens,
         };
-        console.log(data.data.user.jobNumber);
+        console.log(data.roleTokens);
         localStorage.setItem("user", JSON.stringify(_user));
+        if (data.roleTokens["admin"]) {
+          console.log("admin");
+          userContext.setUserRole({ role: "admin" });
+        } else if (data.roleTokens["trainer"]) {
+          console.log("exists");
+          userContext.setUserRole({ role: "trainer" });
+        }
 
-        console.log("hello");
         userContext.setUser({ isAuthenticated: true });
-        userContext.setUserRole({ role: "admin" });
 
         setLoading(false);
         setError(null);
