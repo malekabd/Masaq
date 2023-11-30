@@ -1,9 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
-import OAuth from "../components/OAuth";
 import React from "react";
-import axios from "axios";
 import UserContext from "./userContext";
 import toast from "react-hot-toast";
 export default function Login() {
@@ -41,8 +39,11 @@ export default function Login() {
         body: JSON.stringify({ jobNumber, password }), // it's a much secure way
       });
       const data = await res.json(); //this to see it in the console
-      console.log(data);
-      if (data.code === "404") toast.error("Wrong credentials");
+      /*  console.log(data); */
+      if (data.code === "404") {
+        toast.error("Wrong credentials");
+        return false;
+      }
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
@@ -54,22 +55,31 @@ export default function Login() {
           token: data.token,
           roleTokens: data.roleTokens,
         };
-        console.log(data.roleTokens);
-        localStorage.setItem("user", JSON.stringify(_user));
-        if (data.roleTokens["admin"]) {
-          console.log("admin");
-          userContext.setUserRole({ role: "admin" });
-        } else if (data.roleTokens["trainer"]) {
-          console.log("exists");
-          userContext.setUserRole({ role: "trainer" });
-        }
 
+        localStorage.setItem("user", JSON.stringify(_user));
         userContext.setUser({ isAuthenticated: true });
 
-        setLoading(false);
-        setError(null);
-        navigate("/");
+        if (data.roleTokens["admin"]) {
+          localStorage.setItem(
+            "admin",
+            JSON.stringify(data.roleTokens["admin"])
+          );
+          userContext.setUserRole({ role: "admin" });
+        } else if (data.roleTokens["trainer"]) {
+          localStorage.setItem(
+            "trainer",
+            JSON.stringify(data.roleTokens["trainer"])
+          );
+          userContext.setUserRole({ role: "trainer" });
+        } else if (data.roleTokens["trainee"]) {
+          localStorage.setItem(
+            "trainee",
+            JSON.stringify(data.roleTokens["trainee"])
+          );
+          userContext.setUserRole({ role: "trainee" });
+        }
       }
+      navigate("/");
     } catch (error) {
       setLoading(false);
       setError(error.message);

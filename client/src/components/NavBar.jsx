@@ -13,8 +13,9 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../pages/userContext";
+import { Link, useNavigate } from "react-router-dom";
+
 const pages = ["Company Page", "Gallery", "Contact "];
-import { Link } from "react-router-dom";
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -158,14 +159,15 @@ function NavBar() {
                     <Typography
                       onClick={() => {
                         userContext.setUser({ isAuthenticated: false });
-                        localStorage.removeItem("user");
+                        userContext.setUserRole({ role: "" });
+                        localStorage.clear();
                       }}
                       textAlign="center"
                     >
                       Logout
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={handleCloseUserMenu}key="2">
+                  <MenuItem onClick={handleCloseUserMenu} key="2">
                     <Typography
                       textAlign="center"
                       onClick={() => console.log("hello")}
