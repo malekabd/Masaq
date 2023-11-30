@@ -36,17 +36,18 @@ const Example = () => {
       {
         accessorKey: "_id",
         header: "Id",
+        
         enableEditing: false,
         size: 80,
       },
       {
-        accessorKey: "hallNumber",
-        header: "Hall Number   ",
+        accessorKey: "jobNumber",
+        header: "Job Number",
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.hallNumber,
-          helperText: validationErrors?.hallNumber,
+          error: !!validationErrors?.jobNumber,
+          helperText: validationErrors?.jobNumber,
           //remove any previous validation errors when user focuses on the input
           /*      onFocus: () =>
             setValidationErrors({
@@ -75,30 +76,31 @@ const Example = () => {
       },
 
       {
-        accessorKey: "location",
-        header: "Location",
+        accessorKey: "phoneNumber",
+        header: "Phone Number",
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.location,
-          helperText: validationErrors?.location,
+          error: !!validationErrors?.phoneNumber,
+          helperText: validationErrors?.phoneNumber,
           //remove any previous validation errors when user focuses on the input
           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
-              location: undefined,
+              phoneNumber: undefined,
             }),
           //optionally add validation checking for onBlur or onChange
         },
       },
       {
-        accessorKey: "attendanceNumber",
-        header: "Attendance Number",
+        accessorKey: "email",
+        header: "email",
+        enableClickToCopy: true,
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.attendanceNumber,
-          helperText: validationErrors?.attendanceNumber,
+          error: !!validationErrors?.email,
+          helperText: validationErrors?.email,
           //remove any previous validation errors when user focuses on the input
           /* onFocus: () =>
             setValidationErrors({
@@ -109,13 +111,98 @@ const Example = () => {
         },
       },
       {
-        accessorKey: "equipments",
-        header: "Equipments",
+        accessorKey: "jobDescription",
+        header: "Job Description",
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.equipments,
-          helperText: validationErrors?.equipments,
+          error: !!validationErrors?.jobDescription,
+          helperText: validationErrors?.jobDescription,
+          //remove any previous validation errors when user focuses on the input
+          /*           onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "employer",
+        header: "Employer",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.employer,
+          helperText: validationErrors?.employer,
+          //remove any previous validation errors when user focuses on the input
+          /*           onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "qualifications",
+        header: "Qualifications",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.qualifications,
+          helperText: validationErrors?.qualifications,
+          //remove any previous validation errors when user focuses on the input
+          /*           onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "trainer",
+        header: "Trainer",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.trainer,
+          helperText: validationErrors?.trainer,
+          //remove any previous validation errors when user focuses on the input
+          /*           onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "trainee",
+        header: "Trainee",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.trainee,
+          helperText: validationErrors?.trainee,
+          //remove any previous validation errors when user focuses on the input
+          /*           onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "admin",
+        header: "Admin",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.admin,
+          helperText: validationErrors?.admin,
           //remove any previous validation errors when user focuses on the input
           /*           onFocus: () =>
             setValidationErrors({
@@ -268,10 +355,10 @@ const Example = () => {
 function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (hall) => {
-      const { _id, ...rest } = hall;
+    mutationFn: async (employee) => {
+      const { _id, ...rest } = employee;
       //send api update request here
-      const res = await fetch("api/train/addTrainingHall", {
+      const res = await fetch("api/train/addEmployee", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -284,11 +371,11 @@ function useCreateUser() {
         /*         toast.error("Wrong credentials");
          */ console.log("error");
       }
-      return data.data;
+      return data.data.employee;
     },
     //client side optimistic update
     onMutate: (newHallInfo) => {
-      queryClient.setQueryData(["Rooms"], (prevUsers) => {
+      queryClient.setQueryData(["Employees"], (prevUsers) => {
         [
           ...prevUsers,
           {
@@ -298,26 +385,27 @@ function useCreateUser() {
         ];
       });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Rooms"] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Employees"] }), //refetch users after mutation, disabled for demo
   });
 }
 
 //READ hook (get users from api)
 function useGetUsers() {
   return useQuery({
-    queryKey: ["Rooms"],
+    queryKey: ["Employees"],
     queryFn: async () => {
-      const res = await fetch("api/train/getAllTrainingHall", {
+      const res = await fetch("api/train/getAllEmployee", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
       let data = await res.json();
+      console.log(data);
       if (data.status === "Fail") {
         console.log(data.message);
       }
-      return data.data;
+      return data.data.employee;
     },
     refetchOnWindowFocus: false,
   });
@@ -329,7 +417,7 @@ function useUpdateUser() {
   return useMutation({
     mutationFn: async (hall) => {
       //send api update request here
-      const res = await fetch("api/train/editTrainingHall", {
+      const res = await fetch("api/train/editEmployee", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -346,13 +434,13 @@ function useUpdateUser() {
     },
     //client side optimistic update
     onMutate: (newUserInfo) => {
-      queryClient.setQueryData(["Rooms"], (prevUsers) =>
+      queryClient.setQueryData(["Employees"], (prevUsers) =>
         prevUsers?.map((prevUser) =>
           prevUser._id === newUserInfo._id ? newUserInfo : prevUser
         )
       );
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Rooms"] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Employees"] }), //refetch users after mutation, disabled for demo
   });
 }
 
@@ -361,7 +449,7 @@ function useDeleteUser() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id) => {
-      const res = await fetch("api/train/deleteTrainingHall", {
+      const res = await fetch("api/train/deleteEmployee", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -373,11 +461,11 @@ function useDeleteUser() {
     },
     //client side optimistic update
     onMutate: (userId) => {
-      queryClient.setQueryData(["Rooms"], (prevUsers) =>
+      queryClient.setQueryData(["Employees"], (prevUsers) =>
         prevUsers?.filter((user) => user._id !== userId)
       );
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Rooms"] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Employees"] }), //refetch users after mutation, disabled for demo
   });
 }
 
@@ -402,24 +490,35 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-/* const validateEmail = (email) =>
+const validateEmail = (email) =>
   !!email.length &&
   email
     .toLowerCase()
     .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    ); */
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
 
-function validateUser(hall) {
+function validateUser(employee) {
   return {
-    hallNumber: !validateRequired(hall.name) ? "Hall Number is Required" : "",
-    name: !validateRequired(hall.name) ? "Name is Required" : "",
-    location: !validateRequired(hall.name) ? "Location is Required" : "",
-    attendanceNumber: !validateRequired(hall.location)
-      ? "Attendance Number is Required"
+    jobNumber: !validateRequired(employee.jobNumber)
+      ? "Job Number is Required"
       : "",
-    equipments: !validateRequired(hall.location)
-      ? "Equipments is Required"
+    name: !validateRequired(employee.name) ? "Name is Required" : "",
+    phoneNumber: !validateRequired(employee.phoneNumber)
+      ? "Phone Number is Required"
       : "",
+    email: !validateEmail(employee.email) ? "email is Required" : "",
+    jobDescription: !validateRequired(employee.jobDescription)
+      ? "Job Description is Required"
+      : "",
+    employer: !validateRequired(employee.employer)
+      ? "Employer is Required"
+      : "",
+    qualifications: !validateRequired(employee.qualifications)
+      ? "Qualifications is Required"
+      : "",
+    trainer: !validateRequired(employee.trainer) ? "Trainer is Required" : "",
+    trainee: !validateRequired(employee.trainee) ? "Trainee is Required" : "",
+    admin: !validateRequired(employee.admin) ? "Admin is Required" : "",
   };
 }

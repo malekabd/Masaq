@@ -2,9 +2,9 @@ import Employee from "../models/employee.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 export const getEmployee = async (req, res, next) => {
-  const { jobNumber } = req.body;
+  const { _id } = req.body;
   try {
-    const validEmployee = await Employee.findOne({ jobNumber });
+    const validEmployee = await Employee.findOne({ _id });
     if (!validEmployee)
       return res.status(409).json({
         code: "404",
@@ -15,7 +15,11 @@ export const getEmployee = async (req, res, next) => {
 
     res.status(200).json({ status: "success", data: { user: rest } });
   } catch (error) {
-    next(error);
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+
+    next();
   }
 };
 export const getAllEmployee = async (req, res, next) => {
@@ -28,20 +32,23 @@ export const getAllEmployee = async (req, res, next) => {
         message: "Employees does not  exist",
       });
 
-    res.status(200).json({ status: "success", data: validEmployee });
+    res
+      .status(200)
+      .json({ status: "success", data: { employee: validEmployee } });
   } catch (error) {
-    next(error);
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+
+    next();
   }
 };
 
-
-
-
 export const addEmployee = async (req, res, next) => {
-  const { jobNumber} = req.body;
+  const { _id } = req.body;
 
   try {
-    const validEmployee = await Employee.findOne({ jobNumber });
+    const validEmployee = await Employee.findOne({ _id });
     if (validEmployee)
       return res.status(409).json({
         code: "409",
@@ -52,11 +59,15 @@ export const addEmployee = async (req, res, next) => {
     const newEmployee = new Employee(req.body);
     await newEmployee.save();
 
-    const { password: pass, ...rest } = newEmployee._doc; //this destructering is to sen the uer data without the encrypted password
+    //const { password: pass, ...rest } = newEmployee._doc; //this destructering is to sen the uer data without the encrypted password
     res
       .status(201)
-      .json({ status: "success", data: { user: rest } });
+      .json({ status: "success", data: { employee: newEmployee } });
   } catch (error) {
-    next(error);
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+
+    next();
   }
 };

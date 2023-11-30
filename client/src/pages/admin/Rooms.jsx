@@ -1,5 +1,5 @@
 import React from 'react'
-import ExampleWithProviders from '../../components/table2'
+import ExampleWithProviders from '../../components/RoomsTable'
 
 export default function Rooms() {
   return (

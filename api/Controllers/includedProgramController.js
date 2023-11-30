@@ -18,7 +18,9 @@ export const getIncludedProgram = async (req, res, next) => {
       data: { includedProgram: validIncludedProgram },
     });
   } catch (error) {
-    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
     next();
   }
 };
@@ -37,7 +39,9 @@ export const getAllIncludedProgram = async (req, res, next) => {
       data: { includedProgram: validIncludedProgram },
     });
   } catch (error) {
-    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
     next();
   }
 };
@@ -62,7 +66,9 @@ export const addIncludedProgram = async (req, res, next) => {
       data: { includedProgram: newIncludedProgram },
     });
   } catch (error) {
-    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
     next();
   }
 };
@@ -79,7 +85,9 @@ export const deleteIncludedProgramController = async (req, res, next) => {
       });
     res.status(202).json({ status: "success" });
   } catch (error) {
-    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
 
     next();
   }
@@ -88,16 +96,26 @@ export const EditIncludedProgram = async (req, res, next) => {
   const { _id, ...rest } = req.body;
 
   try {
-    const validUser = await IncludedProgram.findOneAndUpdate({ _id }, rest);
-    if (!validUser)
+    const newIncludedProgram = await IncludedProgram.findOneAndUpdate(
+      { _id },
+      rest
+    );
+    if (!newIncludedProgram)
       return res.status(404).json({
         code: "404",
         status: "Fail",
         message: "Program does not  exist",
       });
-    res.status(202).json({ status: "success" });
+    res
+      .status(202)
+      .json({
+        status: "success",
+        data: { includedProgram: newIncludedProgram },
+      });
   } catch (error) {
-    res.status(500).json({code: "500", status: " Bad Request", message: error.message });
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
 
     next();
   }

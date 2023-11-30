@@ -1,8 +1,6 @@
-import React from 'react'
-import Example from '../../components/Table'
+import React from "react";
+import ExampleWithProviders from "../../components/EmployeeTable";
 
 export default function Employees() {
-  return (
-    <Example/>
-  )
+  return <ExampleWithProviders />;
 }

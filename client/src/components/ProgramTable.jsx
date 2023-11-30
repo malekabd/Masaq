@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -21,9 +22,10 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import toast from "react-hot-toast";
 import React from "react";
 
 const Example = () => {
@@ -32,25 +34,94 @@ const Example = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "id",
+        accessorKey: "_id",
         header: "Id",
         enableEditing: false,
         size: 80,
       },
       {
-        accessorKey: "hallNumber",
-        header: "hallNumber",
+        accessorKey: "programNumber",
+        header: "Program Number",
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.firstName,
-          helperText: validationErrors?.firstName,
+          error: !!validationErrors?.programNumber,
+          helperText: validationErrors?.programNumber,
+          //remove any previous validation errors when user focuses on the input
+          /*      onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "programName",
+        header: "Program Name",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.programName,
+          helperText: validationErrors?.programName,
           //remove any previous validation errors when user focuses on the input
           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
-              firstName: undefined,
+              programName: undefined,
             }),
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+
+      {
+        accessorKey: "type",
+        header: "Type",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.type,
+          helperText: validationErrors?.type,
+          //remove any previous validation errors when user focuses on the input
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              type: undefined,
+            }),
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "implementingSection",
+        header: "Implementing Section",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.implementingSection,
+          helperText: validationErrors?.implementingSection,
+          //remove any previous validation errors when user focuses on the input
+          /* onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
+        accessorKey: "programPackage",
+        header: "Program Package",
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.programPackage,
+          helperText: validationErrors?.programPackage,
+          //remove any previous validation errors when user focuses on the input
+          /*           onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
           //optionally add validation checking for onBlur or onChange
         },
       },
@@ -68,7 +139,7 @@ const Example = () => {
     isFetching: isFetchingUsers,
     isLoading: isLoadingUsers,
   } = useGetUsers();
-  console.log(fetchedUsers);
+
   //call UPDATE hook
   const { mutateAsync: updateUser, isPending: isUpdatingUser } =
     useUpdateUser();
@@ -103,7 +174,7 @@ const Example = () => {
   //DELETE action
   const openDeleteConfirmModal = (row) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
-      deleteUser(row.original.id);
+      deleteUser(row.original._id);
     }
   };
 
@@ -122,7 +193,7 @@ const Example = () => {
       : undefined,
     muiTableContainerProps: {
       sx: {
-        minHeight: "500px",
+        minHeight: "100px",
       },
     },
     onCreatingRowCancel: () => setValidationErrors({}),
@@ -132,7 +203,7 @@ const Example = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Create New User</DialogTitle>
+        <DialogTitle variant="h3">Create New Training Hall</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
@@ -146,7 +217,7 @@ const Example = () => {
     //optionally customize modal content
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Edit User</DialogTitle>
+        <DialogTitle variant="h3">Edit Training</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
         >
@@ -173,18 +244,13 @@ const Example = () => {
     ),
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
+        style={{ backgroundColor: "#12824C", color: "#FFFFFF" }}
         variant="contained"
         onClick={() => {
-          table.setCreatingRow(true); //simplest way to open the create row modal with no default values
-          //or you can pass in a row object to set default values with the `createRow` helper function
-          // table.setCreatingRow(
-          //   createRow(table, {
-          //     //optionally pass in default values for the new row, useful for nested data or other complex scenarios
-          //   }),
-          // );
+          table.setCreatingRow(true);
         }}
       >
-        Create New User
+        Create New Training Hall
       </Button>
     ),
     state: {
@@ -202,38 +268,57 @@ const Example = () => {
 function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (user) => {
+    mutationFn: async (program) => {
+      const { _id, ...rest } = program;
       //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+      const res = await fetch("api/train/addIncludedProgram", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...rest }),
+      });
+      let data = await res.json();
+
+      if (data.code === 500) {
+        /*         toast.error("Wrong credentials");
+         */ console.log("error");
+      }
+      return data.data.includedProgram;
     },
     //client side optimistic update
-    onMutate: (newUserInfo) => {
-      queryClient.setQueryData(["users"], (prevUsers) => [
-        ...prevUsers,
-        {
-          ...newUserInfo,
-          id: (Math.random() + 1).toString(36).substring(7),
-        },
-      ]);
+    onMutate: (newHallInfo) => {
+      queryClient.setQueryData(["Programs"], (prevUsers) => {
+        [
+          ...prevUsers,
+          {
+            ...newHallInfo,
+            //id: (Math.random() + 1).toString(36).substring(7),
+          },
+        ];
+      });
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Programs"] }), //refetch users after mutation, disabled for demo
   });
 }
 
 //READ hook (get users from api)
 function useGetUsers() {
   return useQuery({
-    queryKey: ["users"],
+    queryKey: ["Programs"],
     queryFn: async () => {
-      const res = await fetch("api/train/getAllTrainingHall", {
+      const res = await fetch("api/train/getAllIncludedProgram", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
       let data = await res.json();
-      return data.data;
+      console.log(data);
+      if (data.status === "Fail") {
+        console.log(data.message);
+      }
+      return data.data.includedProgram;
     },
     refetchOnWindowFocus: false,
   });
@@ -243,20 +328,32 @@ function useGetUsers() {
 function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (user) => {
+    mutationFn: async (program) => {
       //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+      const res = await fetch("api/train/editIncludedProgram", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(program),
+      });
+      let data = await res.json();
+      console.log(data.code);
+      if (data.code == "500") {
+        /*         toast.error("Wrong credentials");
+         */ toast.error(data.message);
+      }
+      return data.data.includedProgram;
     },
     //client side optimistic update
     onMutate: (newUserInfo) => {
-      queryClient.setQueryData(["users"], (prevUsers) =>
+      queryClient.setQueryData(["Programs"], (prevUsers) =>
         prevUsers?.map((prevUser) =>
-          prevUser.id === newUserInfo.id ? newUserInfo : prevUser
+          prevUser._id === newUserInfo._id ? newUserInfo : prevUser
         )
       );
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Programs"] }), //refetch users after mutation, disabled for demo
   });
 }
 
@@ -264,26 +361,41 @@ function useUpdateUser() {
 function useDeleteUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (userId) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+    mutationFn: async (id) => {
+      const res = await fetch("api/train/deleteIncludedProgram", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: id,
+        }),
+      });
     },
     //client side optimistic update
     onMutate: (userId) => {
-      queryClient.setQueryData(["users"], (prevUsers) =>
-        prevUsers?.filter((user) => user.id !== userId)
+      queryClient.setQueryData(["Programs"], (prevUsers) =>
+        prevUsers?.filter((user) => user._id !== userId)
       );
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Programs"] }), //refetch users after mutation, disabled for demo
   });
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  //sets up the cashe
+  defaultOptions: {
+    queries: {
+      //this is the amount of time that the data in the cash will stay fresh
+      staleTime: 0,
+    },
+  },
+});
 
 const ExampleWithProviders = () => (
   //Put this with your other react-query providers near root of your app
   <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={false} />
     <Example />
   </QueryClientProvider>
 );
@@ -291,20 +403,28 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
+/* const validateEmail = (email) =>
   !!email.length &&
   email
     .toLowerCase()
     .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    ); */
 
-function validateUser(user) {
+function validateUser(program) {
   return {
-    firstName: !validateRequired(user.firstName)
-      ? "First Name is Required"
+    programNumber: !validateRequired(program.programNumber)
+      ? "Program Number is Required"
       : "",
-    lastName: !validateRequired(user.lastName) ? "Last Name is Required" : "",
-    email: !validateEmail(user.email) ? "Incorrect Email Format" : "",
+    programName: !validateRequired(program.programName)
+      ? "Program Name is Required"
+      : "",
+    type: !validateRequired(program.type) ? "type is Required" : "",
+    implementingSection: !validateRequired(program.implementingSection)
+      ? "Implementing Section is Required"
+      : "",
+    programPackage: !validateRequired(program.programPackage)
+      ? "Program Package is Required"
+      : "",
   };
 }
