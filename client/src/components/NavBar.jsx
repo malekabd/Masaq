@@ -15,9 +15,8 @@ import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../pages/userContext";
 import { Link, useNavigate } from "react-router-dom";
 
-const pages = ["Company Page", "Gallery", "Contact "];
-
 function NavBar() {
+  const pages = [<Link to="/">Company Page</Link>, "Gallery", "Contact "];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const userContext = React.useContext(UserContext);

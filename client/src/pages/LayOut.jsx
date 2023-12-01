@@ -26,7 +26,6 @@ export default function LayOut() {
         ) : (
           ""
         )}
-        {userContext.userRole.role == "trainer" ? <Outlet /> : ""}
       </>
     </>
   );

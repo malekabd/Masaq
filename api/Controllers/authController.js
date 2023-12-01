@@ -90,7 +90,7 @@ export const login = async (req, res, next) => {
         //this is the way how to define a session
         httpOnly: true,
       })
-      .cookie("admin_token", adminToken, {
+      /*       .cookie("admin_token", adminToken, {
         //this is the way how to define a session
         httpOnly: true,
       })
@@ -101,7 +101,7 @@ export const login = async (req, res, next) => {
       .cookie("trainer_token", trainerToken, {
         //this is the way how to define a session
         httpOnly: true,
-      })
+      }) */
       .status(200)
       .json({
         status: "success",
@@ -156,22 +156,30 @@ export const login = async (req, res, next) => {
 export const protect = async (req, res, next) => {
   try {
     let token;
+    if (!req.headers.cookie) {
+      res.status(401).json({ message: "Unauthorized access" });
+      next();
+    }
     if (req.headers.cookie.startsWith(process.env.TOKEN_NAME)) {
-      token = req.headers.cookie.split("=")[1] + 0;
+      token = req.headers.cookie.split("=")[1];
     }
     if (!token) {
       res.status(401).json({ message: "Unauthorized access" });
       next();
     }
+    console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const freshUser = await Employee.findById(decoded.id);
+
     console.log(freshUser);
-    if (!freshUser) {
-      res.status(403).json({
-        message: "The Employee belonging to this token does not exist",
+    if (freshUser.admin != "true") {
+      return res.status(403).json({
+        message: "You don't have access to this route",
       });
     }
-    next();
+    if (freshUser.admin == "true") {
+      next();
+    }
   } catch (error) {
     res.status(403).json({ message: error.message });
     next();

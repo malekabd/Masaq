@@ -79,7 +79,7 @@ export default function Login() {
           userContext.setUserRole({ role: "trainee" });
         }
       }
-      navigate("/");
+      navigate("/schedule");
     } catch (error) {
       setLoading(false);
       setError(error.message);

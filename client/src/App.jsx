@@ -44,8 +44,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/signin" element={<SignIn />} />
-
           <Route path="/" element={<Home />} />
+
           <Route element={<LayOut />}>
             {userRole.role == "admin" ? (
               <>
