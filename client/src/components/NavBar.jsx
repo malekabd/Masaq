@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function NavBar() {
   const pages = [<Link to="/">Company Page</Link>, "Gallery", "Contact "];
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const userContext = React.useContext(UserContext);
@@ -160,6 +161,7 @@ function NavBar() {
                         userContext.setUser({ isAuthenticated: false });
                         userContext.setUserRole({ role: "" });
                         localStorage.clear();
+                        navigate("/");
                       }}
                       textAlign="center"
                     >

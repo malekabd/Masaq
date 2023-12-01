@@ -65,21 +65,24 @@ export default function Login() {
             JSON.stringify(data.roleTokens["admin"])
           );
           userContext.setUserRole({ role: "admin" });
+          navigate("/schedule");
+          console.log("hello");
         } else if (data.roleTokens["trainer"]) {
           localStorage.setItem(
             "trainer",
             JSON.stringify(data.roleTokens["trainer"])
           );
           userContext.setUserRole({ role: "trainer" });
+          navigate("/");
         } else if (data.roleTokens["trainee"]) {
           localStorage.setItem(
             "trainee",
             JSON.stringify(data.roleTokens["trainee"])
           );
           userContext.setUserRole({ role: "trainee" });
+          navigate("/trainee");
         }
       }
-      navigate("/schedule");
     } catch (error) {
       setLoading(false);
       setError(error.message);

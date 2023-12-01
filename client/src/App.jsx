@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import SignIn from "./pages/signIn";
-import LayOut from "./pages/LayOut";
+import LayOut from "./pages/admin/LayOut";
 import UserContext from "./pages/userContext";
 import { Toaster } from "react-hot-toast";
 import Reports from "./pages/admin/Reports";
@@ -11,6 +11,9 @@ import Programs from "./pages/admin/Programs";
 import Rooms from "./pages/admin/Rooms";
 import Employees from "./pages/admin/Employees";
 import Schedule from "./pages/admin/Schedule";
+import TraineeLayOut from "./pages/trainee/TraineeLayOut";
+import TraineeRecord from "./pages/trainee/TraineeRecord";
+import Evaluations from "./pages/trainee/Evaluations";
 export default function App() {
   let _user = localStorage.getItem("user");
 
@@ -54,6 +57,31 @@ export default function App() {
                 <Route path="/rooms" element={<Rooms />} />
                 <Route path="/programs" element={<Programs />} />
                 <Route path="/reports" element={<Reports />} />
+              </>
+            ) : (
+              <>
+                <Route
+                  path="/schedule"
+                  element={<Navigate to="/forbidden" />}
+                />
+                <Route
+                  path="/employees"
+                  element={<Navigate to="/forbidden" />}
+                />
+                <Route path="/rooms" element={<Navigate to="/forbidden" />} />
+                <Route
+                  path="/programs"
+                  element={<Navigate to="/forbidden" />}
+                />
+                <Route path="/reports" element={<Navigate to="/forbidden" />} />
+              </>
+            )}
+          </Route>
+          <Route element={<TraineeLayOut />}>
+            {userRole.role == "trainee" ? (
+              <>
+                <Route path="/trainee" element={<TraineeRecord />} />
+                <Route path="/evaluation" element={<Evaluations />} />
               </>
             ) : (
               <>

@@ -16,6 +16,7 @@
     "@mui/material": "^5.3.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@tanstack/react-query-devtools": "^5.8.9",
+    "axios": "^1.6.2",
     "firebase": "^10.5.0",
     "flowbite-react": "^0.6.4",
     "react": "^18.2.0",
