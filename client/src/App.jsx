@@ -14,6 +14,7 @@ import Schedule from "./pages/admin/Schedule";
 import TraineeLayOut from "./pages/trainee/TraineeLayOut";
 import TraineeRecord from "./pages/trainee/TraineeRecord";
 import Evaluations from "./pages/trainee/Evaluations";
+import Announcements from "./pages/admin/Announcements";
 export default function App() {
   let _user = localStorage.getItem("user");
 
@@ -57,6 +58,7 @@ export default function App() {
                 <Route path="/rooms" element={<Rooms />} />
                 <Route path="/programs" element={<Programs />} />
                 <Route path="/reports" element={<Reports />} />
+                <Route path="/announcements" element={<Announcements />} />
               </>
             ) : (
               <>

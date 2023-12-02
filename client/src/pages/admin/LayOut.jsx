@@ -24,6 +24,7 @@ export default function LayOut() {
                   "rooms",
                   "programs",
                   "reports",
+                  "Announcements",
                 ]}
               />
             </div>

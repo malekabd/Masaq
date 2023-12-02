@@ -37,49 +37,77 @@ const Example = () => {
 
   const fetchProgramsList = useMemo(
     () => async () => {
-      setProgram([]);
-      setTrainingHalls([]);
-      setTrainers([]);
       try {
-        const p = await axios.get("/api/train/getAllImplementedProgram"); // Replace with your API endpoint
-        //console.log(p.data.data.implementedProgram);
+        setProgram([]);
+        const p = await axios.get("/api/train/getAllIncludedProgram"); // Replace with your API endpoint
 
-        p.data.data.implementedProgram.forEach((item) => {
-          //console.log(item);
-          const {
-            includedProgramNumber: { _id: p_id, programNumber },
-            hallNumber: { _id: h_id, hallNumber },
-            trainerNumber: { _id: j_id, jobNumber, trainer },
-            ...rest
-          } = item;
-          console.log(trainer);
-          if (trainer) {
-            setProgram((oldArray) => [
-              ...oldArray,
-              [programNumber, p_id].join("@"),
-            ]);
-            setTrainingHalls((oldArray) => [
-              ...oldArray,
-              [hallNumber, h_id].join("@"),
-            ]);
-            setTrainers((oldArray) => [
-              ...oldArray,
-              [jobNumber, j_id].join("@"),
-            ]);
-          }
+        p.data.data.includedProgram.forEach((item) => {
+          //  console.log(item);
+          const { _id: p_id, programNumber } = item;
+
+          setProgram((oldArray) => [
+            ...oldArray,
+            [programNumber, p_id].join("@"),
+          ]);
         });
-        console.log("program", program);
-        console.log("jobNumber", trainer);
-        console.log("hall", trainingHalls);
+        console.log(program);
       } catch (error) {
         console.error("Error fetching program list:", error);
       }
     },
     []
   );
+
+  const fetchHallsList = useMemo(
+    () => async () => {
+      try {
+        setTrainingHalls([]);
+        const h = await axios.get("/api/train/getAllTrainingHall"); // Replace with your API endpoint
+
+        h.data.data.forEach((item) => {
+          const { _id: h_id, hallNumber } = item;
+
+          setTrainingHalls((oldArray) => [
+            ...oldArray,
+            [hallNumber, h_id].join("@"),
+          ]);
+        });
+      } catch (error) {
+        console.error("Error fetching halls list:", error);
+      }
+    },
+    []
+  );
+
+  const fetchTrainersList = useMemo(
+    () => async () => {
+      try {
+        setTrainers([]);
+        const t = await axios.get("/api/train/getAllEmployee"); // Replace with your API endpoint
+        t.data.data.employee.forEach((item) => {
+          //console.log(item);
+          const { _id: t_id, jobNumber, trainer } = item;
+          console.log(trainer);
+          if (trainer == "true") {
+            setTrainers((oldArray) => [
+              ...oldArray,
+              [jobNumber, t_id].join("@"),
+            ]);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching trainer list:", error);
+      }
+    },
+    []
+  );
+  // Fetch the product list on component mount
   useEffect(() => {
     fetchProgramsList();
-  }, [fetchProgramsList]);
+    fetchHallsList();
+
+    fetchTrainersList();
+  }, [fetchProgramsList, fetchHallsList, fetchTrainersList]);
 
   const columns = useMemo(
     () => [

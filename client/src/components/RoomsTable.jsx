@@ -34,12 +34,6 @@ const Example = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "_id",
-        header: "Id",
-        enableEditing: false,
-        size: 80,
-      },
-      {
         accessorKey: "hallNumber",
         header: "Hall Number   ",
         muiEditTextFieldProps: {
@@ -124,6 +118,12 @@ const Example = () => {
             }), */
           //optionally add validation checking for onBlur or onChange
         },
+      },
+      {
+        accessorKey: "_id",
+        header: "Id",
+        enableEditing: false,
+        size: 80,
       },
     ],
     [validationErrors]
