@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRoutes.js";
 import trainRouter from "./routes/trainRoutes.js";
-import AppError from "./utils/appError.js";
+import announcementRouter from "./routes/announcementRoutes.js";
+
 dotenv.config();
 
 mongoose
@@ -27,6 +28,7 @@ app.listen(3000, () => {
 });
 app.use("/api/user", authRouter);
 app.use("/api/train", trainRouter);
+app.use("/api/announcement", announcementRouter);
 
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");

@@ -377,8 +377,8 @@ function useCreateUser() {
       });
       let data = await res.json();
       console.log(data);
-      if (data.code === "500") {
-        toast.error(data.message);
+      if (data.code == "500") {
+        toast.error("Wrong credentials");
       }
       return data;
     },
@@ -409,8 +409,8 @@ function useGetUsers() {
         },
       });
       let data = await res.json();
-      if (data.code === "500") {
-        toast.error(data.message);
+      if (data.code == "500") {
+        toast.error("Wrong credentials");
       }
       let result = [];
       data.data.forEach((item) => {
@@ -456,9 +456,8 @@ function useUpdateUser() {
         }),
       });
       let data = await res.json();
-      console.log(data.code);
       if (data.code == "500") {
-        toast.error(data.message);
+        toast.error("Wrong credentials");
       }
       return data.data;
     },
