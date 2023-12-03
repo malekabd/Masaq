@@ -69,8 +69,11 @@ export const EditTrainingHall = async (req, res, next) => {
   console.log(_id);
   console.log(rest);
   try {
-    const validUser = await TrainingHall.findOneAndUpdate({ _id }, rest);
-    if (!validUser)
+    const validTrainingHall = await TrainingHall.findOneAndUpdate(
+      { _id },
+      rest
+    );
+    if (!validTrainingHall)
       return res.status(404).json({
         code: "404",
         status: "Fail",

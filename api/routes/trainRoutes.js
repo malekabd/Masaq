@@ -3,6 +3,8 @@ import {
   getEmployee,
   addEmployee,
   getAllEmployee,
+  EditEmployee,
+  deleteEmployee,
 } from "../Controllers/employeeController.js";
 import {
   addTrainingHall,
@@ -45,9 +47,8 @@ const router = express.Router();
 router.get("/getEmployee", protect, getEmployee);
 router.get("/getAllEmployee", protect, getAllEmployee);
 router.post("/addEmployee", protect, addEmployee);
-/* router.patch("/editEmployee", EditEmployee);
+router.patch("/editEmployee", EditEmployee);
 router.delete("/deleteEmployee", deleteEmployee);
- */
 
 //Done
 router.get("/getTrainingHall", getTrainingHall);

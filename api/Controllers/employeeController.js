@@ -71,3 +71,42 @@ export const addEmployee = async (req, res, next) => {
     next();
   }
 };
+export const EditEmployee = async (req, res, next) => {
+  const { _id, ...rest } = req.body;
+  console.log(_id);
+  console.log(rest);
+  try {
+    const validUser = await Employee.findOneAndUpdate({ _id }, rest);
+    if (!validUser)
+      return res.status(404).json({
+        code: "404",
+        status: "Fail",
+        message: "Employee  does not  exist",
+      });
+    res.status(202).json({ status: "success" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
+  }
+};
+
+export const deleteEmployee = async (req, res, next) => {
+  const { _id } = req.body;
+  try {
+    const validUser = await Employee.findOneAndRemove({ _id });
+    if (!validUser)
+      return res.status(404).json({
+        code: "404",
+        status: "Fail",
+        message: "Employee does not  exist",
+      });
+    res.status(202).json({ status: "success" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
+  }
+};

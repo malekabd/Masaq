@@ -48,6 +48,11 @@ const Example = () => {
           required: true,
           error: !!validationErrors?.hallNumber,
           helperText: validationErrors?.hallNumber,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              hallNumber: undefined,
+            }),
           //remove any previous validation errors when user focuses on the input
           /*      onFocus: () =>
             setValidationErrors({
@@ -210,7 +215,7 @@ const Example = () => {
 
   //DELETE action
   const openDeleteConfirmModal = (row) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
+    if (window.confirm("Are you sure you want to delete this Training Hall?")) {
       deleteUser(row.original._id);
     }
   };
@@ -324,10 +329,10 @@ function useCreateUser() {
       });
       let data = await res.json();
 
-      if (data.code === 500) {
-        /*         toast.error("Wrong credentials");
-         */ console.log("error");
-      }
+      if (data.code == "500") {
+        toast.error("Wrong credentials");
+    
+   }
       return data.data;
     },
     //client side optimistic update

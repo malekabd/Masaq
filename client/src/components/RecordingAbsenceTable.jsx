@@ -440,9 +440,8 @@ function useUpdateUser() {
   return useMutation({
     mutationFn: async (program) => {
       //send api update request here
-      const { _id, ...rest } = program;
 
-      const { programNumber, employeeNumber, ...r } = rest;
+      const { programNumber, employeeNumber, ...r } = program;
       console.log(programNumber.split("@")[1]);
       console.log(employeeNumber.split("@")[1]);
       const res = await fetch("api/train/editRegistrationOfTrainee", {

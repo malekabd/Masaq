@@ -595,10 +595,11 @@ function useUpdateUser() {
         }),
       });
       let data = await res.json();
-      console.log(data.code);
+      
       if (data.code == "500") {
-        toast.error(data.message);
-      }
+        toast.error("Wrong credentials");
+    
+   }
       return data.data;
     },
     //client side optimistic update

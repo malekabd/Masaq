@@ -67,16 +67,16 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "string",
           required: true,
           error: !!validationErrors?.name,
           helperText: validationErrors?.name,
           //remove any previous validation errors when user focuses on the input
-          onFocus: () =>
+          /*    onFocus: () =>
             setValidationErrors({
               ...validationErrors,
               name: undefined,
-            }),
+            }), */
           //optionally add validation checking for onBlur or onChange
         },
       },
@@ -96,11 +96,11 @@ const Example = () => {
           error: !!validationErrors?.phoneNumber,
           helperText: validationErrors?.phoneNumber,
           //remove any previous validation errors when user focuses on the input
-          onFocus: () =>
+          /* onFocus: () =>
             setValidationErrors({
               ...validationErrors,
               phoneNumber: undefined,
-            }),
+            }), */
           //optionally add validation checking for onBlur or onChange
         },
       },
@@ -267,6 +267,29 @@ const Example = () => {
         },
       },
       {
+        accessorKey: "password",
+        header: "Password",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+        muiEditTextFieldProps: {
+          type: "Password",
+          required: true,
+          error: !!validationErrors?.password,
+          helperText: validationErrors?.password,
+          //remove any previous validation errors when user focuses on the input
+          /*           onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
         accessorKey: "_id",
         header: "Id",
         muiTableHeadCellProps: {
@@ -326,7 +349,7 @@ const Example = () => {
 
   //DELETE action
   const openDeleteConfirmModal = (row) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
+    if (window.confirm("Are you sure you want to delete this Employee?")) {
       deleteUser(row.original._id);
     }
   };
@@ -356,7 +379,7 @@ const Example = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Create New Training Hall</DialogTitle>
+        <DialogTitle variant="h3">Create New Employee</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
@@ -370,7 +393,7 @@ const Example = () => {
     //optionally customize modal content
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Edit Training</DialogTitle>
+        <DialogTitle variant="h3">Edit Employee</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
         >
@@ -403,7 +426,7 @@ const Example = () => {
           table.setCreatingRow(true);
         }}
       >
-        Create New Training Hall
+        Create New Employee
       </Button>
     ),
     state: {
@@ -423,30 +446,28 @@ function useCreateUser() {
   return useMutation({
     mutationFn: async (employee) => {
       const { _id, ...rest } = employee;
+      console.log(rest);
       //send api update request here
       const res = await fetch("api/train/addEmployee", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...rest }),
+        body: JSON.stringify(rest),
       });
       let data = await res.json();
-
-      if (data.code === 500) {
-        /*         toast.error("Wrong credentials");
-         */ console.log("error");
+      if (data.code == "500") {
+        toast.error("Wrong credentials");
       }
-      return data.data.employee;
+      return data.data;
     },
     //client side optimistic update
-    onMutate: (newHallInfo) => {
-      queryClient.setQueryData(["Employees"], (prevUsers) => {
+    onMutate: (newEmployeeInfo) => {
+      queryClient.setQueryData(["Employees"], (prevEmployee) => {
         [
-          ...prevUsers,
+          ...prevEmployee,
           {
-            ...newHallInfo,
-            //id: (Math.random() + 1).toString(36).substring(7),
+            ...newEmployeeInfo,
           },
         ];
       });
@@ -457,6 +478,7 @@ function useCreateUser() {
 
 //READ hook (get users from api)
 function useGetUsers() {
+  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["Employees"],
     queryFn: async () => {
@@ -467,9 +489,9 @@ function useGetUsers() {
         },
       });
       let data = await res.json();
-      console.log(data);
-      if (data.status === "Fail") {
-        console.log(data.message);
+
+      if (data.code == "500") {
+        toast.error("Wrong credentials");
       }
       return data.data.employee;
     },
@@ -481,20 +503,20 @@ function useGetUsers() {
 function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (hall) => {
+    mutationFn: async (employee) => {
       //send api update request here
+
       const res = await fetch("api/train/editEmployee", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(hall),
+        body: JSON.stringify(employee),
       });
       let data = await res.json();
-      console.log(data.code);
+
       if (data.code == "500") {
-        /*         toast.error("Wrong credentials");
-         */ toast.error(data.message);
+        toast.error("Wrong credentials");
       }
       return data.data;
     },
