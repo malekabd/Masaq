@@ -36,6 +36,12 @@ const Example = () => {
       {
         accessorKey: "programNumber",
         header: "Program Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -53,6 +59,12 @@ const Example = () => {
       {
         accessorKey: "programName",
         header: "Program Name",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -71,6 +83,12 @@ const Example = () => {
       {
         accessorKey: "type",
         header: "Type",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -88,6 +106,12 @@ const Example = () => {
       {
         accessorKey: "implementingSection",
         header: "Implementing Section",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -105,6 +129,12 @@ const Example = () => {
       {
         accessorKey: "programPackage",
         header: "Program Package",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -122,6 +152,12 @@ const Example = () => {
       {
         accessorKey: "_id",
         header: "Id",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         enableEditing: false,
         size: 80,
       },

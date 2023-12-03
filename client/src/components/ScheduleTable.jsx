@@ -31,8 +31,8 @@ import React from "react";
 
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
-  const [program, setProgram] = useState([]);
   const [trainingHalls, setTrainingHalls] = useState([]);
+  const [program, setProgram] = useState([]);
   const [trainer, setTrainers] = useState([]);
 
   const fetchProgramsList = useMemo(
@@ -112,15 +112,14 @@ const Example = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "_id",
-        header: "Id",
-
-        enableEditing: false,
-        size: 80,
-      },
-      {
         accessorKey: "programNumber",
         header: "Program Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -138,6 +137,12 @@ const Example = () => {
       {
         accessorKey: "includedProgramNumber",
         header: "Included Program Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         editVariant: "select",
         editSelectOptions: program.filter((v, i, a) => a.indexOf(v) === i),
         muiEditTextFieldProps: {
@@ -157,8 +162,14 @@ const Example = () => {
       {
         accessorKey: "date",
         header: "Date",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "date",
           required: true,
           error: !!validationErrors?.date,
           helperText: validationErrors?.date,
@@ -174,6 +185,12 @@ const Example = () => {
       {
         accessorKey: "hallNumber",
         header: "Hall Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         enableClickToCopy: true,
         editVariant: "select",
         editSelectOptions: trainingHalls.filter(
@@ -190,6 +207,12 @@ const Example = () => {
       {
         accessorKey: "attendanceType",
         header: "Attendance Type",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -207,6 +230,12 @@ const Example = () => {
       {
         accessorKey: "targetedCategory",
         header: "Targeted Category",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -224,6 +253,12 @@ const Example = () => {
       {
         accessorKey: "trainerNumber",
         header: "Trainer Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         editVariant: "select",
         editSelectOptions: trainer.filter((v, i, a) => a.indexOf(v) === i),
         muiEditTextFieldProps: {
@@ -236,6 +271,12 @@ const Example = () => {
       {
         accessorKey: "days",
         header: "Days",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -253,6 +294,12 @@ const Example = () => {
       {
         accessorKey: "attendanceNumber",
         header: "Attendance Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -270,6 +317,12 @@ const Example = () => {
       {
         accessorKey: "traineeList",
         header: "Trainee List",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -283,6 +336,18 @@ const Example = () => {
             }), */
           //optionally add validation checking for onBlur or onChange
         },
+      },
+      {
+        accessorKey: "_id",
+        header: "Id",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+        enableEditing: false,
+        size: 80,
       },
     ],
     [validationErrors]
@@ -447,9 +512,8 @@ function useCreateUser() {
       });
       let data = await res.json();
 
-      if (data.code === 500) {
-        /*         toast.error("Wrong credentials");
-         */ console.log("error");
+      if (data.code === "500") {
+        toast.error(data.message);
       }
       return data.data.implementedProgram;
     },
@@ -484,8 +548,8 @@ function useGetUsers() {
 
       let data = await res.json();
       //console.log(data.data.implementedProgram);
-      if (data.status === "Fail") {
-        console.log(data.message);
+      if (data.code === "500") {
+        toast.error("Wrong credentials");
       }
       let result = [];
       data.data.implementedProgram.forEach((item) => {
@@ -533,8 +597,7 @@ function useUpdateUser() {
       let data = await res.json();
       console.log(data.code);
       if (data.code == "500") {
-        /*         toast.error("Wrong credentials");
-         */ toast.error(data.message);
+        toast.error(data.message);
       }
       return data.data;
     },

@@ -15,15 +15,15 @@ import TraineeLayOut from "./pages/trainee/TraineeLayOut";
 import TraineeRecord from "./pages/trainee/TraineeRecord";
 import Evaluations from "./pages/trainee/Evaluations";
 import Announcements from "./pages/admin/Announcements";
+import RecordingAbsence from "./pages/admin/RecordingAbsence";
+
 export default function App() {
   let _user = localStorage.getItem("user");
 
   let admin = localStorage.getItem("admin");
   let trainer = localStorage.getItem("trainer");
   let trainee = localStorage.getItem("trainee");
-  /*   console.log(trainer);
-  console.log(trainee);
-  console.log(admin); */
+
   let isLoggedIn = false;
   let Role = "";
   if (_user) {
@@ -59,6 +59,7 @@ export default function App() {
                 <Route path="/programs" element={<Programs />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/announcements" element={<Announcements />} />
+                <Route path="/recordingabsence" element={<RecordingAbsence />} />
               </>
             ) : (
               <>

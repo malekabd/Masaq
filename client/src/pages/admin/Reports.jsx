@@ -1,8 +1,5 @@
-import React from 'react'
-import ExampleWithProviders from '../../components/EmployeeTable'
+import React from "react";
 
 export default function Reports() {
-  return (
-    <ExampleWithProviders/>
-  )
+  return <h1>Reports</h1>;
 }

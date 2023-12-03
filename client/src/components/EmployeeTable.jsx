@@ -36,9 +36,16 @@ const Example = () => {
       {
         accessorKey: "jobNumber",
         header: "Job Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
+
           error: !!validationErrors?.jobNumber,
           helperText: validationErrors?.jobNumber,
           //remove any previous validation errors when user focuses on the input
@@ -53,6 +60,12 @@ const Example = () => {
       {
         accessorKey: "name",
         header: "Name",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -71,6 +84,12 @@ const Example = () => {
       {
         accessorKey: "phoneNumber",
         header: "Phone Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -88,6 +107,12 @@ const Example = () => {
       {
         accessorKey: "email",
         header: "email",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         enableClickToCopy: true,
         muiEditTextFieldProps: {
           type: "email",
@@ -106,6 +131,12 @@ const Example = () => {
       {
         accessorKey: "jobDescription",
         header: "Job Description",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -123,6 +154,12 @@ const Example = () => {
       {
         accessorKey: "employer",
         header: "Employer",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -140,6 +177,12 @@ const Example = () => {
       {
         accessorKey: "qualifications",
         header: "Qualifications",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -157,6 +200,12 @@ const Example = () => {
       {
         accessorKey: "trainer",
         header: "Trainer",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -174,6 +223,12 @@ const Example = () => {
       {
         accessorKey: "trainee",
         header: "Trainee",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -191,6 +246,12 @@ const Example = () => {
       {
         accessorKey: "admin",
         header: "Admin",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -208,6 +269,12 @@ const Example = () => {
       {
         accessorKey: "_id",
         header: "Id",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         enableEditing: false,
         size: 80,
       },
