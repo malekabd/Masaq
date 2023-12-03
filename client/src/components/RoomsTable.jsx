@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
-
+import { jsPDF } from "jspdf"; //or use your library of choice here
+import autoTable from "jspdf-autotable";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -33,6 +35,18 @@ const Example = () => {
 
   const columns = useMemo(
     () => [
+      {
+        accessorKey: "_id",
+        header: "Id",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+        enableEditing: false,
+        size: 80,
+      },
       {
         accessorKey: "hallNumber",
         header: "Hall Number   ",
@@ -155,18 +169,6 @@ const Example = () => {
           //optionally add validation checking for onBlur or onChange
         },
       },
-      {
-        accessorKey: "_id",
-        header: "Id",
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        enableEditing: false,
-        size: 80,
-      },
     ],
     [validationErrors]
   );
@@ -218,6 +220,18 @@ const Example = () => {
     if (window.confirm("Are you sure you want to delete this Training Hall?")) {
       deleteUser(row.original._id);
     }
+  };
+  const handleExportRows = (rows) => {
+    const doc = new jsPDF();
+    const tableData = rows.map((row) => Object.values(row.original));
+    const tableHeaders = columns.map((c) => c.header);
+
+    autoTable(doc, {
+      head: [tableHeaders],
+      body: tableData,
+    });
+
+    doc.save("mrt-pdf-example.pdf");
   };
 
   const table = useMaterialReactTable({
@@ -285,29 +299,55 @@ const Example = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => console.log("hello")}>
+          <IconButton
+            color="error"
+            onClick={() => {
+              console.log("hello");
+            }}
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       </Box>
     ),
-    renderTopToolbarCustomActions: ({ table }) => (
-      <Button
-        style={{ backgroundColor: "#12824C", color: "#FFFFFF" }}
-        variant="contained"
-        onClick={() => {
-          table.setCreatingRow(true);
-        }}
-      >
-        Create New Training Hall
-      </Button>
-    ),
+
     state: {
       isLoading: isLoadingUsers,
       isSaving: isCreatingUser || isUpdatingUser || isDeletingUser,
       showAlertBanner: isLoadingUsersError,
       showProgressBars: isFetchingUsers,
     },
+
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: "flex",
+          gap: "16px",
+          padding: "8px",
+          flexWrap: "wrap",
+        }}
+      >
+        <Button
+          style={{ backgroundColor: "#12824C", color: "#FFFFFF" }}
+          variant="contained"
+          onClick={() => {
+            table.setCreatingRow(true);
+          }}
+        >
+          Create New Training Hall
+        </Button>
+        <Button
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          //export all rows, including from the next page, (still respects filtering and sorting)
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+          startIcon={<FileDownloadIcon />}
+        >
+          Export All Rows
+        </Button>
+      </Box>
+    ),
   });
 
   return <MaterialReactTable table={table} />;
@@ -331,8 +371,7 @@ function useCreateUser() {
 
       if (data.code == "500") {
         toast.error("Wrong credentials");
-    
-   }
+      }
       return data.data;
     },
     //client side optimistic update
