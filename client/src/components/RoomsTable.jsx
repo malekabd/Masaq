@@ -344,7 +344,7 @@ const Example = () => {
           }
           startIcon={<FileDownloadIcon />}
         >
-          Export All Rows
+          Export All Rows To PDF
         </Button>
       </Box>
     ),

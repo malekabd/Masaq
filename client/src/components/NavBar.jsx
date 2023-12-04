@@ -40,7 +40,30 @@ function NavBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const MenuItem1 = () => (
+    <MenuItem onClick={handleCloseUserMenu} key="1.5">
+      <Typography
+        onClick={() => {
+          userContext.setUser({ isAuthenticated: false });
+          userContext.setUserRole({ role: "" });
+          localStorage.clear();
+          navigate("/");
+        }}
+        textAlign="center"
+      >
+        Logout
+      </Typography>
+    </MenuItem>
+  );
 
+  const MenuItem2 = () => (
+    <MenuItem onClick={handleCloseUserMenu} key="2.5">
+      <Typography textAlign="center" onClick={() => console.log("hello")}>
+        Profile
+      </Typography>
+    </MenuItem>
+  );
+  const MenuItems = [MenuItem1, MenuItem2];
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -154,36 +177,9 @@ function NavBar() {
               onClose={handleCloseUserMenu}
             >
               {userContext.user.isAuthenticated ? (
-                <>
-                  <MenuItem onClick={handleCloseUserMenu} key="1">
-                    <Typography
-                      onClick={() => {
-                        userContext.setUser({ isAuthenticated: false });
-                        userContext.setUserRole({ role: "" });
-                        localStorage.clear();
-                        navigate("/");
-                      }}
-                      textAlign="center"
-                    >
-                      Logout
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseUserMenu} key="2">
-                    <Typography
-                      textAlign="center"
-                      onClick={() => console.log("hello")}
-                    >
-                      Profile
-                    </Typography>
-                  </MenuItem>
-                </>
+                MenuItems.map((MenuItem, index) => <MenuItem key={index*0.6} />)
               ) : (
                 <>
-                  {/*   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">
-                      <Link to="/signup">Sign Up</Link>
-                    </Typography>
-                  </MenuItem> */}
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">
                       <Link to="/signin">Sign In</Link>

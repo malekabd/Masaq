@@ -16,7 +16,7 @@ export default function LayOut() {
         {/* <SignIn /> */}
         {userContext.userRole.role == "admin" ? (
           <div className="flex flex-col sm:flex-row  ">
-            <div className=" flex flex-row flex-wrap sm:flex-nowrap  sm:flex-col justify-around sm:pt-6 border-x-2 border-zinc-200 pt-6 sm:pb-96 pb-6 items-center sm:w-2/12">
+            <div className=" flex flex-row flex-wrap sm:flex-nowrap  sm:flex-col justify-around  border-x-2 border-zinc-200 sm:pt-6 pt-6 sm:pb-96 pb-6 items-center sm:w-2/12 ">
               <Sidebar
                 routes={[
                   "schedule",

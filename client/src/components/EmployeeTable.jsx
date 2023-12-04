@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
-
+import { jsPDF } from "jspdf"; //or use your library of choice here
+import autoTable from "jspdf-autotable";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -33,6 +35,18 @@ const Example = () => {
 
   const columns = useMemo(
     () => [
+      {
+        accessorKey: "_id",
+        header: "Id",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+        enableEditing: false,
+        size: 80,
+      },
       {
         accessorKey: "jobNumber",
         header: "Job Number",
@@ -289,18 +303,6 @@ const Example = () => {
           //optionally add validation checking for onBlur or onChange
         },
       },
-      {
-        accessorKey: "_id",
-        header: "Id",
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        enableEditing: false,
-        size: 80,
-      },
     ],
     [validationErrors]
   );
@@ -352,6 +354,18 @@ const Example = () => {
     if (window.confirm("Are you sure you want to delete this Employee?")) {
       deleteUser(row.original._id);
     }
+  };
+  const handleExportRows = (rows) => {
+    const doc = new jsPDF();
+    const tableData = rows.map((row) => Object.values(row.original));
+    const tableHeaders = columns.map((c) => c.header);
+
+    autoTable(doc, {
+      head: [tableHeaders],
+      body: tableData,
+    });
+
+    doc.save("mrt-pdf-example.pdf");
   };
 
   const table = useMaterialReactTable({
@@ -419,15 +433,34 @@ const Example = () => {
       </Box>
     ),
     renderTopToolbarCustomActions: ({ table }) => (
-      <Button
-        style={{ backgroundColor: "#12824C", color: "#FFFFFF" }}
-        variant="contained"
-        onClick={() => {
-          table.setCreatingRow(true);
+      <Box
+        sx={{
+          display: "flex",
+          gap: "16px",
+          padding: "8px",
+          flexWrap: "wrap",
         }}
       >
-        Create New Employee
-      </Button>
+        <Button
+          style={{ backgroundColor: "#12824C", color: "#FFFFFF" }}
+          variant="contained"
+          onClick={() => {
+            table.setCreatingRow(true);
+          }}
+        >
+          Create New Employee
+        </Button>
+        <Button
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          //export all rows, including from the next page, (still respects filtering and sorting)
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+          startIcon={<FileDownloadIcon />}
+        >
+          Export All Rows To PDF
+        </Button>
+      </Box>
     ),
     state: {
       isLoading: isLoadingUsers,
