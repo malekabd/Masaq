@@ -10,7 +10,7 @@ export default function LayOut() {
   console.log(userContext.userRole.role);
   return (
     <>
-      <NavBar />
+      
 
       <>
         {/* <SignIn /> */}

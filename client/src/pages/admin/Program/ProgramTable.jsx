@@ -382,7 +382,7 @@ function useGetUsers() {
         },
       });
       let data = await res.json();
-      console.log(data);
+
       if (data.status === "Fail") {
         console.log(data.message);
       }
@@ -408,8 +408,8 @@ function useUpdateUser() {
       let data = await res.json();
       console.log(data.code);
       if (data.code == "500") {
-        /*         toast.error("Wrong credentials");
-         */ toast.error(data.message);
+        toast.error("Wrong credentials");
+        toast.error(data.message);
       }
       return data.data.includedProgram;
     },

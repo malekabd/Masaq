@@ -409,6 +409,7 @@ function useGetUsers() {
         },
       });
       let data = await res.json();
+      console.log(data.data);
       if (data.code == "500") {
         toast.error("Wrong credentials");
       }
@@ -427,6 +428,7 @@ function useGetUsers() {
           programNumber,
           employeeNumber: jobNumber,
         });
+        console.log(result);
       });
       return result;
     },

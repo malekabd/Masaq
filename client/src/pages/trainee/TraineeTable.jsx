@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   MRT_EditActionButtons,
@@ -27,27 +27,79 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import toast from "react-hot-toast";
 import React from "react";
+import axios from "axios";
 
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
+  const [trainees, setTrainees] = useState([]);
+  const [program, setProgram] = useState([]);
 
+  const fetchProgramsList = useMemo(
+    () => async () => {
+      try {
+        setProgram([]);
+        const p = await axios.get("/api/train/getAllImplementedProgram"); // Replace with your API endpoint
+
+        p.data.data.implementedProgram.forEach((item) => {
+          //  console.log(item);
+          const { _id: p_id, programNumber } = item;
+
+          setProgram((oldArray) => [
+            ...oldArray,
+            [programNumber, p_id].join("@"),
+          ]);
+        });
+        console.log(program);
+      } catch (error) {
+        console.error("Error fetching program list:", error);
+      }
+    },
+    []
+  );
+  const fetchTrainersList = useMemo(
+    () => async () => {
+      try {
+        setTrainees([]);
+        const t = await axios.get("/api/train/getAllEmployee"); // Replace with your API endpoint
+        t.data.data.employee.forEach((item) => {
+          //console.log(item);
+          const { _id: t_id, jobNumber, trainee } = item;
+          console.log(trainee);
+          if (trainee == "true") {
+            setTrainees((oldArray) => [
+              ...oldArray,
+              [jobNumber, t_id].join("@"),
+            ]);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching trainer list:", error);
+      }
+    },
+    []
+  );
+  // Fetch the product list on component mount
+  useEffect(() => {
+    fetchTrainersList();
+    fetchProgramsList();
+  }, [fetchProgramsList, fetchTrainersList]);
   const columns = useMemo(
     () => [
       {
         accessorKey: "_id",
         header: "Id",
-        
+
         enableEditing: false,
         size: 80,
       },
       {
-        accessorKey: "programNumber",
-        header: "Program Number",
+        accessorKey: "evaluationNumber",
+        header: "Evaluation Number",
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.programNumber,
-          helperText: validationErrors?.programNumber,
+          error: !!validationErrors?.evaluationNumber,
+          helperText: validationErrors?.evaluationNumber,
           //remove any previous validation errors when user focuses on the input
           /*      onFocus: () =>
             setValidationErrors({
@@ -58,156 +110,98 @@ const Example = () => {
         },
       },
       {
-        accessorKey: "programName",
-        header: "program Name",
+        accessorKey: "executedProgramNumber",
+        header: "Executed Program Number",
+        editVariant: "select",
+        editSelectOptions: program.filter((v, i, a) => a.indexOf(v) === i),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.name,
-          helperText: validationErrors?.name,
+          error: !!validationErrors?.executedProgramNumber,
+          helperText: validationErrors?.executedProgramNumber,
           //remove any previous validation errors when user focuses on the input
           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
-              name: undefined,
+              executedProgramNumber: undefined,
             }),
           //optionally add validation checking for onBlur or onChange
         },
       },
 
       {
-        accessorKey: "phoneNumber",
-        header: "Phone Number",
+        accessorKey: "traineeNumber",
+        header: "Trainee Number",
+        editVariant: "select",
+        editSelectOptions: trainees.filter((v, i, a) => a.indexOf(v) === i),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.phoneNumber,
-          helperText: validationErrors?.phoneNumber,
+          error: !!validationErrors?.traineeNumber,
+          helperText: validationErrors?.traineeNumber,
           //remove any previous validation errors when user focuses on the input
           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
-              phoneNumber: undefined,
+              traineeNumber: undefined,
             }),
           //optionally add validation checking for onBlur or onChange
         },
       },
+
       {
-        accessorKey: "email",
-        header: "email",
-        enableClickToCopy: true,
+        accessorKey: "trainerEvaluation",
+        header: "Trainer Evaluation",
+        editVariant: "select",
+        editSelectOptions: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.email,
-          helperText: validationErrors?.email,
+          error: !!validationErrors?.trainerEvaluation,
+          helperText: validationErrors?.trainerEvaluation,
           //remove any previous validation errors when user focuses on the input
-          /* onFocus: () =>
+          /*           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
-              firstName: undefined,
+              trainerEvaluation: undefined,
             }), */
           //optionally add validation checking for onBlur or onChange
         },
       },
       {
-        accessorKey: "jobDescription",
-        header: "Job Description",
+        accessorKey: "programNumber",
+        header: "Program Evaluation", //I made a mistake in this name in the data base (programNumber)
+        editVariant: "select",
+        editSelectOptions: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.jobDescription,
-          helperText: validationErrors?.jobDescription,
+          error: !!validationErrors?.programNumber,
+          helperText: validationErrors?.programNumber,
           //remove any previous validation errors when user focuses on the input
           /*           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
-              firstName: undefined,
+              programNumber: undefined,
             }), */
           //optionally add validation checking for onBlur or onChange
         },
       },
       {
-        accessorKey: "employer",
-        header: "Employer",
+        accessorKey: "hallEvaluation",
+        header: "Hall Evaluation",
+        editVariant: "select",
+        editSelectOptions: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         muiEditTextFieldProps: {
           type: "email",
           required: true,
-          error: !!validationErrors?.employer,
-          helperText: validationErrors?.employer,
+          error: !!validationErrors?.hallEvaluation,
+          helperText: validationErrors?.hallEvaluation,
           //remove any previous validation errors when user focuses on the input
           /*           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
-              firstName: undefined,
-            }), */
-          //optionally add validation checking for onBlur or onChange
-        },
-      },
-      {
-        accessorKey: "qualifications",
-        header: "Qualifications",
-        muiEditTextFieldProps: {
-          type: "email",
-          required: true,
-          error: !!validationErrors?.qualifications,
-          helperText: validationErrors?.qualifications,
-          //remove any previous validation errors when user focuses on the input
-          /*           onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              firstName: undefined,
-            }), */
-          //optionally add validation checking for onBlur or onChange
-        },
-      },
-      {
-        accessorKey: "trainer",
-        header: "Trainer",
-        muiEditTextFieldProps: {
-          type: "email",
-          required: true,
-          error: !!validationErrors?.trainer,
-          helperText: validationErrors?.trainer,
-          //remove any previous validation errors when user focuses on the input
-          /*           onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              firstName: undefined,
-            }), */
-          //optionally add validation checking for onBlur or onChange
-        },
-      },
-      {
-        accessorKey: "trainee",
-        header: "Trainee",
-        muiEditTextFieldProps: {
-          type: "email",
-          required: true,
-          error: !!validationErrors?.trainee,
-          helperText: validationErrors?.trainee,
-          //remove any previous validation errors when user focuses on the input
-          /*           onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              firstName: undefined,
-            }), */
-          //optionally add validation checking for onBlur or onChange
-        },
-      },
-      {
-        accessorKey: "admin",
-        header: "Admin",
-        muiEditTextFieldProps: {
-          type: "email",
-          required: true,
-          error: !!validationErrors?.admin,
-          helperText: validationErrors?.admin,
-          //remove any previous validation errors when user focuses on the input
-          /*           onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              firstName: undefined,
+              hallEvaluation: undefined,
             }), */
           //optionally add validation checking for onBlur or onChange
         },
@@ -290,7 +284,7 @@ const Example = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Create New Training Hall</DialogTitle>
+        <DialogTitle variant="h3">Create New Evaluation</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
@@ -304,7 +298,7 @@ const Example = () => {
     //optionally customize modal content
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Edit Training</DialogTitle>
+        <DialogTitle variant="h3">Edit Evaluation</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
         >
@@ -337,7 +331,7 @@ const Example = () => {
           table.setCreatingRow(true);
         }}
       >
-        Create New Training Hall
+        Create New Evaluation
       </Button>
     ),
     state: {
@@ -355,57 +349,82 @@ const Example = () => {
 function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (employee) => {
-      const { _id, ...rest } = employee;
+    mutationFn: async (program) => {
+      const { _id, ...rest } = program;
+      //console.log(rest);
+      const { executedProgramNumber, traineeNumber, ...r } = rest;
+
       //send api update request here
-      const res = await fetch("api/train/addEmployee", {
+      const res = await fetch("api/train/addProgramEvaluation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...rest }),
+        body: JSON.stringify({
+          executedProgramNumber: executedProgramNumber.split("@")[1],
+          traineeNumber: traineeNumber.split("@")[1],
+          ...r,
+        }),
       });
       let data = await res.json();
 
-      if (data.code === 500) {
-        /*         toast.error("Wrong credentials");
-         */ console.log("error");
+      if (data.code === "500") {
+        toast.error("Wrong credentials");
       }
-      return data.data.employee;
+      return data.data;
     },
     //client side optimistic update
-    onMutate: (newHallInfo) => {
-      queryClient.setQueryData(["Employees"], (prevUsers) => {
+    onMutate: (newEvaluationInfo) => {
+      queryClient.setQueryData(["Evaluation"], (prevEvaluation) => {
         [
-          ...prevUsers,
+          ...prevEvaluation,
           {
-            ...newHallInfo,
-            //id: (Math.random() + 1).toString(36).substring(7),
+            ...newEvaluationInfo,
           },
         ];
       });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Employees"] }), //refetch users after mutation, disabled for demo
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ["Evaluation"] }), //refetch users after mutation, disabled for demo
   });
 }
 
 //READ hook (get users from api)
 function useGetUsers() {
   return useQuery({
-    queryKey: ["Employees"],
+    queryKey: ["Evaluation"],
     queryFn: async () => {
-      const res = await fetch("api/train/getAllEmployee", {
+      const res = await fetch("api/train/getAllProgramEvaluation", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
       let data = await res.json();
-      console.log(data);
+      //  console.log(data.data);
       if (data.status === "Fail") {
         console.log(data.message);
       }
-      return data.data.employee;
+
+      let result = [];
+      data.data.forEach((item) => {
+        console.log(item);
+        const {
+          executedProgramNumber: { programNumber },
+
+          traineeNumber: { _id, jobNumber },
+          ...rest
+        } = item;
+
+        result.push({
+          ...rest,
+          executedProgramNumber: programNumber,
+
+          trainerNumber: jobNumber,
+        });
+      });
+      console.log(result);
+      return result;
     },
     refetchOnWindowFocus: false,
   });
@@ -415,32 +434,39 @@ function useGetUsers() {
 function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (hall) => {
+    mutationFn: async (evaluation) => {
+      const { _id, ...rest } = evaluation;
+      //console.log(rest);
+      const { executedProgramNumber, traineeNumber, ...r } = rest;
       //send api update request here
-      const res = await fetch("api/train/editEmployee", {
+      const res = await fetch("api/train/editProgramEvaluation", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(hall),
+        body: JSON.stringify({
+          executedProgramNumber: executedProgramNumber.split("@")[1],
+          traineeNumber: traineeNumber.split("@")[1],
+          ...r,
+        }),
       });
       let data = await res.json();
-      console.log(data.code);
+      // console.log(data.code);
       if (data.code == "500") {
-        /*         toast.error("Wrong credentials");
-         */ toast.error(data.message);
+        console.log(data.message);
       }
       return data.data;
     },
     //client side optimistic update
-    onMutate: (newUserInfo) => {
-      queryClient.setQueryData(["Employees"], (prevUsers) =>
+    onMutate: (newEvaluation) => {
+      queryClient.setQueryData(["Evaluation"], (prevUsers) =>
         prevUsers?.map((prevUser) =>
-          prevUser._id === newUserInfo._id ? newUserInfo : prevUser
+          prevUser._id === newEvaluation._id ? newEvaluation : prevUser
         )
       );
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Employees"] }), //refetch users after mutation, disabled for demo
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ["Evaluation"] }), //refetch users after mutation, disabled for demo
   });
 }
 
@@ -449,7 +475,7 @@ function useDeleteUser() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id) => {
-      const res = await fetch("api/train/deleteEmployee", {
+      const res = await fetch("api/train/deleteProgramEvaluation", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -461,11 +487,12 @@ function useDeleteUser() {
     },
     //client side optimistic update
     onMutate: (userId) => {
-      queryClient.setQueryData(["Employees"], (prevUsers) =>
+      queryClient.setQueryData(["Evaluation"], (prevUsers) =>
         prevUsers?.filter((user) => user._id !== userId)
       );
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["Employees"] }), //refetch users after mutation, disabled for demo
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ["Evaluation"] }), //refetch users after mutation, disabled for demo
   });
 }
 
@@ -490,35 +517,26 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
 
-function validateUser(employee) {
+function validateUser(evaluation) {
   return {
-    jobNumber: !validateRequired(employee.jobNumber)
-      ? "Job Number is Required"
+    evaluationNumber: !validateRequired(evaluation.evaluationNumber)
+      ? "Evaluation Number is Required"
       : "",
-    name: !validateRequired(employee.name) ? "Name is Required" : "",
-    phoneNumber: !validateRequired(employee.phoneNumber)
-      ? "Phone Number is Required"
+    executedProgramNumber: !validateRequired(evaluation.executedProgramNumber)
+      ? "Executed ProgramNumber is Required"
       : "",
-    email: !validateEmail(employee.email) ? "email is Required" : "",
-    jobDescription: !validateRequired(employee.jobDescription)
-      ? "Job Description is Required"
+    traineeNumber: !validateRequired(evaluation.traineeNumber)
+      ? "Trainee Number is Required"
       : "",
-    employer: !validateRequired(employee.employer)
-      ? "Employer is Required"
+    trainerEvaluation: !validateRequired(evaluation.trainerEvaluation)
+      ? "Trainer Evaluation is Required"
       : "",
-    qualifications: !validateRequired(employee.qualifications)
-      ? "Qualifications is Required"
+    programNumber: !validateRequired(evaluation.programNumber)
+      ? "Program Number is Required"
       : "",
-    trainer: !validateRequired(employee.trainer) ? "Trainer is Required" : "",
-    trainee: !validateRequired(employee.trainee) ? "Trainee is Required" : "",
-    admin: !validateRequired(employee.admin) ? "Admin is Required" : "",
+    hallEvaluation: !validateRequired(evaluation.hallEvaluation)
+      ? "Hall Evaluation is Required"
+      : "",
   };
 }

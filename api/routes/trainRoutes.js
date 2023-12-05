@@ -44,9 +44,9 @@ import {
 import { protect } from "../Controllers/authController.js";
 const router = express.Router();
 
-router.get("/getEmployee", protect, getEmployee);
-router.get("/getAllEmployee", protect, getAllEmployee);
-router.post("/addEmployee", protect, addEmployee);
+router.get("/getEmployee", getEmployee);
+router.get("/getAllEmployee", getAllEmployee);
+router.post("/addEmployee", addEmployee);
 router.patch("/editEmployee", EditEmployee);
 router.delete("/deleteEmployee", deleteEmployee);
 

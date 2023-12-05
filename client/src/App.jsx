@@ -6,16 +6,17 @@ import SignIn from "./pages/signIn";
 import LayOut from "./pages/admin/LayOut";
 import UserContext from "./pages/userContext";
 import { Toaster } from "react-hot-toast";
-import Reports from "./pages/admin/Reports";
-import Programs from "./pages/admin/Programs";
-import Rooms from "./pages/admin/Rooms";
-import Employees from "./pages/admin/Employees";
-import Schedule from "./pages/admin/Schedule";
+import Reports from "./pages/admin/Reports/Reports";
+import Programs from "./pages/admin/Program/Programs";
+import Rooms from "./pages/admin/Rooms/Rooms";
+import Employees from "./pages/admin/Employee/Employees";
+import Schedule from "./pages/admin/Schedule/Schedule";
 import TraineeLayOut from "./pages/trainee/TraineeLayOut";
 import TraineeRecord from "./pages/trainee/TraineeRecord";
-import Evaluations from "./pages/trainee/Evaluations";
-import Announcements from "./pages/admin/Announcements";
-import RecordingAbsence from "./pages/admin/RecordingAbsence";
+import Evaluations from "./pages/trainee/TraineeEvaluations";
+import Announcements from "./pages/admin/Announcements/Announcements";
+import RecordingAbsence from "./pages/admin/Absence/RecordingAbsence";
+import NavBar from "./components/NavBar";
 
 export default function App() {
   let _user = localStorage.getItem("user");
@@ -46,6 +47,7 @@ export default function App() {
   return (
     <UserContext.Provider value={{ user, setUser, userRole, setUserRole }}>
       <BrowserRouter>
+        <NavBar />
         <Routes>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/" element={<Home />} />
@@ -59,7 +61,10 @@ export default function App() {
                 <Route path="/programs" element={<Programs />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/announcements" element={<Announcements />} />
-                <Route path="/recordingabsence" element={<RecordingAbsence />} />
+                <Route
+                  path="/recordingabsence"
+                  element={<RecordingAbsence />}
+                />
               </>
             ) : (
               <>
