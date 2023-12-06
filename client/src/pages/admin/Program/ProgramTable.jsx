@@ -36,6 +36,18 @@ const Example = () => {
   const columns = useMemo(
     () => [
       {
+        accessorKey: "_id",
+        header: "Id",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+        enableEditing: false,
+        size: 80,
+      },
+      {
         accessorKey: "programNumber",
         header: "Program Number",
         muiTableHeadCellProps: {
@@ -151,18 +163,6 @@ const Example = () => {
           //optionally add validation checking for onBlur or onChange
         },
       },
-      {
-        accessorKey: "_id",
-        header: "Id",
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        enableEditing: false,
-        size: 80,
-      },
     ],
     [validationErrors]
   );
@@ -230,6 +230,7 @@ const Example = () => {
   const table = useMaterialReactTable({
     columns,
     data: fetchedUsers,
+    initialState: { columnVisibility: { _id: false } },
     createDisplayMode: "modal", //default ('row', and 'custom' are also available)
     editDisplayMode: "modal", //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,

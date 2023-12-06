@@ -17,7 +17,7 @@ import Evaluations from "./pages/trainee/TraineeEvaluations";
 import Announcements from "./pages/admin/Announcements/Announcements";
 import RecordingAbsence from "./pages/admin/Absence/RecordingAbsence";
 import NavBar from "./components/NavBar";
-
+import MainLayOut from "./pages/MainLayOut";
 export default function App() {
   let _user = localStorage.getItem("user");
 
@@ -49,8 +49,10 @@ export default function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/" element={<Home />} />
+          <Route element={<MainLayOut />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/signin" element={<SignIn />} />
+          </Route>
 
           <Route element={<LayOut />}>
             {userRole.role == "admin" ? (
@@ -62,7 +64,7 @@ export default function App() {
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/announcements" element={<Announcements />} />
                 <Route
-                  path="/recordingabsence"
+                  path="/Absence"
                   element={<RecordingAbsence />}
                 />
               </>

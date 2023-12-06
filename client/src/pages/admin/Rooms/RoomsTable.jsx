@@ -238,6 +238,7 @@ const Example = () => {
     columns,
     data: fetchedUsers,
 
+    initialState: { columnVisibility: { _id: false } },
     createDisplayMode: "modal", //default ('row', and 'custom' are also available)
     editDisplayMode: "modal", //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,

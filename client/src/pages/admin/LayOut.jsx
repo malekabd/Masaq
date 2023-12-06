@@ -23,7 +23,7 @@ export default function LayOut() {
                   "employees",
                   "rooms",
                   "programs",
-                  "RecordingAbsence",
+                  "Absence",
                   "reports",
                   "Announcements",
                 ]}

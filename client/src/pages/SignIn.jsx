@@ -11,7 +11,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { errors } = formState;
   const navigate = useNavigate();
-
   const [jobNumber, password] = watch(["jobNumber", "password"]);
   const [values, setValues] = useState({
     showPassword: false,
@@ -26,11 +25,9 @@ export default function Login() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
   async function onSubmit() {
     try {
       setLoading(true);
-
       const res = await fetch("/api/user/signin", {
         method: "POST",
         headers: {
@@ -55,10 +52,8 @@ export default function Login() {
           token: data.token,
           roleTokens: data.roleTokens,
         };
-
         localStorage.setItem("user", JSON.stringify(_user));
         userContext.setUser({ isAuthenticated: true });
-
         if (data.roleTokens["admin"]) {
           localStorage.setItem(
             "admin",
@@ -92,11 +87,10 @@ export default function Login() {
   function onError(errors) {
     console.log(errors);
   }
-
   return (
-    <div className="min-h-screen flex bg-slate-100 items-center justify-around">
-      <div className="flex flex-col bg-white  shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
-        <div className="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">
+    <div className="min-h-screen flex bg-indigo-200 items-center justify-around">
+      <div className="flex flex-col bg-gradient-to-r from-indigo-400 to-cyan-300  shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
+        <div className="font-medium self-center text-xl sm:text-2xl uppercase text-white">
           SIGN IN To Your Account
         </div>
         <div className="mt-10">
@@ -104,7 +98,7 @@ export default function Login() {
             <div className="flex flex-col mb-6">
               <label
                 htmlFor="email"
-                className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
+                className="mb-1 text-xs sm:text-sm tracking-wide  text-white"
               >
                 Job Number:
               </label>
@@ -119,7 +113,6 @@ export default function Login() {
                     <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
                 </div>
-
                 <input
                   name="jobNumber"
                   className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
@@ -136,7 +129,7 @@ export default function Login() {
             <div className="flex flex-col mb-6">
               <label
                 htmlFor="password"
-                className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
+                className="mb-1 text-xs sm:text-sm tracking-wide text-white"
               >
                 Password:
               </label>
@@ -153,7 +146,6 @@ export default function Login() {
                     </svg>
                   </span>
                 </div>
-
                 <input
                   id="password"
                   type="password"
@@ -201,11 +193,10 @@ export default function Login() {
                   </span>
                 )}
             </div>
-
-            <div className="flex w-full">
+            <div className="flex w-full ">
               <button
                 type="submit"
-                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded-full py-2 w-full transition duration-150 ease-in"
+                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-indigo-600 hover:bg-indigo-900 rounded-full py-2 w-full transition duration-150 ease-in"
               >
                 <span className="mr-2 uppercase">SIGN IN</span>
                 <span>

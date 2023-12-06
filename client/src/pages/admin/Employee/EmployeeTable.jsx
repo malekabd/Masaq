@@ -105,7 +105,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.phoneNumber,
           helperText: validationErrors?.phoneNumber,
@@ -220,6 +220,8 @@ const Example = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
+        editVariant: "select",
+        editSelectOptions: ["true", "false"],
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -243,6 +245,8 @@ const Example = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
+        editVariant: "select",
+        editSelectOptions: ["true", "false"],
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -260,6 +264,8 @@ const Example = () => {
       {
         accessorKey: "admin",
         header: "Admin",
+        editVariant: "select",
+        editSelectOptions: ["true", "false"],
         muiTableHeadCellProps: {
           align: "center",
         },
@@ -371,6 +377,7 @@ const Example = () => {
   const table = useMaterialReactTable({
     columns,
     data: fetchedUsers,
+    initialState: { columnVisibility: { _id: false, password: false } },
     createDisplayMode: "modal", //default ('row', and 'custom' are also available)
     editDisplayMode: "modal", //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
