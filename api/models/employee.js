@@ -61,16 +61,16 @@ const employee = new mongoose.Schema(
   { timestamps: true }
 );
 
-
-employee.pre('save', async function(next) {
+employee.pre("save", async function (next) {
   // Only run this function if password was actually modified
-  if (!this.isModified('password')) return next();
+  if (!this.isModified("password")) return next();
 
   // Hash the password with cost of 12
   this.password = bcryptjs.hashSync(this.password, 10);
 
   next();
 });
+
 
 const Employee = mongoose.model("Employee", employee);
 

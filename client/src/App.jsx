@@ -10,14 +10,16 @@ import Reports from "./pages/admin/Reports/Reports";
 import Programs from "./pages/admin/Program/Programs";
 import Rooms from "./pages/admin/Rooms/Rooms";
 import Employees from "./pages/admin/Employee/Employees";
-import Schedule from "./pages/admin/Schedule/Schedule";
-import TraineeLayOut from "./pages/trainee/TraineeLayOut";
-import TraineeRecord from "./pages/trainee/TraineeRecord";
-import Evaluations from "./pages/trainee/TraineeEvaluations";
 import Announcements from "./pages/admin/Announcements/Announcements";
 import RecordingAbsence from "./pages/admin/Absence/RecordingAbsence";
-import NavBar from "./components/NavBar";
+import TraineeRecord from "./pages/trainee/TraineeRecord";
+import Evaluations from "./pages/trainee/TraineeEvaluations";
+import Schedule from "./pages/admin/Schedule/Schedule";
 import MainLayOut from "./pages/MainLayOut";
+import TrainerLayOut from "./pages/trainer/TrainerLayOut";
+import TrainerRecord from "./pages/trainer/TrainerRecord";
+import TraineeLayOut from "./pages/trainee/TraineeLayOut";
+import NavBar from "./components/NavBar";
 export default function App() {
   let _user = localStorage.getItem("user");
 
@@ -63,10 +65,33 @@ export default function App() {
                 <Route path="/programs" element={<Programs />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/announcements" element={<Announcements />} />
+                <Route path="/Absence" element={<RecordingAbsence />} />
+              </>
+            ) : (
+              <>
                 <Route
-                  path="/Absence"
-                  element={<RecordingAbsence />}
+                  path="/schedule"
+                  element={<Navigate to="/forbidden" />}
                 />
+                <Route
+                  path="/employees"
+                  element={<Navigate to="/forbidden" />}
+                />
+                <Route path="/rooms" element={<Navigate to="/forbidden" />} />
+                <Route
+                  path="/programs"
+                  element={<Navigate to="/forbidden" />}
+                />
+
+                <Route path="/reports" element={<Navigate to="/forbidden" />} />
+              </>
+            )}
+          </Route>
+          <Route element={<TraineeLayOut />}>
+            {userRole.role == "trainee" ? (
+              <>
+                <Route path="/trainee" element={<TraineeRecord />} />
+                <Route path="/evaluation" element={<Evaluations />} />
               </>
             ) : (
               <>
@@ -87,11 +112,10 @@ export default function App() {
               </>
             )}
           </Route>
-          <Route element={<TraineeLayOut />}>
-            {userRole.role == "trainee" ? (
+          <Route element={<TrainerLayOut />}>
+            {userRole.role == "trainer" ? (
               <>
-                <Route path="/trainee" element={<TraineeRecord />} />
-                <Route path="/evaluation" element={<Evaluations />} />
+                <Route path="/trainer" element={<TrainerRecord />} />
               </>
             ) : (
               <>

@@ -545,14 +545,25 @@ function useUpdateUser() {
   return useMutation({
     mutationFn: async (employee) => {
       //send api update request here
-
-      const res = await fetch("api/train/editEmployee", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(employee),
-      });
+      const { password, ...rest } = employee;
+      let res = {};
+      if (password.length > 23) {
+        res = await fetch("api/train/editEmployee", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...rest }),
+        });
+      } else {
+        res = await fetch("api/train/editEmployee", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...rest, password }),
+        });
+      }
       let data = await res.json();
 
       if (data.code == "500") {

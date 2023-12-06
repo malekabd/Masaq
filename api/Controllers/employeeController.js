@@ -72,11 +72,20 @@ export const addEmployee = async (req, res, next) => {
   }
 };
 export const EditEmployee = async (req, res, next) => {
-  const { _id, ...rest } = req.body;
+  const { _id, password, ...rest } = req.body;
   console.log(_id);
   console.log(rest);
+  let validUser = "";
   try {
-    const validUser = await Employee.findOneAndUpdate({ _id }, rest);
+    if (password) {
+      const hashedPassword = bcryptjs.hashSync(password, 10);
+      validUser = await Employee.findOneAndUpdate(
+        { _id },
+        { ...rest, password: hashedPassword }
+      );
+    } else {
+      validUser = await Employee.findOneAndUpdate({ _id }, { ...rest });
+    }
     if (!validUser)
       return res.status(404).json({
         code: "404",

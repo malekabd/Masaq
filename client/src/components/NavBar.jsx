@@ -13,10 +13,11 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../pages/userContext";
+
 import { Link, useNavigate } from "react-router-dom";
 
 function NavBar() {
-  const pages = [<Link to="/">Company Page</Link>, "Gallery", "Contact "];
+  const pages = [<Link to="/">Home</Link>, "Gallery", "Contact "];
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -177,7 +178,9 @@ function NavBar() {
               onClose={handleCloseUserMenu}
             >
               {userContext.user.isAuthenticated ? (
-                MenuItems.map((MenuItem, index) => <MenuItem key={index*0.6} />)
+                MenuItems.map((MenuItem, index) => (
+                  <MenuItem key={index * 0.6} />
+                ))
               ) : (
                 <>
                   <MenuItem onClick={handleCloseUserMenu}>
