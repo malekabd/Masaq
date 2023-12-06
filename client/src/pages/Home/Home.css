@@ -1,0 +1,66 @@
+.chat-notification {
+  display: flex;
+  max-width: 24rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  margin: 40px;
+}
+.chat-notification-logo-wrapper {
+  flex-shrink: 0;
+}
+.chat-notification-logo {
+  height: 3rem;
+  width: 3rem;
+}
+.chat-notification-content {
+  margin-left: 1.5rem;
+  padding-top: 0.25rem;
+}
+.chat-notification-title {
+  color: #1a202c;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+.chat-notification-message {
+  color: #718096;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.box1 {
+  display: flex;
+  flex-direction: row;
+}
+
+.box2 {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}
+
+.btn {
+  margin: 20px;
+}
+
+.myTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.myTable td,
+#customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.myTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.myTable tr:hover {
+  background-color: #ddd;
+}

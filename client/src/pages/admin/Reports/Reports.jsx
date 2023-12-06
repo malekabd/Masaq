@@ -10,7 +10,6 @@ export default function Reports() {
   const [data, setData] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [age, setAge] = useState("");
-
   const fetchTrainersList = useMemo(
     () => async () => {
       try {
@@ -19,7 +18,6 @@ export default function Reports() {
         e.data.data.employee.forEach((item) => {
           //console.log(item);
           const { _id: t_id, jobNumber } = item;
-
           setEmployees((oldArray) => [...oldArray, item]);
         });
       } catch (error) {
@@ -28,12 +26,10 @@ export default function Reports() {
     },
     []
   );
-
   // Fetch the product list on component mount
   useEffect(() => {
     fetchTrainersList();
   }, [fetchTrainersList]);
-
   const exportToPDF = (role) => {
     const pdf = new jsPDF();
     pdf.text(
@@ -51,7 +47,6 @@ export default function Reports() {
           i,
           `  Job Number:${employee.jobNumber}\t Name: ${employee.name}\t Phone Number: ${employee.phoneNumber}\nEmail:${employee.email}\t Description: ${employee.description} \nEmployer: ${employee.employer}\tTrainee:${employee.trainee}\t Trainer: ${employee.trainer}\t Admin: ${employee.admin}`
         );
-
         i += 20;
         pdf.text(
           10,
@@ -66,7 +61,6 @@ export default function Reports() {
             i,
             `  Job Number:${employee.jobNumber}\t Name: ${employee.name}\t Phone Number: ${employee.phoneNumber}\nEmail:${employee.email}\t Description: ${employee.description} \nEmployer: ${employee.employer}\tTrainee:${employee.trainee}\t Trainer: ${employee.trainer}\t Admin: ${employee.admin}`
           );
-
           i += 20;
           pdf.text(
             10,
@@ -82,7 +76,6 @@ export default function Reports() {
             i,
             `  Job Number:${employee.jobNumber}\t Name: ${employee.name}\t Phone Number: ${employee.phoneNumber}\nEmail:${employee.email}\t Description: ${employee.description} \nEmployer: ${employee.employer}\tTrainee:${employee.trainee}\t Trainer: ${employee.trainer}\t Admin: ${employee.admin}`
           );
-
           i += 20;
           pdf.text(
             10,
@@ -95,18 +88,18 @@ export default function Reports() {
     // Save the PDF or open it in a new tab
     pdf.save("exported-data.pdf");
   };
-
   const handleChange = (event) => {
     setAge(event.target.value);
   };
   return (
-    <div className="flex sm:flex-row flex-col mt-20 justify-around ">
-      <div className="flex flex-col justify-center items-center space-y-10 w-44 h-48 border-double border-4 border-sky-500 ">
+    <div className="mt-20 ">
+      <div className=" grid grid-cols-2 lg:grid-cols-3  gap-3 p-4">
         <button
           onClick={() => {
             console.log(employees);
             exportToPDF("trainer");
           }}
+          class="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
         >
           All Trainer List
         </button>
@@ -115,6 +108,7 @@ export default function Reports() {
             console.log(employees);
             exportToPDF("trainee");
           }}
+          class="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-100 p-3"
         >
           All Trainee List
         </button>
@@ -123,17 +117,30 @@ export default function Reports() {
             console.log(employees);
             exportToPDF("admin");
           }}
+          class="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-400 p-3"
         >
           All Employees List
         </button>
       </div>
-      <div className="flex flex-col  justify-center items-center space-y-10 w-44 h-48 border-double border-4 border-sky-500 ">
-        <a> Scheduled Programs</a>
-        <a> Given Programs</a>
-        <a> Available Programs</a>
+      <div className=" grid grid-cols-2 lg:grid-cols-3 gap-3 pt-6 ">
+        <a class="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400">
+          {" "}
+          Scheduled Programs
+        </a>
+        <a class="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400">
+          {" "}
+          Given Programs
+        </a>
+        <a class="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400">
+          {" "}
+          Available Programs
+        </a>
       </div>
-      <div className="flex flex-col justify-center items-center space-y-10 w-44 h-48 border-double border-4 border-sky-500 ">
-        <Box sx={{ minWidth: 120 }}>
+      <div className="grid grid-cols-2 gap-4 pt-6">
+        <Box
+          class=" bg-sky-400  p-2 rounded-md hover:text-lg hover:text-white"
+          sx={{ minWidth: 120 }}
+        >
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Age</InputLabel>
             <Select
@@ -149,7 +156,9 @@ export default function Reports() {
             </Select>
           </FormControl>
         </Box>
-        <button>View Report</button>
+        <button class=" bg-sky-400  text-white rounded-md p-2 shadow-lg hover:text-lg hover:text-black">
+          View Report
+        </button>
       </div>
     </div>
   );
