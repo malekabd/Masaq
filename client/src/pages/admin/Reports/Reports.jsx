@@ -1,47 +1,77 @@
-import { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import axios from "axios"; // For making HTTP requests
 import jsPDF from "jspdf";
 export default function Reports() {
-  const [data, setData] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [programs, setPrograms] = useState([]);
+  const [includedPrograms, setIncludedPrograms] = useState([]);
   const [age, setAge] = useState("");
-  const fetchTrainersList = useMemo(
-    () => async () => {
-      try {
-        setEmployees([]);
-        const e = await axios.get("/api/train/getAllEmployee"); // Replace with your API endpoint
-        e.data.data.employee.forEach((item) => {
-          //console.log(item);
-          const { _id: t_id, jobNumber } = item;
-          setEmployees((oldArray) => [...oldArray, item]);
-        });
-      } catch (error) {
-        console.error("Error fetching trainer list:", error);
-      }
-    },
-    []
-  );
+
   // Fetch the product list on component mount
   useEffect(() => {
+    const fetchSchedule = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllImplementedProgram");
+        const result = await response.json();
+
+        // console.log(result.data.implementedProgram);
+        // Update the state with the fetched data
+        setPrograms(result.data.implementedProgram);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    const fetchTrainersList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllEmployee");
+        const result = await response.json();
+
+        console.log(result.data.employee);
+        // Update the state with the fetched data
+        setEmployees(result.data.employee);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    const fetchIncludedList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllIncludedProgram");
+        const result = await response.json();
+
+        console.log(result.data.includedProgram);
+        // Update the state with the fetched data
+        setIncludedPrograms(result.data.includedProgram);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchSchedule();
+    fetchIncludedList();
     fetchTrainersList();
-  }, [fetchTrainersList]);
+  }, []);
+
   const exportToPDF = (role) => {
     const pdf = new jsPDF();
-    pdf.text(
-      10,
-      10,
-      "------------------------------------------Employee-------------------------------------------------"
-    );
-    let i = 20;
+
     // Format and add data to the PDF
-    employees.forEach((employee) => {
-      i += 10;
-      if (role == "admin") {
+    if (role == "admin") {
+      pdf.text(
+        10,
+        10,
+        "------------------------------------------Employee-------------------------------------------------"
+      );
+      let i = 20;
+      employees.forEach((employee) => {
+        i += 10;
+
         pdf.text(
           10,
           i,
@@ -53,9 +83,19 @@ export default function Reports() {
           i,
           "--------------------------------------------------------------------------------------------------------"
         );
-      }
-      if (role == "trainer") {
+      });
+    }
+    if (role == "trainer") {
+      pdf.text(
+        10,
+        10,
+        "------------------------------------------Trainer-------------------------------------------------"
+      );
+      let i = 20;
+      employees.forEach((employee) => {
         if (employee.trainer == "true") {
+          i += 10;
+
           pdf.text(
             10,
             i,
@@ -68,9 +108,19 @@ export default function Reports() {
             "--------------------------------------------------------------------------------------------------------"
           );
         }
-      }
-      if (role == "trainee") {
+      });
+    }
+    if (role == "trainee") {
+      pdf.text(
+        10,
+        10,
+        "------------------------------------------Trainee-------------------------------------------------"
+      );
+      let i = 20;
+      employees.forEach((employee) => {
         if (employee.trainee == "true") {
+          i += 10;
+
           pdf.text(
             10,
             i,
@@ -83,8 +133,77 @@ export default function Reports() {
             "--------------------------------------------------------------------------------------------------------"
           );
         }
-      }
-    });
+      });
+    }
+
+    if (role == "scheduled") {
+      console.log("programs", programs);
+      pdf.text(
+        10,
+        10,
+        "------------------------------------------Scheduled Program-------------------------------------------------"
+      );
+      let i = 20;
+      programs.forEach((program) => {
+        i += 15;
+        pdf.text(
+          10,
+          i,
+          `  Program Number:${program.programNumber}\t Included Program Number: ${program.includedProgramNumber.programNumber}\n Date: ${program.date}\hallNumber:${program.hallNumber.hallNumber}\t Attendance Type: ${program.attendanceType} \n Targeted Category: ${program.targetedCategory}\t Trainer Number:${program.trainerNumber.jobNumber}\t Days: ${program.days}\n Attendance Number: ${program.attendanceNumber}\t Trainee List: ${program.traineeList}`
+        );
+        i += 25;
+        pdf.text(
+          10,
+          i + 10,
+          "--------------------------------------------------------------------------------------------------------"
+        );
+      });
+    }
+    //}
+    if (role == "given") {
+      pdf.text(
+        10,
+        10,
+        "------------------------------------------Given Programs-------------------------------------------------"
+      );
+      let i = 20;
+      programs.forEach((program) => {
+        i += 15;
+        pdf.text(
+          10,
+          i,
+          `  Program Number:${program.programNumber}\t Included Program Number: ${program.includedProgramNumber.programNumber}\n Date: ${program.date}\hallNumber:${program.hallNumber.hallNumber}\t Attendance Type: ${program.attendanceType} \n Targeted Category: ${program.targetedCategory}\t Trainer Number:${program.trainerNumber.jobNumber}\t Days: ${program.days}\n Attendance Number: ${program.attendanceNumber}\t Trainee List: ${program.traineeList}`
+        );
+        i += 25;
+        pdf.text(
+          10,
+          i + 10,
+          "--------------------------------------------------------------------------------------------------------"
+        );
+      });
+    }
+    if (role == "available") {
+      pdf.text(
+        10,
+        10,
+        "------------------------------------------Available Programs-------------------------------------------------"
+      );
+      let i = 20;
+      includedPrograms.forEach((program) => {
+        i += 10;
+        pdf.text(
+          10,
+          i,
+          `  Program Number:${program.programNumber}\t  Program Number: ${program.programNumber}\n type: ${program.type}\tImplementing Section :${program.implementingSection}\n Program Package: ${program.programPackage} \n`
+        );
+        i += 25;
+        pdf.text(
+          10,
+          i,
+          "--------------------------------------------------------------------------------------------------------"
+        );
+      });
+    }
     // Save the PDF or open it in a new tab
     pdf.save("exported-data.pdf");
   };
@@ -96,49 +215,58 @@ export default function Reports() {
       <div className=" grid grid-cols-2 lg:grid-cols-3  gap-3 p-4">
         <button
           onClick={() => {
-            console.log(employees);
             exportToPDF("trainer");
           }}
-          class="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
         >
           All Trainer List
         </button>
         <button
           onClick={() => {
-            console.log(employees);
             exportToPDF("trainee");
           }}
-          class="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-100 p-3"
+          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-100 p-3"
         >
           All Trainee List
         </button>
         <button
           onClick={() => {
-            console.log(employees);
             exportToPDF("admin");
           }}
-          class="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-400 p-3"
+          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-400 p-3"
         >
           All Employees List
         </button>
       </div>
       <div className=" grid grid-cols-2 lg:grid-cols-3 gap-3 pt-6 ">
-        <a class="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400">
-          {" "}
+        <button
+          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          onClick={() => {
+            exportToPDF("scheduled");
+          }}
+        >
           Scheduled Programs
-        </a>
-        <a class="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400">
-          {" "}
+        </button>
+        <button
+          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          onClick={() => {
+            exportToPDF("given");
+          }}
+        >
           Given Programs
-        </a>
-        <a class="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400">
-          {" "}
+        </button>
+        <button
+          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          onClick={() => {
+            exportToPDF("available");
+          }}
+        >
           Available Programs
-        </a>
+        </button>
       </div>
       <div className="grid grid-cols-2 gap-4 pt-6">
         <Box
-          class=" bg-sky-400  p-2 rounded-md hover:text-lg hover:text-white"
+          className=" bg-sky-400  p-2 rounded-md hover:text-lg hover:text-white"
           sx={{ minWidth: 120 }}
         >
           <FormControl fullWidth>
@@ -156,7 +284,7 @@ export default function Reports() {
             </Select>
           </FormControl>
         </Box>
-        <button class=" bg-sky-400  text-white rounded-md p-2 shadow-lg hover:text-lg hover:text-black">
+        <button className=" bg-sky-400  text-white rounded-md p-2 shadow-lg hover:text-lg hover:text-black">
           View Report
         </button>
       </div>
