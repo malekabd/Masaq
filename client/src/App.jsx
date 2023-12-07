@@ -23,21 +23,11 @@ import NavBar from "./components/NavBar";
 export default function App() {
   let _user = localStorage.getItem("user");
 
-  let admin = localStorage.getItem("admin");
-  let trainer = localStorage.getItem("trainer");
-  let trainee = localStorage.getItem("trainee");
-
   let isLoggedIn = false;
   let Role = "";
   if (_user) {
+    let user = JSON.parse(_user);
     isLoggedIn = true;
-  }
-  if (admin) {
-    Role = "admin";
-  } else if (trainer) {
-    Role = "trainer";
-  } else if (trainee) {
-    Role = "trainee";
   }
 
   const [user, setUser] = useState({
@@ -57,84 +47,21 @@ export default function App() {
           </Route>
 
           <Route element={<LayOut />}>
-            {userRole.role == "admin" ? (
-              <>
-                <Route path="/schedule" element={<Schedule />} />
-                <Route path="/employees" element={<Employees />} />
-                <Route path="/rooms" element={<Rooms />} />
-                <Route path="/programs" element={<Programs />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/announcements" element={<Announcements />} />
-                <Route path="/Absence" element={<RecordingAbsence />} />
-              </>
-            ) : (
-              <>
-                <Route
-                  path="/schedule"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route
-                  path="/employees"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route path="/rooms" element={<Navigate to="/forbidden" />} />
-                <Route
-                  path="/programs"
-                  element={<Navigate to="/forbidden" />}
-                />
-
-                <Route path="/reports" element={<Navigate to="/forbidden" />} />
-              </>
-            )}
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/employees" element={<Employees />} />
+            <Route path="/rooms" element={<Rooms />} />
+            <Route path="/programs" element={<Programs />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/announcements" element={<Announcements />} />
+            <Route path="/Absence" element={<RecordingAbsence />} />
           </Route>
+
           <Route element={<TraineeLayOut />}>
-            {userRole.role == "trainee" ? (
-              <>
-                <Route path="/trainee" element={<TraineeRecord />} />
-                <Route path="/evaluation" element={<Evaluations />} />
-              </>
-            ) : (
-              <>
-                <Route
-                  path="/schedule"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route
-                  path="/employees"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route path="/rooms" element={<Navigate to="/forbidden" />} />
-                <Route
-                  path="/programs"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route path="/reports" element={<Navigate to="/forbidden" />} />
-              </>
-            )}
+            <Route path="/trainee" element={<TraineeRecord />} />
+            <Route path="/evaluation" element={<Evaluations />} />
           </Route>
           <Route element={<TrainerLayOut />}>
-            {userRole.role == "trainer" ? (
-              <>
-                <Route path="/trainer" element={<TrainerRecord />} />
-              </>
-            ) : (
-              <>
-                <Route
-                  path="/schedule"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route
-                  path="/employees"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route path="/rooms" element={<Navigate to="/forbidden" />} />
-                <Route
-                  path="/programs"
-                  element={<Navigate to="/forbidden" />}
-                />
-                <Route path="/reports" element={<Navigate to="/forbidden" />} />
-              </>
-            )}
+            <Route path="/trainer" element={<TrainerRecord />} />
           </Route>
           <Route path="/forbidden" element={<h1>UnAuthorized</h1>} />
         </Routes>

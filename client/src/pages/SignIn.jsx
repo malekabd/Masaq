@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import React from "react";
@@ -59,25 +59,28 @@ export default function Login() {
             "admin",
             JSON.stringify(data.roleTokens["admin"])
           );
-          userContext.setUserRole({ role: "admin" });
-          navigate("/schedule");
-          console.log("hello");
-        } else if (data.roleTokens["trainer"]) {
+          userContext.setUserRole({ admin: "true" });
+          /*  navigate("/schedule");
+          console.log("hello"); */
+        }
+        if (data.roleTokens["trainer"]) {
           localStorage.setItem(
             "trainer",
             JSON.stringify(data.roleTokens["trainer"])
           );
           userContext.setUserRole({ role: "trainer" });
-          navigate("/");
-        } else if (data.roleTokens["trainee"]) {
+          /*  navigate("/"); */
+        }
+        if (data.roleTokens["trainee"]) {
           localStorage.setItem(
             "trainee",
             JSON.stringify(data.roleTokens["trainee"])
           );
           userContext.setUserRole({ role: "trainee" });
-          navigate("/trainee");
+          /*   navigate("/trainee"); */
         }
       }
+      navigate("/");
     } catch (error) {
       setLoading(false);
       setError(error.message);
