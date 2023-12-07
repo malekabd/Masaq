@@ -19,8 +19,6 @@ export default function Reports() {
         const response = await fetch("/api/train/getAllImplementedProgram");
         const result = await response.json();
 
-        // console.log(result.data.implementedProgram);
-        // Update the state with the fetched data
         setPrograms(result.data.implementedProgram);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -270,7 +268,9 @@ export default function Reports() {
           sx={{ minWidth: 120 }}
         >
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            <InputLabel id="demo-simple-select-label ">
+              <span className="text-white">Age</span>
+            </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"

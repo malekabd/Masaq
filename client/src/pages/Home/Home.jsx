@@ -2,8 +2,23 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
-
 export default function Home() {
+  const [announcements, setAnnouncements] = React.useState([]);
+  React.useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/announcement/getAllAnnouncement");
+        const result = await response.json();
+        console.log(result.announcements);
+        setAnnouncements(result.announcements);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
   return (
     <>
       <div className="box1 flex justify-center items-center">
@@ -21,8 +36,18 @@ export default function Home() {
 
         <div className="chat-notification">
           <div className="chat-notification-content">
-            <h4 className="chat-notification-title">Anouncement</h4>
-            <p className="chat-notification-message">You have a new message!</p>
+            {announcements.map((announcement, i) => {
+              return (
+                <div key={i}>
+                  <h4 className="chat-notification-title">
+                    Announcement {i + 1}
+                  </h4>
+                  <p className="chat-notification-message">
+                    {announcement.announcement}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
