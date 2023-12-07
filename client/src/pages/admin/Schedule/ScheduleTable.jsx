@@ -34,10 +34,10 @@ import React from "react";
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [trainingHalls, setTrainingHalls] = useState([]);
-  const [program, setProgram] = useState([]);
-  const [trainer, setTrainers] = useState([]);
+  const [programs, setPrograms] = useState([]);
+  const [trainers, setTrainers] = useState([]);
 
-  const fetchProgramsList = useMemo(
+  /*   const fetchProgramsList = useMemo(
     () => async () => {
       try {
         setProgram([]);
@@ -58,58 +58,68 @@ const Example = () => {
       }
     },
     []
-  );
+  ); */
 
-  const fetchHallsList = useMemo(
-    () => async () => {
-      try {
-        setTrainingHalls([]);
-        const h = await axios.get("/api/train/getAllTrainingHall"); // Replace with your API endpoint
-
-        h.data.data.forEach((item) => {
-          const { _id: h_id, hallNumber } = item;
-
-          setTrainingHalls((oldArray) => [
-            ...oldArray,
-            [hallNumber, h_id].join("@"),
-          ]);
-        });
-      } catch (error) {
-        console.error("Error fetching halls list:", error);
-      }
-    },
-    []
-  );
-
-  const fetchTrainersList = useMemo(
-    () => async () => {
-      try {
-        setTrainers([]);
-        const t = await axios.get("/api/train/getAllEmployee"); // Replace with your API endpoint
-        t.data.data.employee.forEach((item) => {
-          //console.log(item);
-          const { _id: t_id, jobNumber, trainer } = item;
-          console.log(trainer);
-          if (trainer == "true") {
-            setTrainers((oldArray) => [
-              ...oldArray,
-              [jobNumber, t_id].join("@"),
-            ]);
-          }
-        });
-      } catch (error) {
-        console.error("Error fetching trainer list:", error);
-      }
-    },
-    []
-  );
   // Fetch the product list on component mount
   useEffect(() => {
-    fetchProgramsList();
-    fetchHallsList();
+    const fetchTrainersList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllEmployee");
+        const result = await response.json();
+        // Update the state with the fetched data
+        setTrainers(result.data.employee);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    const fetchHallsList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllTrainingHall");
+        const result = await response.json();
 
+        setTrainingHalls(result.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    const fetchProgramsList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllIncludedProgram");
+        const result = await response.json();
+        console.log(result.data.includedProgram);
+        setPrograms(result.data.includedProgram);
+        console.log("program", programs);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     fetchTrainersList();
-  }, [fetchProgramsList, fetchHallsList, fetchTrainersList]);
+    fetchHallsList();
+    fetchProgramsList();
+  }, []);
+  //Loop and Return Dictionary of trainers list
+  function filterObjectsByProperty(array, propertyKey, propertyValue) {
+    const matchingObjects = array.filter(
+      (obj) => obj[propertyKey] === propertyValue
+    );
+    return matchingObjects.map((obj) => obj.jobNumber);
+  }
+  // Loop and Return the halls list
+  function getUniqueValuesForKey(arrayOfObjects, selectedKey) {
+    const uniqueValues = new Set();
+
+    arrayOfObjects.forEach((obj) => {
+      const value = obj[selectedKey];
+      if (value !== undefined) {
+        uniqueValues.add(value);
+      }
+    });
+
+    return Array.from(uniqueValues);
+  }
 
   const columns = useMemo(
     () => [
@@ -158,7 +168,7 @@ const Example = () => {
           align: "center",
         },
         editVariant: "select",
-        editSelectOptions: program.filter((v, i, a) => a.indexOf(v) === i),
+        editSelectOptions: getUniqueValuesForKey(programs, ["programNumber"]),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -207,9 +217,7 @@ const Example = () => {
         },
         enableClickToCopy: true,
         editVariant: "select",
-        editSelectOptions: trainingHalls.filter(
-          (v, i, a) => a.indexOf(v) === i
-        ),
+        editSelectOptions: getUniqueValuesForKey(trainingHalls, ["hallNumber"]),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -274,7 +282,7 @@ const Example = () => {
           align: "center",
         },
         editVariant: "select",
-        editSelectOptions: trainer.filter((v, i, a) => a.indexOf(v) === i),
+        editSelectOptions: filterObjectsByProperty(trainers, "trainer", "true"),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -356,8 +364,11 @@ const Example = () => {
   );
 
   //call CREATE hook
-  const { mutateAsync: createUser, isPending: isCreatingUser } =
-    useCreateUser();
+  const { mutateAsync: createUser, isPending: isCreatingUser } = useCreateUser(
+    programs,
+    trainingHalls,
+    trainers
+  );
   //call READ hook
   const {
     data: fetchedUsers = [],
@@ -367,8 +378,11 @@ const Example = () => {
   } = useGetUsers();
 
   //call UPDATE hook
-  const { mutateAsync: updateUser, isPending: isUpdatingUser } =
-    useUpdateUser();
+  const { mutateAsync: updateUser, isPending: isUpdatingUser } = useUpdateUser(
+    programs,
+    trainingHalls,
+    trainers
+  );
   //call DELETE hook
   const { mutateAsync: deleteUser, isPending: isDeletingUser } =
     useDeleteUser();
@@ -524,14 +538,21 @@ const Example = () => {
 };
 
 //CREATE hook (post new user to api)
-function useCreateUser() {
+function useCreateUser(programs, trainingHalls, trainers) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (program) => {
+      // Loop and Return the id base on the targeted value
+      const findValueByKey = (list, searchKey, searchValue, resultKey) => {
+        const result = list.find((item) => item[searchKey] === searchValue);
+        return result ? result[resultKey] : null;
+      };
       const { _id, ...rest } = program;
       //console.log(rest);
       const { includedProgramNumber, hallNumber, trainerNumber, ...r } = rest;
-
+      console.log(includedProgramNumber);
+      console.log(hallNumber);
+      console.log(trainerNumber);
       //send api update request here
       const res = await fetch("api/train/addImplementedProgram", {
         method: "POST",
@@ -539,9 +560,24 @@ function useCreateUser() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          includedProgramNumber: includedProgramNumber.split("@")[1],
-          hallNumber: hallNumber.split("@")[1],
-          trainerNumber: trainerNumber.split("@")[1],
+          includedProgramNumber: findValueByKey(
+            programs,
+            "programNumber",
+            includedProgramNumber,
+            "_id"
+          ),
+          hallNumber: findValueByKey(
+            trainingHalls,
+            "hallNumber",
+            hallNumber,
+            "_id"
+          ),
+          trainerNumber: findValueByKey(
+            trainers,
+            "jobNumber",
+            trainerNumber,
+            "_id"
+          ),
           ...r,
         }),
       });
@@ -588,7 +624,7 @@ function useGetUsers() {
       }
       let result = [];
       data.data.implementedProgram.forEach((item) => {
-        console.log(item);
+        //console.log(item);
         const {
           includedProgramNumber: { programNumber },
           hallNumber: { hallNumber },
@@ -603,7 +639,7 @@ function useGetUsers() {
           trainerNumber: jobNumber,
         });
       });
-      console.log(result);
+      // console.log(result);
       return result;
     },
     refetchOnWindowFocus: false,
@@ -611,10 +647,14 @@ function useGetUsers() {
 }
 
 //UPDATE hook (put user in api)
-function useUpdateUser() {
+function useUpdateUser(programs, trainingHalls, trainers) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (program) => {
+      const findValueByKey = (list, searchKey, searchValue, resultKey) => {
+        const result = list.find((item) => item[searchKey] === searchValue);
+        return result ? result[resultKey] : null;
+      };
       const { includedProgramNumber, hallNumber, trainerNumber, ...rest } =
         program;
       //send api update request here
@@ -624,9 +664,24 @@ function useUpdateUser() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          includedProgramNumber: includedProgramNumber.split("@")[1],
-          hallNumber: hallNumber.split("@")[1],
-          trainerNumber: trainerNumber.split("@")[1],
+          includedProgramNumber: findValueByKey(
+            programs,
+            "programNumber",
+            includedProgramNumber,
+            "_id"
+          ),
+          hallNumber: findValueByKey(
+            trainingHalls,
+            "hallNumber",
+            hallNumber,
+            "_id"
+          ),
+          trainerNumber: findValueByKey(
+            trainers,
+            "jobNumber",
+            trainerNumber,
+            "_id"
+          ),
           ...rest,
         }),
       });
@@ -703,22 +758,22 @@ function validateUser(program) {
     programNumber: !validateRequired(program.programNumber)
       ? "Program Number is Required"
       : "",
-    includedProgramNumber: !validateRequired(program.includedProgramNumber)
+    /*  includedProgramNumber: !validateRequired(program.includedProgramNumber)
       ? "Included ProgramNumber is Required"
-      : "",
+      : "", */
     date: !validateRequired(program.date) ? "Date Number is Required" : "",
-    hallNumber: !validateRequired(program.hallNumber)
+    /* hallNumber: !validateRequired(program.hallNumber)
       ? "Hall Number is Required"
-      : "",
+      : "", */
     attendanceType: !validateRequired(program.attendanceType)
       ? "Attendance Type is Required"
       : "",
     targetedCategory: !validateRequired(program.targetedCategory)
       ? "Targeted Category is Required"
       : "",
-    trainerNumber: !validateRequired(program.trainerNumber)
+    /*  trainerNumber: !validateRequired(program.trainerNumber)
       ? "Trainer Number is Required"
-      : "",
+      : "", */
     days: !validateRequired(program.days) ? "Days is Required" : "",
     attendanceNumber: !validateRequired(program.attendanceNumber)
       ? "Attendance Number is Required"
