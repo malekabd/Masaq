@@ -57,7 +57,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.programNumber,
           helperText: validationErrors?.programNumber,
@@ -472,17 +472,13 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-/* const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    ); */
-
+const validateNumberRequired = (value) => {
+  // Check if the value is not undefined, not null, and not NaN
+  return value !== undefined && value !== null && !isNaN(value) && value !== "";
+};
 function validateUser(program) {
   return {
-    programNumber: !validateRequired(program.programNumber)
+    programNumber: !validateNumberRequired(program.programNumber)
       ? "Program Number is Required"
       : "",
     programName: !validateRequired(program.programName)

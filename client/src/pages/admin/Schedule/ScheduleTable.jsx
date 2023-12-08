@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect } from "react";
-import axios from "axios";
 import { jsPDF } from "jspdf"; //or use your library of choice here
 import autoTable from "jspdf-autotable";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -37,29 +36,6 @@ const Example = () => {
   const [programs, setPrograms] = useState([]);
   const [trainers, setTrainers] = useState([]);
 
-  /*   const fetchProgramsList = useMemo(
-    () => async () => {
-      try {
-        setProgram([]);
-        const p = await axios.get("/api/train/getAllIncludedProgram"); // Replace with your API endpoint
-
-        p.data.data.includedProgram.forEach((item) => {
-          //  console.log(item);
-          const { _id: p_id, programNumber } = item;
-
-          setProgram((oldArray) => [
-            ...oldArray,
-            [programNumber, p_id].join("@"),
-          ]);
-        });
-        console.log(program);
-      } catch (error) {
-        console.error("Error fetching program list:", error);
-      }
-    },
-    []
-  ); */
-
   // Fetch the product list on component mount
   useEffect(() => {
     const fetchTrainersList = async () => {
@@ -89,9 +65,7 @@ const Example = () => {
         // Perform the fetch operation
         const response = await fetch("/api/train/getAllIncludedProgram");
         const result = await response.json();
-        console.log(result.data.includedProgram);
         setPrograms(result.data.includedProgram);
-        console.log("program", programs);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -145,7 +119,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.programNumber,
           helperText: validationErrors?.programNumber,
@@ -229,6 +203,9 @@ const Example = () => {
       {
         accessorKey: "attendanceType",
         header: "Attendance Type",
+        editVariant: "select",
+        editSelectOptions: ["online", "offline"],
+
         muiTableHeadCellProps: {
           align: "center",
         },
@@ -275,6 +252,7 @@ const Example = () => {
       {
         accessorKey: "trainerNumber",
         header: "Trainer Number",
+
         muiTableHeadCellProps: {
           align: "center",
         },
@@ -300,7 +278,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.days,
           helperText: validationErrors?.days,
@@ -316,6 +294,7 @@ const Example = () => {
       {
         accessorKey: "attendanceNumber",
         header: "Attendance Number",
+
         muiTableHeadCellProps: {
           align: "center",
         },
@@ -323,7 +302,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.attendanceNumber,
           helperText: validationErrors?.attendanceNumber,
@@ -550,9 +529,7 @@ function useCreateUser(programs, trainingHalls, trainers) {
       const { _id, ...rest } = program;
       //console.log(rest);
       const { includedProgramNumber, hallNumber, trainerNumber, ...r } = rest;
-      console.log(includedProgramNumber);
-      console.log(hallNumber);
-      console.log(trainerNumber);
+
       //send api update request here
       const res = await fetch("api/train/addImplementedProgram", {
         method: "POST",
@@ -752,19 +729,24 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-
+const validateNumberRequired = (value) => {
+  // Check if the value is not undefined, not null, and not NaN
+  return value !== undefined && value !== null && !isNaN(value) && value !== "";
+};
 function validateUser(program) {
   return {
-    programNumber: !validateRequired(program.programNumber)
+    programNumber: !validateNumberRequired(program.programNumber)
       ? "Program Number is Required"
       : "",
-    /*  includedProgramNumber: !validateRequired(program.includedProgramNumber)
+    includedProgramNumber: !validateNumberRequired(
+      program.includedProgramNumber
+    )
       ? "Included ProgramNumber is Required"
-      : "", */
+      : "",
     date: !validateRequired(program.date) ? "Date Number is Required" : "",
-    /* hallNumber: !validateRequired(program.hallNumber)
+    hallNumber: !validateNumberRequired(program.hallNumber)
       ? "Hall Number is Required"
-      : "", */
+      : "",
     attendanceType: !validateRequired(program.attendanceType)
       ? "Attendance Type is Required"
       : "",
@@ -775,7 +757,7 @@ function validateUser(program) {
       ? "Trainer Number is Required"
       : "", */
     days: !validateRequired(program.days) ? "Days is Required" : "",
-    attendanceNumber: !validateRequired(program.attendanceNumber)
+    attendanceNumber: !validateNumberRequired(program.attendanceNumber)
       ? "Attendance Number is Required"
       : "",
     traineeList: !validateRequired(program.traineeList)

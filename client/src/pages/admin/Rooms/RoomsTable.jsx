@@ -58,7 +58,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.hallNumber,
           helperText: validationErrors?.hallNumber,
@@ -133,7 +133,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.attendanceNumber,
           helperText: validationErrors?.attendanceNumber,
@@ -491,22 +491,18 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-/* const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    ); */
-
+const validateNumberRequired = (value) => {
+  // Check if the value is not undefined, not null, and not NaN
+  return value !== undefined && value !== null && !isNaN(value) && value !== "";
+};
 function validateUser(hall) {
   return {
-    hallNumber: !validateRequired(hall.hallNumber)
+    hallNumber: !validateNumberRequired(hall.hallNumber)
       ? "Hall Number is Required"
       : "",
     name: !validateRequired(hall.name) ? "Name is Required" : "",
     location: !validateRequired(hall.location) ? "Location is Required" : "",
-    attendanceNumber: !validateRequired(hall.attendanceNumber)
+    attendanceNumber: !validateNumberRequired(hall.attendanceNumber)
       ? "Attendance Number is Required"
       : "",
     equipments: !validateRequired(hall.equipments)

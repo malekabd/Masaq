@@ -57,7 +57,7 @@ const Example = () => {
           align: "center",
         },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
 
           error: !!validationErrors?.jobNumber,
@@ -636,14 +636,17 @@ const validateEmail = (email) =>
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
-
+const validateNumberRequired = (value) => {
+  // Check if the value is not undefined, not null, and not NaN
+  return value !== undefined && value !== null && !isNaN(value) && value !== "";
+};
 function validateUser(employee) {
   return {
-    jobNumber: !validateRequired(employee.jobNumber)
+    jobNumber: !validateNumberRequired(employee.jobNumber)
       ? "Job Number is Required"
       : "",
     name: !validateRequired(employee.name) ? "Name is Required" : "",
-    phoneNumber: !validateRequired(employee.phoneNumber)
+    phoneNumber: !validateNumberRequired(employee.phoneNumber)
       ? "Phone Number is Required"
       : "",
     email: !validateEmail(employee.email) ? "email is Required" : "",

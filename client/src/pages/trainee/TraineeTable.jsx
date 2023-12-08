@@ -27,62 +27,59 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import toast from "react-hot-toast";
 import React from "react";
-import axios from "axios";
 
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [trainees, setTrainees] = useState([]);
-  const [program, setProgram] = useState([]);
+  const [programs, setPrograms] = useState([]);
 
-  const fetchProgramsList = useMemo(
-    () => async () => {
-      try {
-        setProgram([]);
-        const p = await axios.get("/api/train/getAllImplementedProgram"); // Replace with your API endpoint
-
-        p.data.data.implementedProgram.forEach((item) => {
-          //  console.log(item);
-          const { _id: p_id, programNumber } = item;
-
-          setProgram((oldArray) => [
-            ...oldArray,
-            [programNumber, p_id].join("@"),
-          ]);
-        });
-        console.log(program);
-      } catch (error) {
-        console.error("Error fetching program list:", error);
-      }
-    },
-    []
-  );
-  const fetchTrainersList = useMemo(
-    () => async () => {
-      try {
-        setTrainees([]);
-        const t = await axios.get("/api/train/getAllEmployee"); // Replace with your API endpoint
-        t.data.data.employee.forEach((item) => {
-          //console.log(item);
-          const { _id: t_id, jobNumber, trainee } = item;
-          console.log(trainee);
-          if (trainee == "true") {
-            setTrainees((oldArray) => [
-              ...oldArray,
-              [jobNumber, t_id].join("@"),
-            ]);
-          }
-        });
-      } catch (error) {
-        console.error("Error fetching trainer list:", error);
-      }
-    },
-    []
-  );
   // Fetch the product list on component mount
   useEffect(() => {
+    const fetchTrainersList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllEmployee");
+        const result = await response.json();
+        // Update the state with the fetched data
+        setTrainees(result.data.employee);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    const fetchProgramsList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllImplementedProgram");
+        const result = await response.json();
+        setPrograms(result.data.implementedProgram);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     fetchTrainersList();
     fetchProgramsList();
-  }, [fetchProgramsList, fetchTrainersList]);
+  }, []);
+  //Loop and Return Dictionary of trainers list
+  function filterObjectsByProperty(array, propertyKey, propertyValue) {
+    const matchingObjects = array.filter(
+      (obj) => obj[propertyKey] === propertyValue
+    );
+    return matchingObjects.map((obj) => obj.jobNumber);
+  }
+  // Loop and Return the halls list
+  function getUniqueValuesForKey(arrayOfObjects, selectedKey) {
+    const uniqueValues = new Set();
+
+    arrayOfObjects.forEach((obj) => {
+      const value = obj[selectedKey];
+      if (value !== undefined) {
+        uniqueValues.add(value);
+      }
+    });
+
+    return Array.from(uniqueValues);
+  }
+
   const columns = useMemo(
     () => [
       {
@@ -95,8 +92,14 @@ const Example = () => {
       {
         accessorKey: "evaluationNumber",
         header: "Evaluation Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
-          type: "email",
+          type: "number",
           required: true,
           error: !!validationErrors?.evaluationNumber,
           helperText: validationErrors?.evaluationNumber,
@@ -112,8 +115,14 @@ const Example = () => {
       {
         accessorKey: "executedProgramNumber",
         header: "Executed Program Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         editVariant: "select",
-        editSelectOptions: program.filter((v, i, a) => a.indexOf(v) === i),
+        editSelectOptions: getUniqueValuesForKey(programs, ["programNumber"]),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -132,8 +141,14 @@ const Example = () => {
       {
         accessorKey: "traineeNumber",
         header: "Trainee Number",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         editVariant: "select",
-        editSelectOptions: trainees.filter((v, i, a) => a.indexOf(v) === i),
+        editSelectOptions: filterObjectsByProperty(trainees, "trainee", "true"),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -211,8 +226,10 @@ const Example = () => {
   );
 
   //call CREATE hook
-  const { mutateAsync: createUser, isPending: isCreatingUser } =
-    useCreateUser();
+  const { mutateAsync: createUser, isPending: isCreatingUser } = useCreateUser(
+    programs,
+    trainees
+  );
   //call READ hook
   const {
     data: fetchedUsers = [],
@@ -222,8 +239,10 @@ const Example = () => {
   } = useGetUsers();
 
   //call UPDATE hook
-  const { mutateAsync: updateUser, isPending: isUpdatingUser } =
-    useUpdateUser();
+  const { mutateAsync: updateUser, isPending: isUpdatingUser } = useUpdateUser(
+    programs,
+    trainees
+  );
   //call DELETE hook
   const { mutateAsync: deleteUser, isPending: isDeletingUser } =
     useDeleteUser();
@@ -262,6 +281,7 @@ const Example = () => {
   const table = useMaterialReactTable({
     columns,
     data: fetchedUsers,
+    initialState: { columnVisibility: { _id: false } },
     createDisplayMode: "modal", //default ('row', and 'custom' are also available)
     editDisplayMode: "modal", //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
@@ -346,12 +366,15 @@ const Example = () => {
 };
 
 //CREATE hook (post new user to api)
-function useCreateUser() {
+function useCreateUser(programs, trainees) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (program) => {
       const { _id, ...rest } = program;
-      //console.log(rest);
+      const findValueByKey = (list, searchKey, searchValue, resultKey) => {
+        const result = list.find((item) => item[searchKey] === searchValue);
+        return result ? result[resultKey] : null;
+      };
       const { executedProgramNumber, traineeNumber, ...r } = rest;
 
       //send api update request here
@@ -361,8 +384,18 @@ function useCreateUser() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          executedProgramNumber: executedProgramNumber.split("@")[1],
-          traineeNumber: traineeNumber.split("@")[1],
+          executedProgramNumber: findValueByKey(
+            programs,
+            "programNumber",
+            executedProgramNumber,
+            "_id"
+          ),
+          traineeNumber: findValueByKey(
+            trainees,
+            "jobNumber",
+            traineeNumber,
+            "_id"
+          ),
           ...r,
         }),
       });
@@ -401,18 +434,17 @@ function useGetUsers() {
         },
       });
       let data = await res.json();
-      //  console.log(data.data);
+
       if (data.status === "Fail") {
         console.log(data.message);
       }
-
+      
       let result = [];
       data.data.forEach((item) => {
-        console.log(item);
         const {
           executedProgramNumber: { programNumber },
 
-          traineeNumber: { _id, jobNumber },
+          traineeNumber: { jobNumber },
           ...rest
         } = item;
 
@@ -420,10 +452,10 @@ function useGetUsers() {
           ...rest,
           executedProgramNumber: programNumber,
 
-          trainerNumber: jobNumber,
+          traineeNumber: jobNumber,
         });
       });
-      console.log(result);
+
       return result;
     },
     refetchOnWindowFocus: false,
@@ -431,27 +463,41 @@ function useGetUsers() {
 }
 
 //UPDATE hook (put user in api)
-function useUpdateUser() {
+function useUpdateUser(programs, trainees) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (evaluation) => {
+      const findValueByKey = (list, searchKey, searchValue, resultKey) => {
+        const result = list.find((item) => item[searchKey] === searchValue);
+        return result ? result[resultKey] : null;
+      };
       const { _id, ...rest } = evaluation;
-      //console.log(rest);
+    
       const { executedProgramNumber, traineeNumber, ...r } = rest;
       //send api update request here
-      const res = await fetch("api/train/editProgramEvaluation", {
+      const res = await fetch("api/train/EditProgramEvaluation", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          executedProgramNumber: executedProgramNumber.split("@")[1],
-          traineeNumber: traineeNumber.split("@")[1],
+          executedProgramNumber: findValueByKey(
+            programs,
+            "programNumber",
+            executedProgramNumber,
+            "_id"
+          ),
+          traineeNumber: findValueByKey(
+            trainees,
+            "jobNumber",
+            traineeNumber,
+            "_id"
+          ),
           ...r,
         }),
       });
       let data = await res.json();
-      // console.log(data.code);
+
       if (data.code == "500") {
         console.log(data.message);
       }
@@ -517,25 +563,30 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-
+const validateNumberRequired = (value) => {
+  // Check if the value is not undefined, not null, and not NaN
+  return value !== undefined && value !== null && !isNaN(value) && value !== "";
+};
 function validateUser(evaluation) {
   return {
-    evaluationNumber: !validateRequired(evaluation.evaluationNumber)
+    evaluationNumber: !validateNumberRequired(evaluation.evaluationNumber)
       ? "Evaluation Number is Required"
       : "",
-    executedProgramNumber: !validateRequired(evaluation.executedProgramNumber)
+    executedProgramNumber: !validateNumberRequired(
+      evaluation.executedProgramNumber
+    )
       ? "Executed ProgramNumber is Required"
       : "",
-    traineeNumber: !validateRequired(evaluation.traineeNumber)
+    traineeNumber: !validateNumberRequired(evaluation.traineeNumber)
       ? "Trainee Number is Required"
       : "",
-    trainerEvaluation: !validateRequired(evaluation.trainerEvaluation)
+    trainerEvaluation: !validateNumberRequired(evaluation.trainerEvaluation)
       ? "Trainer Evaluation is Required"
       : "",
-    programNumber: !validateRequired(evaluation.programNumber)
+    programNumber: !validateNumberRequired(evaluation.programNumber)
       ? "Program Number is Required"
       : "",
-    hallEvaluation: !validateRequired(evaluation.hallEvaluation)
+    hallEvaluation: !validateNumberRequired(evaluation.hallEvaluation)
       ? "Hall Evaluation is Required"
       : "",
   };
