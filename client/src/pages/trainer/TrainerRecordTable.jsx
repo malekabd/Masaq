@@ -205,15 +205,17 @@ function useGetUsers(name, jobNumber) {
       }
       let result = [];
       data.data.forEach((item) => {
-        console.log(item);
+        //console.log(item);
         const {
-          executedProgramNumber: { programNumber, attendanceType },
-          traineeNumber: { jobNumber },
+          executedProgramNumber: {
+            programNumber,
+            attendanceType,
+            trainerNumber: { jobNumber: JN },
+          },
           trainerEvaluation,
         } = item;
-        console.log(jobNumber);
-        if (89 == jobNumber) {
-          console.log("true");
+
+        if (JN == jobNumber) {
           result.push({
             programNumber,
             attendanceType,

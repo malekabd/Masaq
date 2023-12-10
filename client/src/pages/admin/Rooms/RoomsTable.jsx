@@ -299,7 +299,7 @@ const Example = () => {
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete">
+        {/*     <Tooltip title="Delete">
           <IconButton
             color="error"
             onClick={() => {
@@ -308,7 +308,7 @@ const Example = () => {
           >
             <DeleteIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </Box>
     ),
 
@@ -426,10 +426,9 @@ function useUpdateUser() {
         body: JSON.stringify(hall),
       });
       let data = await res.json();
-      console.log(data.code);
+
       if (data.code == "500") {
-        /*         toast.error("Wrong credentials");
-         */ toast.error(data.message);
+        toast.error("Wrong credentials");
       }
       return data.data;
     },
@@ -491,18 +490,15 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-const validateNumberRequired = (value) => {
-  // Check if the value is not undefined, not null, and not NaN
-  return value !== undefined && value !== null && !isNaN(value) && value !== "";
-};
+
 function validateUser(hall) {
   return {
-    hallNumber: !validateNumberRequired(hall.hallNumber)
+    hallNumber: !validateRequired(hall.hallNumber)
       ? "Hall Number is Required"
       : "",
     name: !validateRequired(hall.name) ? "Name is Required" : "",
     location: !validateRequired(hall.location) ? "Location is Required" : "",
-    attendanceNumber: !validateNumberRequired(hall.attendanceNumber)
+    attendanceNumber: !validateRequired(hall.attendanceNumber)
       ? "Attendance Number is Required"
       : "",
     equipments: !validateRequired(hall.equipments)

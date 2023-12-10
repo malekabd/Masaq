@@ -28,6 +28,7 @@ export default function App() {
   if (_user) {
     let user = JSON.parse(_user);
     isLoggedIn = true;
+    //console.log(user);
   }
 
   const [user, setUser] = useState({

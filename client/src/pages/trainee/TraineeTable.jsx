@@ -281,6 +281,11 @@ const Example = () => {
   const table = useMaterialReactTable({
     columns,
     data: fetchedUsers,
+    muiTableBodyProps: {
+      sx: {
+        backgroundColor: "#f5f5",
+      },
+    },
     initialState: { columnVisibility: { _id: false } },
     createDisplayMode: "modal", //default ('row', and 'custom' are also available)
     editDisplayMode: "modal", //default ('row', 'cell', 'table', and 'custom' are also available)
@@ -438,7 +443,7 @@ function useGetUsers() {
       if (data.status === "Fail") {
         console.log(data.message);
       }
-      
+
       let result = [];
       data.data.forEach((item) => {
         const {
@@ -472,7 +477,7 @@ function useUpdateUser(programs, trainees) {
         return result ? result[resultKey] : null;
       };
       const { _id, ...rest } = evaluation;
-    
+
       const { executedProgramNumber, traineeNumber, ...r } = rest;
       //send api update request here
       const res = await fetch("api/train/EditProgramEvaluation", {
@@ -556,7 +561,9 @@ const ExampleWithProviders = () => (
   //Put this with your other react-query providers near root of your app
   <QueryClientProvider client={queryClient}>
     <ReactQueryDevtools initialIsOpen={false} />
-    <Example />
+    <div className="w-full h-screen">
+      <Example />
+    </div>
   </QueryClientProvider>
 );
 

@@ -15,20 +15,25 @@ const SingleFieldForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "",
-        inputValue
-      );
+      // Adjust the URL to your API endpoint
+      const response = await fetch("api/announcement/addAnnouncement", {
+        method: "POST",
 
-      console.log("Data received:", response.data);
+        body: JSON.stringify(inputValue),
+      });
 
+      // Ensure the request was successful (status code 2xx)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Parse the JSON response
+      const responseData = await response.json();
+      console.log(responseData);
       // Perform additional actions with the received data
     } catch (error) {
       console.error("Error during POST request:", error.message);
     }
-    // Perform any action with the form data here
-    console.log("Form submitted with value:", inputValue);
-    // You can send the data to a server, perform validation, etc.
   };
 
   return (

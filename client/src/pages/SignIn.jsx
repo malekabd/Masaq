@@ -49,6 +49,7 @@ export default function Login() {
       if (data.status === "success") {
         const _user = {
           jobNumber: data.data.user.jobNumber,
+          name: data.data.user.name,
           token: data.token,
           roleTokens: data.roleTokens,
         };
