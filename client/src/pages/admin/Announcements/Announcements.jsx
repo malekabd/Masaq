@@ -13,22 +13,23 @@ const SingleFieldForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(inputValue);
     try {
-      // Adjust the URL to your API endpoint
-      const response = await fetch("api/announcement/addAnnouncement", {
+      const res = await fetch("api/announcement/addAnnouncement", {
         method: "POST",
-
-        body: JSON.stringify(inputValue),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ announcement: inputValue }),
       });
 
       // Ensure the request was successful (status code 2xx)
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
       }
 
       // Parse the JSON response
-      const responseData = await response.json();
+      const responseData = await res.json();
       console.log(responseData);
       // Perform additional actions with the received data
     } catch (error) {

@@ -34,3 +34,24 @@ export const getAllAnnouncement = async (req, res, next) => {
     next();
   }
 };
+
+export const deleteAnnouncement = async (req, res, next) => {
+  const { _id } = req.body;
+  // res.json({ code: "200", status: "yep" });
+  console.log(req.body);
+  try {
+    const validAnnouncement = await Announcement.findOneAndRemove({ _id });
+    if (!validAnnouncement)
+      return res.status(404).json({
+        code: "404",
+        status: "Fail",
+        message: "Announcement does not  exist",
+      });
+    res.status(202).json({ status: "success" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: "500", status: " Bad Request", message: error.message });
+    next();
+  }
+};

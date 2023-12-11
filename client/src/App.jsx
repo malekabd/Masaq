@@ -20,6 +20,7 @@ import TrainerLayOut from "./pages/trainer/TrainerLayOut";
 import TrainerRecord from "./pages/trainer/TrainerRecord";
 import TraineeLayOut from "./pages/trainee/TraineeLayOut";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer/Footer";
 export default function App() {
   let _user = localStorage.getItem("user");
 
@@ -39,34 +40,36 @@ export default function App() {
   });
   return (
     <UserContext.Provider value={{ user, setUser, userRole, setUserRole }}>
-      <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route element={<MainLayOut />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/signin" element={<SignIn />} />
-          </Route>
+      <div className=" h-screen">
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route element={<MainLayOut />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/signin" element={<SignIn />} />
+            </Route>
 
-          <Route element={<LayOut />}>
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/employees" element={<Employees />} />
-            <Route path="/rooms" element={<Rooms />} />
-            <Route path="/programs" element={<Programs />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/announcements" element={<Announcements />} />
-            <Route path="/Absence" element={<RecordingAbsence />} />
-          </Route>
+            <Route element={<LayOut />}>
+              <Route path="/schedule" element={<Schedule />} />
+              <Route path="/employees" element={<Employees />} />
+              <Route path="/rooms" element={<Rooms />} />
+              <Route path="/programs" element={<Programs />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/announcements" element={<Announcements />} />
+              <Route path="/Absence" element={<RecordingAbsence />} />
+            </Route>
 
-          <Route element={<TraineeLayOut />}>
-            <Route path="/trainee" element={<TraineeRecord />} />
-            <Route path="/evaluation" element={<Evaluations />} />
-          </Route>
-          <Route element={<TrainerLayOut />}>
-            <Route path="/trainer" element={<TrainerRecord />} />
-          </Route>
-          <Route path="/forbidden" element={<h1>UnAuthorized</h1>} />
-        </Routes>
-      </BrowserRouter>
+            <Route element={<TraineeLayOut />}>
+              <Route path="/trainee" element={<TraineeRecord />} />
+              <Route path="/evaluation" element={<Evaluations />} />
+            </Route>
+            <Route element={<TrainerLayOut />}>
+              <Route path="/trainer" element={<TrainerRecord />} />
+            </Route>
+            <Route path="/forbidden" element={<h1>UnAuthorized</h1>} />
+          </Routes>
+        </BrowserRouter>
+      </div>
       <Toaster
         position="top-center"
         gutter={12}
