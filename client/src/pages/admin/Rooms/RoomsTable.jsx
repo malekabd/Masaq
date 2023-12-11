@@ -490,15 +490,18 @@ const ExampleWithProviders = () => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-
+const validateNumberRequired = (value) => {
+  // Check if the value is not undefined, not null, and not NaN
+  return value !== undefined && value !== null && !isNaN(value) && value !== "";
+};
 function validateUser(hall) {
   return {
-    hallNumber: !validateRequired(hall.hallNumber)
+    hallNumber: !validateNumberRequired(hall.hallNumber)
       ? "Hall Number is Required"
       : "",
     name: !validateRequired(hall.name) ? "Name is Required" : "",
     location: !validateRequired(hall.location) ? "Location is Required" : "",
-    attendanceNumber: !validateRequired(hall.attendanceNumber)
+    attendanceNumber: !validateNumberRequired(hall.attendanceNumber)
       ? "Attendance Number is Required"
       : "",
     equipments: !validateRequired(hall.equipments)

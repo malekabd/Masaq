@@ -349,9 +349,8 @@ function useCreateUser() {
       });
       let data = await res.json();
 
-      if (data.code === 500) {
-        /*         toast.error("Wrong credentials");
-         */ console.log("error");
+      if (data.code === "500") {
+        toast.error(data.message);
       }
       return data.data.includedProgram;
     },

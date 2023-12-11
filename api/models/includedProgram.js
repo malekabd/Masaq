@@ -15,7 +15,7 @@ const includedProgram = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-    }, 
+    },
     implementingSection: {
       type: String,
       required: true,
@@ -28,9 +28,6 @@ const includedProgram = new mongoose.Schema(
   { timestamps: true }
 );
 
-const IncludedProgram = mongoose.model(
-  "IncludedProgram",
-  includedProgram
-);
+const IncludedProgram = mongoose.model("IncludedProgram", includedProgram);
 
 export default IncludedProgram;

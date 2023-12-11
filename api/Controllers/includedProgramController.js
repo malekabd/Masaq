@@ -1,10 +1,10 @@
 import IncludedProgram from "../models/includedProgram.js";
 
 export const getIncludedProgram = async (req, res, next) => {
-  const { _id } = req.body;
+  const { programNumber } = req.body;
   try {
     const validIncludedProgram = await IncludedProgram.findOne({
-      _id,
+      programNumber,
     });
     if (!validIncludedProgram)
       return res.status(409).json({
@@ -106,12 +106,10 @@ export const EditIncludedProgram = async (req, res, next) => {
         status: "Fail",
         message: "Program does not  exist",
       });
-    res
-      .status(202)
-      .json({
-        status: "success",
-        data: { includedProgram: newIncludedProgram },
-      });
+    res.status(202).json({
+      status: "success",
+      data: { includedProgram: newIncludedProgram },
+    });
   } catch (error) {
     res
       .status(500)
