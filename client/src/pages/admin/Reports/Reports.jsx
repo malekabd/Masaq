@@ -10,7 +10,6 @@ export default function Reports() {
   const [programs, setPrograms] = useState([]);
   const [includedPrograms, setIncludedPrograms] = useState([]);
   const [age, setAge] = useState("");
-
   // Fetch the product list on component mount
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -18,7 +17,6 @@ export default function Reports() {
         // Perform the fetch operation
         const response = await fetch("/api/train/getAllImplementedProgram");
         const result = await response.json();
-
         setPrograms(result.data.implementedProgram);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -29,7 +27,6 @@ export default function Reports() {
         // Perform the fetch operation
         const response = await fetch("/api/train/getAllEmployee");
         const result = await response.json();
-
         console.log(result.data.employee);
         // Update the state with the fetched data
         setEmployees(result.data.employee);
@@ -42,7 +39,6 @@ export default function Reports() {
         // Perform the fetch operation
         const response = await fetch("/api/train/getAllIncludedProgram");
         const result = await response.json();
-
         console.log(result.data.includedProgram);
         // Update the state with the fetched data
         setIncludedPrograms(result.data.includedProgram);
@@ -50,15 +46,12 @@ export default function Reports() {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchSchedule();
     fetchIncludedList();
     fetchTrainersList();
   }, []);
-
   const exportToPDF = (role) => {
     const pdf = new jsPDF();
-
     // Format and add data to the PDF
     if (role == "admin") {
       pdf.text(
@@ -69,7 +62,6 @@ export default function Reports() {
       let i = 20;
       employees.forEach((employee) => {
         i += 10;
-
         pdf.text(
           10,
           i,
@@ -93,7 +85,6 @@ export default function Reports() {
       employees.forEach((employee) => {
         if (employee.trainer == "true") {
           i += 10;
-
           pdf.text(
             10,
             i,
@@ -118,7 +109,6 @@ export default function Reports() {
       employees.forEach((employee) => {
         if (employee.trainee == "true") {
           i += 10;
-
           pdf.text(
             10,
             i,
@@ -133,7 +123,6 @@ export default function Reports() {
         }
       });
     }
-
     if (role == "scheduled") {
       console.log("programs", programs);
       pdf.text(
@@ -209,13 +198,13 @@ export default function Reports() {
     setAge(event.target.value);
   };
   return (
-    <div className="mt-20 ">
-      <div className=" grid grid-cols-2 lg:grid-cols-3  gap-3 p-4">
+    <div className="mt-40 ">
+      <div className=" grid grid-cols-1 lg:grid-cols-3  gap-3 p-4">
         <button
           onClick={() => {
             exportToPDF("trainer");
           }}
-          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400 "
         >
           All Trainer List
         </button>
@@ -223,7 +212,7 @@ export default function Reports() {
           onClick={() => {
             exportToPDF("trainee");
           }}
-          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-100 p-3"
+          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-sky-400 p-3"
         >
           All Trainee List
         </button>
@@ -231,14 +220,14 @@ export default function Reports() {
           onClick={() => {
             exportToPDF("admin");
           }}
-          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-lg hover:text-sky-400 p-3"
+          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-sky-400 p-3"
         >
           All Employees List
         </button>
       </div>
-      <div className=" grid grid-cols-2 lg:grid-cols-3 gap-3 pt-6 ">
+      <div className=" grid grid-cols-1 lg:grid-cols-3 gap-3 pt-6 ">
         <button
-          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400"
           onClick={() => {
             exportToPDF("scheduled");
           }}
@@ -246,7 +235,7 @@ export default function Reports() {
           Scheduled Programs
         </button>
         <button
-          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400"
           onClick={() => {
             exportToPDF("given");
           }}
@@ -254,38 +243,12 @@ export default function Reports() {
           Given Programs
         </button>
         <button
-          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-lg hover:text-sky-400"
+          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400"
           onClick={() => {
             exportToPDF("available");
           }}
         >
           Available Programs
-        </button>
-      </div>
-      <div className="grid grid-cols-2 gap-4 pt-6">
-        <Box
-          className=" bg-sky-400  p-2 rounded-md hover:text-lg hover:text-white"
-          sx={{ minWidth: 120 }}
-        >
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label ">
-              <span className="text-white">Age</span>
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={age}
-              label="Age"
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <button className=" bg-sky-400  text-white rounded-md p-2 shadow-lg hover:text-lg hover:text-black">
-          View Report
         </button>
       </div>
     </div>

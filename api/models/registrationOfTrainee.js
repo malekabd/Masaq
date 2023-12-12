@@ -14,7 +14,7 @@ const registrationOfTrainee = new mongoose.Schema(
     employeeNumber: { type: mongoose.Schema.ObjectId, ref: "Employee" },
 
     present: {
-      type: Number,
+      type: String,
       required: true,
     },
   },

@@ -37,8 +37,7 @@ export const getAllAnnouncement = async (req, res, next) => {
 
 export const deleteAnnouncement = async (req, res, next) => {
   const { _id } = req.body;
-  // res.json({ code: "200", status: "yep" });
-  console.log(req.body);
+
   try {
     const validAnnouncement = await Announcement.findOneAndRemove({ _id });
     if (!validAnnouncement)

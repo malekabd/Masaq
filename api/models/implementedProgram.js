@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const implementedProgram = new mongoose.Schema(
   {
+    programName: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     programNumber: {
       type: Number,
       required: true,

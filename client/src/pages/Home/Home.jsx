@@ -4,6 +4,7 @@ import "./Home.css";
 
 export default function Home() {
   const [announcements, setAnnouncements] = React.useState([]);
+  const [programs, setPrograms] = React.useState([]);
   const promises = [];
   React.useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -30,6 +31,20 @@ export default function Home() {
         console.error("At least one promise rejected:", error);
       });
     // console.log("promises" + promises);
+    const fetchProgramsList = async () => {
+      try {
+        // Perform the fetch operation
+        const response = await fetch("/api/train/getAllImplementedProgram");
+        const result = await response.json();
+        //console.log(result.data.implementedProgram);
+        setPrograms(result.data.implementedProgram);
+        // console.log(programs);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchProgramsList();
     fetchAnnouncements();
   }, []);
 
@@ -41,6 +56,15 @@ export default function Home() {
       console.log("true");
       return deleteResource(_id);
     }
+  }
+
+  function isWithinNextSevenDays(dateString) {
+    console.log(dateString);
+    const currentDate = new Date();
+    const comparedDate = new Date(dateString);
+    const timeDifference = comparedDate - currentDate;
+    const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+    return daysDifference >= 0 && daysDifference <= 7;
   }
 
   const deleteResource = async (_id) => {
@@ -63,7 +87,7 @@ export default function Home() {
     }
   };
 
-  //console.log("Is any object's updatedAt older than 5 days:", filteredArray);
+  console.log("programs", programs);
   return (
     <>
       <div className="box1 flex justify-center items-center">
@@ -100,30 +124,16 @@ export default function Home() {
           <div className="chat-notification-logo-wrapper">
             <h4 className="chat-notification-title">The Week Programs</h4>
             <table className="myTable">
-              <tr>
-                <td>Alfreds Futterkiste</td>
-              </tr>
-              <tr>
-                <td>Sweden</td>
-              </tr>
-              <tr>
-                <td>Centro comercial Moctezuma</td>
-              </tr>
-              <tr>
-                <td>Ernst Handel</td>
-              </tr>
-              <tr>
-                <td>Alfreds Futterkiste</td>
-              </tr>
-              <tr>
-                <td>Sweden</td>
-              </tr>
-              <tr>
-                <td>Centro comercial Moctezuma</td>
-              </tr>
-              <tr>
-                <td>Ernst Handel</td>
-              </tr>
+              {programs
+                .filter((data) => isWithinNextSevenDays(data.date))
+                .map((data) => {
+                  console.log("hello");
+                  return (
+                    <tr>
+                      <td>{data.programName}</td>
+                    </tr>
+                  );
+                })}
             </table>
           </div>
         </div>

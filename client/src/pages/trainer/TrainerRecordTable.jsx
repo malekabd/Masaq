@@ -20,7 +20,7 @@ let user = {};
 if (_user) {
   user = JSON.parse(_user);
 
-  console.log(user.jobNumber);
+ // console.log(user.jobNumber);
 }
 let target_value = user.jobNumber;
 //console.log(target_value);
@@ -199,7 +199,7 @@ function useGetUsers(name, jobNumber) {
       });
 
       let data = await res.json();
-
+      console.log(data);
       if (data.code === "500") {
         toast.error("Wrong credentials");
       }

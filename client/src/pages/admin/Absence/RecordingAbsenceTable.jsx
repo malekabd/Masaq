@@ -183,6 +183,8 @@ const Example = () => {
       {
         accessorKey: "present",
         header: "present",
+        editVariant: "select",
+        editSelectOptions: ["true", "false"],
         muiTableHeadCellProps: {
           align: "center",
         },
@@ -295,9 +297,7 @@ const Example = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">
-          Create New Registration of trainees
-        </DialogTitle>
+        <DialogTitle variant="h3">Create New Attendance</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
@@ -572,8 +572,6 @@ function validateUser(register) {
       ? "Today Training is Required"
       : "",
 
-    present: !validateNumberRequired(register.present)
-      ? "Present is Required"
-      : "",
+    present: !validateRequired(register.present) ? "Present is Required" : "",
   };
 }

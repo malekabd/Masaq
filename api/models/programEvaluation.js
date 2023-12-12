@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const programEvaluation = new mongoose.Schema(
   {
-    evaluationNumber: { type: Number, required: true },
+
     executedProgramNumber: {
       type: mongoose.Schema.ObjectId,
       ref: "ImplementedProgram",

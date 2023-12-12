@@ -20,7 +20,7 @@ let user = {};
 if (_user) {
   user = JSON.parse(_user);
 
-  console.log(user.jobNumber);
+  //console.log(user.jobNumber);
 }
 let target_value = user.jobNumber;
 //console.log(target_value);
@@ -187,7 +187,7 @@ const Example = () => {
 };
 
 //READ hook (get users from api)
-function useGetUsers(name, jobNumber) {
+function useGetUsers(name, jn) {
   return useQuery({
     queryKey: ["ImplementedPrograms"],
     queryFn: async () => {
@@ -205,14 +205,14 @@ function useGetUsers(name, jobNumber) {
       }
       let result = [];
       data.data.forEach((item) => {
-        console.log(item);
+        //console.log(item);
         const {
           executedProgramNumber: { programNumber, attendanceType },
           traineeNumber: { jobNumber },
           trainerEvaluation,
         } = item;
-        console.log(jobNumber);
-        if (89 == jobNumber) {
+        //console.log(jobNumber);
+        if (jn == jobNumber) {
           console.log("true");
           result.push({
             programNumber,

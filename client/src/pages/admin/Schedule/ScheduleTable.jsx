@@ -110,6 +110,29 @@ const Example = () => {
         size: 80,
       },
       {
+        accessorKey: "programName",
+        header: "Program Name",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+        muiEditTextFieldProps: {
+          type: "email",
+          required: true,
+          error: !!validationErrors?.programName,
+          helperText: validationErrors?.programName,
+          //remove any previous validation errors when user focuses on the input
+          /*      onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              firstName: undefined,
+            }), */
+          //optionally add validation checking for onBlur or onChange
+        },
+      },
+      {
         accessorKey: "programNumber",
         header: "Program Number",
         muiTableHeadCellProps: {
@@ -436,7 +459,7 @@ const Example = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Create New Implemented Program</DialogTitle>
+        <DialogTitle variant="h3">Create New </DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
@@ -735,6 +758,9 @@ const validateNumberRequired = (value) => {
 };
 function validateUser(program) {
   return {
+    programName: !validateRequired(program.programName)
+      ? "Program Name is Required"
+      : "",
     programNumber: !validateNumberRequired(program.programNumber)
       ? "Program Number is Required"
       : "",
@@ -756,7 +782,7 @@ function validateUser(program) {
     /*  trainerNumber: !validateRequired(program.trainerNumber)
       ? "Trainer Number is Required"
       : "", */
-    days: !validateRequired(program.days) ? "Days is Required" : "",
+    days: !validateNumberRequired(program.days) ? "Days is Required" : "",
     attendanceNumber: !validateNumberRequired(program.attendanceNumber)
       ? "Attendance Number is Required"
       : "",

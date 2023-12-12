@@ -32,7 +32,12 @@ const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [trainees, setTrainees] = useState([]);
   const [programs, setPrograms] = useState([]);
-
+  let _user = localStorage.getItem("user");
+  let user = {};
+  if (_user) {
+    user = JSON.parse(_user);
+    // console.log(user.jobNumber);
+  }
   // Fetch the product list on component mount
   useEffect(() => {
     const fetchTrainersList = async () => {
@@ -89,29 +94,7 @@ const Example = () => {
         enableEditing: false,
         size: 80,
       },
-      {
-        accessorKey: "evaluationNumber",
-        header: "Evaluation Number",
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiEditTextFieldProps: {
-          type: "number",
-          required: true,
-          error: !!validationErrors?.evaluationNumber,
-          helperText: validationErrors?.evaluationNumber,
-          //remove any previous validation errors when user focuses on the input
-          /*      onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              firstName: undefined,
-            }), */
-          //optionally add validation checking for onBlur or onChange
-        },
-      },
+
       {
         accessorKey: "executedProgramNumber",
         header: "Executed Program Number",
@@ -148,7 +131,7 @@ const Example = () => {
           align: "center",
         },
         editVariant: "select",
-        editSelectOptions: filterObjectsByProperty(trainees, "trainee", "true"),
+        editSelectOptions: [user.jobNumber],
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -167,6 +150,12 @@ const Example = () => {
       {
         accessorKey: "trainerEvaluation",
         header: "Trainer Evaluation",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         editVariant: "select",
         editSelectOptions: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         muiEditTextFieldProps: {
@@ -188,6 +177,12 @@ const Example = () => {
         header: "Program Evaluation", //I made a mistake in this name in the data base (programNumber)
         editVariant: "select",
         editSelectOptions: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -205,6 +200,12 @@ const Example = () => {
       {
         accessorKey: "hallEvaluation",
         header: "Hall Evaluation",
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
+        },
         editVariant: "select",
         editSelectOptions: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         muiEditTextFieldProps: {
@@ -236,7 +237,7 @@ const Example = () => {
     isError: isLoadingUsersError,
     isFetching: isFetchingUsers,
     isLoading: isLoadingUsers,
-  } = useGetUsers();
+  } = useGetUsers(user.jobNumber);
 
   //call UPDATE hook
   const { mutateAsync: updateUser, isPending: isUpdatingUser } = useUpdateUser(
@@ -406,7 +407,7 @@ function useCreateUser(programs, trainees) {
       });
       let data = await res.json();
 
-      if (data.code === "500") {
+      if (data.code == "500") {
         toast.error("Wrong credentials");
       }
       return data.data;
@@ -428,7 +429,7 @@ function useCreateUser(programs, trainees) {
 }
 
 //READ hook (get users from api)
-function useGetUsers() {
+function useGetUsers(jb) {
   return useQuery({
     queryKey: ["Evaluation"],
     queryFn: async () => {
@@ -439,7 +440,7 @@ function useGetUsers() {
         },
       });
       let data = await res.json();
-
+      //console.log(data);
       if (data.status === "Fail") {
         console.log(data.message);
       }
@@ -452,13 +453,14 @@ function useGetUsers() {
           traineeNumber: { jobNumber },
           ...rest
         } = item;
+        if (jb === jobNumber) {
+          result.push({
+            ...rest,
+            executedProgramNumber: programNumber,
 
-        result.push({
-          ...rest,
-          executedProgramNumber: programNumber,
-
-          traineeNumber: jobNumber,
-        });
+            traineeNumber: jobNumber,
+          });
+        }
       });
 
       return result;
@@ -576,9 +578,6 @@ const validateNumberRequired = (value) => {
 };
 function validateUser(evaluation) {
   return {
-    evaluationNumber: !validateNumberRequired(evaluation.evaluationNumber)
-      ? "Evaluation Number is Required"
-      : "",
     executedProgramNumber: !validateNumberRequired(
       evaluation.executedProgramNumber
     )
