@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home/Home";
-import SignIn from "./pages/signIn";
+import SignIn from "./pages/SignIn";
 import LayOut from "./pages/admin/LayOut";
 import UserContext from "./pages/userContext";
 import { Toaster } from "react-hot-toast";
