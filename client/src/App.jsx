@@ -20,7 +20,6 @@ import TrainerLayOut from "./pages/trainer/TrainerLayOut";
 import TrainerRecord from "./pages/trainer/TrainerRecord";
 import TraineeLayOut from "./pages/trainee/TraineeLayOut";
 import NavBar from "./components/NavBar";
-import Footer from "./components/Footer/Footer";
 export default function App() {
   let _user = localStorage.getItem("user");
 

@@ -16,15 +16,7 @@ export default function Login() {
     showPassword: false,
     isLoggedIn: false,
   });
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+
   async function onSubmit() {
     try {
       setLoading(true);
@@ -217,26 +209,6 @@ export default function Login() {
             </div>
           </form>
         </div>
-        {/*   <Link to="/signup" className="">
-          <div className="flex justify-center items-center mt-6 ">
-            <div
-              target="_blank"
-              className="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center "
-            >
-              <span>
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
-              </span>
-              <span className="ml-2">You do have an account?</span>
-            </div>
-          </div>
-        </Link> */}
       </div>
     </div>
   );
