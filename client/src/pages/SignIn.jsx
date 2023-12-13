@@ -1,21 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import React from "react";
 import UserContext from "./userContext";
 import toast from "react-hot-toast";
 export default function Login() {
   const userContext = useContext(UserContext);
   const { register, handleSubmit, formState, watch } = useForm(); //first step
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+
   const { errors } = formState;
   const navigate = useNavigate();
   const [jobNumber, password] = watch(["jobNumber", "password"]);
 
   async function onSubmit() {
     try {
-      setLoading(true);
       const res = await fetch("/api/user/signin", {
         method: "POST",
         headers: {
@@ -29,11 +27,7 @@ export default function Login() {
         toast.error("Wrong credentials");
         return false;
       }
-      if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
-        return;
-      }
+
       if (data.status === "success") {
         const _user = {
           jobNumber: data.data.user.jobNumber,
@@ -67,8 +61,7 @@ export default function Login() {
       }
       navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
+      console.log(error);
     }
   }
 
