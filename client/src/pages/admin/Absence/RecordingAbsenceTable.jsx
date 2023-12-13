@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import axios from "axios";
+
 import {
   MRT_EditActionButtons,
   MaterialReactTable,

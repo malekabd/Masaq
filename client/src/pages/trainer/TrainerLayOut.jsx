@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-import UserContext from "../userContext";
 import Sidebar from "../../components/Sidebar";
 
 export default function TraineeLayOut() {
@@ -25,7 +24,7 @@ export default function TraineeLayOut() {
       ) : (
         <div className="bg-black w-screen h-full flex flex-col  justify-center items-center ">
         <h1 className="text-red-600 font-bold text-4xl ">
-          {" "}
+      
           Unauthorized يا ابن اليهودية
         </h1>
         <img
