@@ -8,7 +8,8 @@
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "ndb api/index.js"
+    "debug": "ndb api/index.js",
+    "build": "npm install && npm install --prefix client && npm run build --prefix client "
   },
   "keywords": [],
   "author": "",

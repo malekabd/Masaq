@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRoutes.js";
 import trainRouter from "./routes/trainRoutes.js";
 import announcementRouter from "./routes/announcementRoutes.js";
-
+import path from "path";
 dotenv.config();
 
 mongoose
@@ -17,6 +17,7 @@ mongoose
     console.log(err);
   });
 
+const _dirname = path.resolve();
 const app = express();
 
 app.use(express.json());
@@ -29,6 +30,11 @@ app.listen(3000, () => {
 app.use("/api/user", authRouter);
 app.use("/api/train", trainRouter);
 app.use("/api/announcement", announcementRouter);
+
+app.use(express.static(path.join(__dirname, "client/dist/")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");

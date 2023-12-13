@@ -53,13 +53,13 @@ export default function Home() {
     const timeDifference = currentDate - new Date(previousDate);
     const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
     if (daysDifference > 3) {
-      console.log("true");
+      //console.log("true");
       return deleteResource(_id);
     }
   }
 
   function isWithinNextSevenDays(dateString) {
-    console.log(dateString);
+    //  console.log(dateString);
     const currentDate = new Date();
     const comparedDate = new Date(dateString);
     const timeDifference = comparedDate - currentDate;
@@ -87,31 +87,40 @@ export default function Home() {
     }
   };
 
-  console.log("programs", programs);
+  //console.log("programs", programs);
   return (
     <>
-      <div className="box1 flex justify-center items-center">
-        <div className="chat-notification box2">
-          <Link to="/schedule" className="btn">
+      <div className="box1 flex justify-center items-center pt-10">
+        <div className="chat-notification box2 bg-gradient-to-r from-indigo-400 to-cyan-300 shadow-xl">
+          <Link
+            to="/schedule"
+            className="btn bg-blue-300 rounded-full font-serif text-center font-bold  text-white  p-2 mt-2"
+          >
             Admin Role
           </Link>
-          <Link to="/trainer" className="btn">
+          <Link
+            to="/trainer"
+            className="btn bg-indigo-400 rounded-full font-serif text-center  text-white font-bold  p-2 mt-2"
+          >
             Trainer Role
           </Link>
-          <Link to="/trainee" className="btn">
+          <Link
+            to="/trainee"
+            className="btn bg-cyan-300 rounded-full font-serif text-center font-bold p-2 mt-2 text-white"
+          >
             Trainee Role
           </Link>
         </div>
 
-        <div className="chat-notification">
+        <div className="chat-notification bg-gradient-to-r from-indigo-400 to-cyan-300 rounded-md shadow-xl">
           <div className="chat-notification-content">
             {announcements.map((announcement, i) => {
               return (
                 <div key={i}>
-                  <h4 className="chat-notification-title">
+                  <h4 className="chat-notification-title font-bold text-white  p-2 font-serif">
                     Announcement {i + 1}
                   </h4>
-                  <p className="chat-notification-message">
+                  <p className="chat-notification-message font-semibold text-blue-700 p-1 text-lift">
                     {announcement.announcement}
                   </p>
                 </div>
@@ -121,13 +130,14 @@ export default function Home() {
         </div>
 
         <div className="chat-notification">
-          <div className="chat-notification-logo-wrapper">
-            <h4 className="chat-notification-title">The Week Programs</h4>
+          <div className="chat-notification-logo-wrapper text-blue-700">
+            <h4 className="chat-notification-title bg-gradient-to-r from-indigo-400 to-cyan-300 text-center font-bold    font-sans  text-white">
+              The Week Programs
+            </h4>
             <table className="myTable">
               {programs
                 .filter((data) => isWithinNextSevenDays(data.date))
                 .map((data) => {
-                  console.log("hello");
                   return (
                     <tr>
                       <td>{data.programName}</td>

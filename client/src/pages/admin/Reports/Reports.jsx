@@ -204,7 +204,7 @@ export default function Reports() {
           onClick={() => {
             exportToPDF("trainer");
           }}
-          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400 "
+          className="bg-gradient-to-r from-cyan-400 to-indigo-400 rounded-md text-center font-bold  font-sansshadow-lg text-white hover:text-indigo-900 p-3 "
         >
           All Trainer List
         </button>
@@ -212,7 +212,7 @@ export default function Reports() {
           onClick={() => {
             exportToPDF("trainee");
           }}
-          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-sky-400 p-3"
+          className="bg-gradient-to-r from-cyan-400 to-indigo-400 rounded-md text-center font-bold  font-sansshadow-lg text-white hover:text-indigo-900 p-3"
         >
           All Trainee List
         </button>
@@ -220,14 +220,14 @@ export default function Reports() {
           onClick={() => {
             exportToPDF("admin");
           }}
-          className="bg-blue-800 rounded-md text-center shadow-lg text-sky-100 hover:text-sky-400 p-3"
+          className="bg-gradient-to-r from-cyan-400 to-indigo-400 rounded-md text-center font-bold  font-sansshadow-lg text-white hover:text-indigo-900 p-3"
         >
           All Employees List
         </button>
       </div>
       <div className=" grid grid-cols-1 lg:grid-cols-3 gap-3 pt-6 ">
         <button
-          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400"
+          className="bg-cyan-400 rounded-md text-center font-bold  font-sansshadow-lg text-white hover:text-indigo-900 p-3"
           onClick={() => {
             exportToPDF("scheduled");
           }}
@@ -235,7 +235,7 @@ export default function Reports() {
           Scheduled Programs
         </button>
         <button
-          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400"
+          className="bg-sky-400 rounded-md text-center font-bold  font-sansshadow-lg text-white hover:text-indigo-900 p-3"
           onClick={() => {
             exportToPDF("given");
           }}
@@ -243,7 +243,7 @@ export default function Reports() {
           Given Programs
         </button>
         <button
-          className="bg-purple-800 rounded-md text-center shadow-lg text-sky-100 p-3 hover:text-sky-400"
+          className="bg-indigo-500 rounded-md text-center font-bold  font-sansshadow-lg text-white hover:text-indigo-900 p-3"
           onClick={() => {
             exportToPDF("available");
           }}
