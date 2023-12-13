@@ -12,10 +12,6 @@ export default function Login() {
   const { errors } = formState;
   const navigate = useNavigate();
   const [jobNumber, password] = watch(["jobNumber", "password"]);
-  const [values, setValues] = useState({
-    showPassword: false,
-    isLoggedIn: false,
-  });
 
   async function onSubmit() {
     try {
@@ -25,10 +21,10 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ jobNumber, password }), // it's a much secure way
+        body: JSON.stringify({ jobNumber, password }),
       });
-      const data = await res.json(); //this to see it in the console
-      /*  console.log(data); */
+      const data = await res.json();
+
       if (data.code === "404") {
         toast.error("Wrong credentials");
         return false;
@@ -53,8 +49,6 @@ export default function Login() {
             JSON.stringify(data.roleTokens["admin"])
           );
           userContext.setUserRole({ admin: "true" });
-          /*  navigate("/schedule");
-          console.log("hello"); */
         }
         if (data.roleTokens["trainer"]) {
           localStorage.setItem(
@@ -62,7 +56,6 @@ export default function Login() {
             JSON.stringify(data.roleTokens["trainer"])
           );
           userContext.setUserRole({ role: "trainer" });
-          /*  navigate("/"); */
         }
         if (data.roleTokens["trainee"]) {
           localStorage.setItem(
@@ -70,7 +63,6 @@ export default function Login() {
             JSON.stringify(data.roleTokens["trainee"])
           );
           userContext.setUserRole({ role: "trainee" });
-          /*   navigate("/trainee"); */
         }
       }
       navigate("/");
@@ -79,7 +71,7 @@ export default function Login() {
       setError(error.message);
     }
   }
-  //third Step
+
   function onError(errors) {
     console.log(errors);
   }
