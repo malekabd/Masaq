@@ -32,11 +32,13 @@ const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [trainees, setTrainees] = useState([]);
   const [programs, setPrograms] = useState([]);
+  const [filteredPrograms, setFilteredPrograms] = useState([]);
+  const [condition, setCondition] = useState(false);
+
   let _user = localStorage.getItem("user");
   let user = {};
   if (_user) {
     user = JSON.parse(_user);
-    // console.log(user.jobNumber);
   }
   // Fetch the product list on component mount
   useEffect(() => {
@@ -52,6 +54,7 @@ const Example = () => {
       }
     };
     const fetchProgramsList = async () => {
+      // console.log(jn);
       try {
         // Perform the fetch operation
         const response = await fetch("/api/train/getAllImplementedProgram");
@@ -61,16 +64,11 @@ const Example = () => {
         console.error("Error fetching data:", error);
       }
     };
-    fetchTrainersList();
+
     fetchProgramsList();
+    fetchTrainersList();
   }, []);
-  //Loop and Return Dictionary of trainers list
-  function filterObjectsByProperty(array, propertyKey, propertyValue) {
-    const matchingObjects = array.filter(
-      (obj) => obj[propertyKey] === propertyValue
-    );
-    return matchingObjects.map((obj) => obj.jobNumber);
-  }
+
   // Loop and Return the halls list
   function getUniqueValuesForKey(arrayOfObjects, selectedKey) {
     const uniqueValues = new Set();
@@ -84,7 +82,21 @@ const Example = () => {
 
     return Array.from(uniqueValues);
   }
+  const findAllProgramsByTraineeNumber = (data, desiredTraineeNumber) => {
+    const matchingPrograms = [];
 
+    for (const program of data) {
+      const traineeList = program.traineeList
+        .split(",")
+        .map((trainee) => trainee.trim());
+
+      if (traineeList.includes(desiredTraineeNumber.toString())) {
+        matchingPrograms.push(program);
+      }
+    }
+
+    return matchingPrograms;
+  };
   const columns = useMemo(
     () => [
       {
@@ -105,7 +117,10 @@ const Example = () => {
           align: "center",
         },
         editVariant: "select",
-        editSelectOptions: getUniqueValuesForKey(programs, ["programNumber"]),
+        editSelectOptions: getUniqueValuesForKey(
+          findAllProgramsByTraineeNumber(programs, user.jobNumber),
+          ["programNumber"]
+        ),
         muiEditTextFieldProps: {
           type: "email",
           required: true,
@@ -439,11 +454,15 @@ function useGetUsers(jb) {
           "Content-Type": "application/json",
         },
       });
+
       let data = await res.json();
-      //console.log(data);
+      // console.log(data);
+
       if (data.status === "Fail") {
         console.log(data.message);
       }
+
+      //const filteredData = findAllProgramsByTraineeNumber(data, "89");
 
       let result = [];
       data.data.forEach((item) => {

@@ -39,7 +39,7 @@ const implementedProgram = new mongoose.Schema(
       required: true,
     },
     traineeList: {
-      type: [String],
+      type: String,
       required: true,
     },
   },
