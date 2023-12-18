@@ -13,7 +13,7 @@ import PotoCarousel3 from "../../components/Carousel/PotoCarousel3";
 export default function About() {
   return (
     <>
-      <Card position="absolute">
+      <Card sx={{ minWidth: 275 }}>
         <CardMedia
           sx={{ height: 350 }}
           image="https://blessedcloud.com/tadreeb/0.jfif"

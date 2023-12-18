@@ -90,7 +90,7 @@ export default function Home() {
   //console.log("programs", programs);
   return (
     <>
-      <div className="box1 flex justify-center items-center pt-10">
+      <div className="box1 flex sm:flex-row sm:justify-center sm:items-center sm:pt-10 flex-col justify-center items-center">
         <div className="chat-notification box2 bg-gradient-to-r from-indigo-400 to-cyan-300 shadow-xl">
           <Link
             to="/schedule"
@@ -130,7 +130,7 @@ export default function Home() {
         </div>
 
         <div className="chat-notification">
-          <div className="chat-notification-logo-wrapper text-blue-700">
+          <div className="chat-notification-logo-wrapper text-blue-700 flex flex-col flex-shrink">
             <h4 className="chat-notification-title bg-gradient-to-r from-indigo-400 to-cyan-300 text-center font-bold    font-sans  text-white">
               The Week Programs
             </h4>
