@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 const SingleFieldForm = () => {
+  const navigate = useNavigate();
   // State to hold form data
   const [inputValue, setInputValue] = useState("");
 
@@ -30,7 +32,8 @@ const SingleFieldForm = () => {
 
       // Parse the JSON response
       const responseData = await res.json();
-      console.log(responseData);
+      navigate("/");
+
       // Perform additional actions with the received data
     } catch (error) {
       console.error("Error during POST request:", error.message);

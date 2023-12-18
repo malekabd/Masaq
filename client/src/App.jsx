@@ -20,6 +20,8 @@ import TrainerLayOut from "./pages/trainer/TrainerLayOut";
 import TrainerRecord from "./pages/trainer/TrainerRecord";
 import TraineeLayOut from "./pages/trainee/TraineeLayOut";
 import NavBar from "./components/NavBar";
+import CompanyPage from "./pages/CompanyPage/CompanyPage";
+import About from "./pages/About/About";
 export default function App() {
   let _user = localStorage.getItem("user");
 
@@ -45,6 +47,8 @@ export default function App() {
           <Routes>
             <Route element={<MainLayOut />}>
               <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/companypage" element={<CompanyPage />} />
               <Route path="/signin" element={<SignIn />} />
             </Route>
 

@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/getAnnouncement",  getEmployee);
 */
 router.get("/getAllAnnouncement", getAllAnnouncement);
-router.post("/addAnnouncement", addAnnouncement);
+router.post("/addAnnouncement", protect, addAnnouncement);
 router.delete("/deleteAnnouncement", deleteAnnouncement);
 
 export default router;

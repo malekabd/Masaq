@@ -13,11 +13,15 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../pages/userContext";
-
+import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 
 function NavBar() {
-  const pages = [<Link to="/">Home</Link>, "Gallery", "Contact "];
+  const pages = [
+    <Link to="/">Home</Link>,
+    <Link to="/about">About</Link>,
+    <Link to="/companypage">CompanyPage</Link>,
+  ];
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -48,6 +52,7 @@ function NavBar() {
           userContext.setUser({ isAuthenticated: false });
           userContext.setUserRole({ role: "" });
           localStorage.clear();
+          Cookies.remove("access_token");
           navigate("/");
         }}
         textAlign="center"
@@ -85,7 +90,7 @@ function NavBar() {
               textDecoration: "none",
             }}
           >
-            {userContext.user.isAuthenticated ? user.email : "LOGO"}
+            {userContext.user.isAuthenticated ? user.name : ""}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -141,7 +146,7 @@ function NavBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            {userContext.user.isAuthenticated ? user.name : ""}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (

@@ -36,7 +36,7 @@ import jwt from "jsonwebtoken";
     const { password: pass, ...rest } = newUser._doc; //this destructering is to sen the uer data without the encrypted password
     res
       .cookie(process.env.TOKEN_NAME, token, {
-        //this is the way how to define a session
+            { maxAge: 60 * 60 * 24 * 365 * 1000 },
         httpOnly: true,
       })
       .status(201)
@@ -86,22 +86,16 @@ export const login = async (req, res, next) => {
     }
     const { password: pass, ...rest } = validUser._doc; //this destructuring is to sen the uer data without the encrypted password
     res
-      .cookie("access_token", token, {
-        //this is the way how to define a session
-        httpOnly: true,
-      })
-      /*       .cookie("admin_token", adminToken, {
-        //this is the way how to define a session
-        httpOnly: true,
-      })
-      .cookie("trainee_token", traineeToken, {
-        //this is the way how to define a session
-        httpOnly: true,
-      })
-      .cookie("trainer_token", trainerToken, {
-        //this is the way how to define a session
-        httpOnly: true,
-      }) */
+      .cookie(
+        "access_token",
+        token,
+        { maxAge: 60 * 60 * 24 * 365 * 1000 },
+        {
+          //this is the way how to define a session
+          httpOnly: true,
+        }
+      )
+
       .status(200)
       .json({
         status: "success",
@@ -144,7 +138,7 @@ export const login = async (req, res, next) => {
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
       res
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token,    { maxAge: 60 * 60 * 24 * 365 * 1000 }, { httpOnly: true })
         .status(200)
         .json({ status: "success", token, data: { user: rest } });
     }
