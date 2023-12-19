@@ -90,8 +90,8 @@ export default function Home() {
   //console.log("programs", programs);
   return (
     <>
-      <div className="box1 flex sm:flex-row sm:justify-center sm:items-center sm:pt-10 flex-col justify-center items-center">
-        <div className="chat-notification box2 bg-gradient-to-r from-indigo-400 to-cyan-300 shadow-xl">
+      <div className="box1 flex flex-col justify-center items-center p-4 sm:flex-row sm:justify-center sm:items-center sm:pt-10 flex-wrap">
+        <div className="chat-notification box2 bg-gradient-to-r from-indigo-400 to-cyan-300 shadow-xl mb-4 sm:mb-0 sm:mr-4">
           <Link
             to="/schedule"
             className="btn bg-blue-300 rounded-full font-serif text-center font-bold  text-white  p-2 mt-2"
@@ -111,8 +111,7 @@ export default function Home() {
             Trainee Role
           </Link>
         </div>
-
-        <div className="chat-notification bg-gradient-to-r from-indigo-400 to-cyan-300 rounded-md shadow-xl">
+        <div className="chat-notification bg-gradient-to-r from-indigo-400 to-cyan-300 rounded-md shadow-xl overflow-y-auto h-64 w-74 mb-4 sm:mb-0 sm:w-1/2 scrollbar-thin scrollbar-thumb-indigo-600 scrollbar-track-indigo-200">
           <div className="chat-notification-content">
             {announcements.map((announcement, i) => {
               return (
@@ -129,7 +128,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="chat-notification">
+        <div className="chat-notification sm:mb-0">
           <div className="chat-notification-logo-wrapper text-blue-700 flex flex-col flex-shrink">
             <h4 className="chat-notification-title bg-gradient-to-r from-indigo-400 to-cyan-300 text-center font-bold    font-sans  text-white">
               The Week Programs
