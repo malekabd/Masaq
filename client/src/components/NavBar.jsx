@@ -11,9 +11,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../pages/userContext";
 import Cookies from "js-cookie";
+import WavesIcon from "@mui/icons-material/Waves";
 import { Link, useNavigate } from "react-router-dom";
 
 function NavBar() {
@@ -74,7 +74,7 @@ function NavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <WavesIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -90,7 +90,8 @@ function NavBar() {
               textDecoration: "none",
             }}
           >
-            {userContext.user.isAuthenticated ? user.name : ""}
+            {/* {userContext.user.isAuthenticated ? user.name : ""} */}
+            Over Seas
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -129,7 +130,7 @@ function NavBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <WavesIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -146,7 +147,8 @@ function NavBar() {
               textDecoration: "none",
             }}
           >
-            {userContext.user.isAuthenticated ? user.name : ""}
+            {/* {userContext.user.isAuthenticated ? user.name : ""} */}
+            Over Seas
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
