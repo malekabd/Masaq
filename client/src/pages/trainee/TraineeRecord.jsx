@@ -122,7 +122,7 @@ const Example = () => {
       { align: "center" }
     );
 
-    // Add Progrma name
+    // Add Program name
     pdfDoc.setFontSize(16);
     pdfDoc.setTextColor(51, 102, 0);
     pdfDoc.text(
@@ -138,8 +138,6 @@ const Example = () => {
     const imgX = (pdfDoc.internal.pageSize.getWidth() - imgWidth) / 1;
     const imgY = (pdfDoc.internal.pageSize.getHeight() - imgHeight) / 1;
     pdfDoc.addImage(signature, "PNG", imgX, imgY, imgWidth, imgHeight);
-
-    // ...
 
     pdfDoc.save("certificate.pdf");
   };
@@ -364,7 +362,9 @@ const queryClient = new QueryClient({
 const ExampleWithProviders = () => (
   <QueryClientProvider client={queryClient}>
     <ReactQueryDevtools initialIsOpen={false} />
-    <Example />
+    <div className="w-full h-screen">
+      <Example />
+    </div>
   </QueryClientProvider>
 );
 
