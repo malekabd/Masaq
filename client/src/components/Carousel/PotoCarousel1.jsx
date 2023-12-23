@@ -22,7 +22,7 @@ const PotoCarousel1 = () => (
       <Paper>
         <CardMedia
           component="img"
-          image="https://firebasestorage.googleapis.com/v0/b/project1-8af56.appspot.com/o/unauthorized.png?alt=media&token=f0f30855-5afb-4161-8856-5e218200343e"
+          image="https://firebasestorage.googleapis.com/v0/b/project1-8af56.appspot.com/o/unauthorized.png?alt=media&token=31c4a630-8516-4932-9e32-aaadcd3f3d3e"
           alt="unauthorized"
         />
       </Paper>
