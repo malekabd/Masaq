@@ -48,7 +48,7 @@ import jwt from "jsonwebtoken";
  */
 export const login = async (req, res, next) => {
   const { jobNumber, password } = req.body;
-  console.log(jobNumber, password);
+  //console.log(jobNumber, password);
 
   try {
     const validUser = await Employee.findOne({ jobNumber });

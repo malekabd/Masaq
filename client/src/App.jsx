@@ -45,12 +45,17 @@ export default function App() {
         <BrowserRouter>
           <NavBar />
           <Routes>
+
+
             <Route element={<MainLayOut />}>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/companypage" element={<CompanyPage />} />
               <Route path="/signin" element={<SignIn />} />
             </Route>
+
+
+
 
             <Route element={<LayOut />}>
               <Route path="/schedule" element={<Schedule />} />
@@ -62,13 +67,20 @@ export default function App() {
               <Route path="/Absence" element={<RecordingAbsence />} />
             </Route>
 
+
+
             <Route element={<TraineeLayOut />}>
               <Route path="/trainee" element={<TraineeRecord />} />
               <Route path="/evaluation" element={<Evaluations />} />
             </Route>
+
+
             <Route element={<TrainerLayOut />}>
               <Route path="/trainer" element={<TrainerRecord />} />
             </Route>
+
+
+            
             <Route path="/forbidden" element={<h1>UnAuthorized</h1>} />
           </Routes>
         </BrowserRouter>

@@ -486,7 +486,7 @@ function useCreateUser() {
   return useMutation({
     mutationFn: async (employee) => {
       const { _id, ...rest } = employee;
-      console.log(rest);
+     // console.log(rest);
       //send api update request here
       const res = await fetch("api/train/addEmployee", {
         method: "POST",

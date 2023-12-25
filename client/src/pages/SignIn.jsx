@@ -170,7 +170,7 @@ export default function Login() {
               {errors?.password &&
                 errors.password.type === "hasSpecialChar" && (
                   <span className="text-red-500">
-                    Password must have a SpecialChart{" "}
+                    Password must have a SpecialChar{" "}
                   </span>
                 )}
             </div>

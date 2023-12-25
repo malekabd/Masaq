@@ -19,7 +19,7 @@ export default function Sidebar({ routes }) {
             className={`${existingClassName} ${
               location.pathname.slice(1) == route
                 ? "bg-blue-200 text-blue-950"
-                : "s"
+                : ""
             }`}
           >
             <Link to={route}>{route}</Link>

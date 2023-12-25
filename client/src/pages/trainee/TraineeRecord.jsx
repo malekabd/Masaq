@@ -4,7 +4,7 @@ import logo from "../../images/logo.png";
 import signature from "../../images/signature.png";
 import autoTable from "jspdf-autotable";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import {
+import { 
   MRT_EditActionButtons,
   MaterialReactTable,
   useMaterialReactTable,

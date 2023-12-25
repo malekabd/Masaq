@@ -1,9 +1,8 @@
 import { Outlet } from "react-router-dom";
 import React from "react";
-import NavBar from "../../components/NavBar";
 import Sidebar from "../../components/Sidebar";
 
-import UserContext from "../userContext";
+
 import { AuthCard } from "../../components/AuthCard";
 
 export default function LayOut() {

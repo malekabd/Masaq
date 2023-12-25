@@ -69,7 +69,7 @@ function NavBar() {
       </Typography>
     </MenuItem>
   );
-  const MenuItems = [MenuItem1, MenuItem2];
+  const MenuItems = [MenuItem1];
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
