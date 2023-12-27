@@ -1,11 +1,15 @@
 import { Outlet } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
-
 
 import { AuthCard } from "../../components/AuthCard";
 
 export default function LayOut() {
+  const [isMobileCollapsed, setIsMobileCollapsed] = useState(true);
+
+  const toggleMobileCollapse = () => {
+    setIsMobileCollapsed(!isMobileCollapsed);
+  };
   let _user = localStorage.getItem("user");
   let user = {};
   if (_user) {
@@ -16,7 +20,17 @@ export default function LayOut() {
     <>
       {user.roleTokens?.admin ? (
         <div className="flex flex-col sm:flex-row flex-1 ">
-          <div className="  flex flex-row flex-wrap sm:flex-nowrap  sm:flex-col justify-around  border-x-2 border-zinc-200 sm:pt-6 pt-6 sm:pb-96 pb-6 items-center sm:w-2/12 ">
+          <button
+            onClick={toggleMobileCollapse}
+            className="sm:hidden block bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-400 focus:outline-none focus:ring focus:border-green-300 w-50 self-center"
+          >
+            {isMobileCollapsed ? "Open Menu" : "Close Menu"}
+          </button>
+          <div
+            className={` flex flex-row flex-wrap sm:flex-nowrap  sm:flex-col justify-around ${
+              isMobileCollapsed ? "hidden sm:flex " : ""
+            }  border-x-2 border-zinc-200 sm:pt-6 pt-6 sm:pb-96 pb-6 items-center sm:w-2/12 `}
+          >
             <Sidebar
               routes={[
                 "schedule",

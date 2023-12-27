@@ -5,7 +5,7 @@ import "./Home.css";
 export default function Home() {
   const [announcements, setAnnouncements] = React.useState([]);
   const [programs, setPrograms] = React.useState([]);
-  const promises = [];
+  // const promises = [];
   React.useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
@@ -18,7 +18,7 @@ export default function Home() {
         console.error("Error fetching data:", error);
       }
     };
-    announcements?.map((data) => {
+    /*   announcements?.map((data) => {
       // console.log(data._id);
       promises.push(isDateOlderThan5Days(data.updatedAt, data._id));
     });
@@ -29,7 +29,7 @@ export default function Home() {
       })
       .catch((error) => {
         console.error("At least one promise rejected:", error);
-      });
+      }); */
     // console.log("promises" + promises);
     const fetchProgramsList = async () => {
       try {
@@ -48,7 +48,7 @@ export default function Home() {
     fetchAnnouncements();
   }, []);
 
-  function isDateOlderThan5Days(previousDate, _id) {
+ /*  function isDateOlderThan5Days(previousDate, _id) {
     const currentDate = new Date();
     const timeDifference = currentDate - new Date(previousDate);
     const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
@@ -56,7 +56,7 @@ export default function Home() {
       //console.log("true");
       return deleteResource(_id);
     }
-  }
+  } */
 
   function isWithinNextSevenDays(dateString) {
     //  console.log(dateString);
@@ -66,7 +66,7 @@ export default function Home() {
     const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
     return daysDifference >= 0 && daysDifference <= 7;
   }
-
+/* 
   const deleteResource = async (_id) => {
     try {
       const response = await fetch("api/announcement/deleteAnnouncement", {
@@ -86,7 +86,7 @@ export default function Home() {
       console.error("Error:", error.message);
     }
   };
-
+ */
   //console.log("programs", programs);
   return (
     <>

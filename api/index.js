@@ -6,6 +6,9 @@ import authRouter from "./routes/authRoutes.js";
 import trainRouter from "./routes/trainRoutes.js";
 import announcementRouter from "./routes/announcementRoutes.js";
 import path from "path";
+import cron from "node-cron";
+import Announcement from "./models/announcementModal.js";
+
 dotenv.config();
 
 mongoose
@@ -23,6 +26,21 @@ const app = express();
 app.use(express.json());
 
 app.use(cookieParser());
+
+cron.schedule("0 0 * * *", async () => {
+  try {
+    // Define your delete logic here
+    // Example: Delete items older than 7 days
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    await Announcement.deleteMany({ createdAt: { $lt: sevenDaysAgo } });
+
+    console.log("Scheduled task: Deleted items older than 7 days");
+  } catch (error) {
+    console.error("Scheduled task failed:", error.message);
+  }
+});
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000!");
