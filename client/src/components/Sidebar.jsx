@@ -12,7 +12,7 @@ export default function Sidebar({ routes }) {
       {routes?.map((route, index) => {
         const randomInteger = getRandomInt(1, 1000);
         const existingClassName =
-          "capitalize flex-wrap sm:w-full font-semibold lg:text-sm lg:max-w-[80%] text-sm  text-sky-700 bg-grey-lighter rounded-full border-grey-lightest sm:p-4 sm:my-1 shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300";
+          "capitalize flex-wrap w-[43%] mb-3 sm:w-full font-semibold lg:text-sm lg:max-w-[80%] text-sm  text-sky-700 bg-grey-lighter rounded-full border-grey-lightest sm:p-4 sm:my-1 shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300";
         return (
           <button
             key={{ randomInteger }}

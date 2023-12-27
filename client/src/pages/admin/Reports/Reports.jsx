@@ -198,7 +198,7 @@ export default function Reports() {
     setAge(event.target.value);
   };
   return (
-    <div className="mt-40 ">
+    <div className="sm:mt-20 ">
       <div className=" grid grid-cols-1 lg:grid-cols-3  gap-3 p-4">
         <button
           onClick={() => {

@@ -43,20 +43,18 @@ const SingleFieldForm = () => {
   return (
     <div className="flex flex-col mt-10">
       <h2 className="flex justify-center mb-3">
-        Enter Announcement to be Appear on Home Page
+        Enter Announcement to Appear on Home Page
       </h2>
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        <div className="flex justify-center items-center">
+      <form onSubmit={handleSubmit} className="flex flex-col items-center">
+        <div className="w-full max-w-md mb-4">
           <textarea
             rows="4"
-            cols="50"
-            type="text"
-            id="singleField"
+            className="w-full p-2 border rounded-md focus:outline-none focus:border-blue-500"
+            placeholder="Type your announcement here..."
             value={inputValue}
             onChange={handleInputChange}
           />
         </div>
-
         <Button type="submit" color="primary">
           Share
         </Button>
