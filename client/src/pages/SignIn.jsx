@@ -37,27 +37,6 @@ export default function Login() {
         };
         localStorage.setItem("user", JSON.stringify(_user));
         userContext.setUser({ isAuthenticated: true });
-        if (data.roleTokens["admin"]) {
-          localStorage.setItem(
-            "admin",
-            JSON.stringify(data.roleTokens["admin"])
-          );
-          userContext.setUserRole({ admin: "true" });
-        }
-        if (data.roleTokens["trainer"]) {
-          localStorage.setItem(
-            "trainer",
-            JSON.stringify(data.roleTokens["trainer"])
-          );
-          userContext.setUserRole({ role: "trainer" });
-        }
-        if (data.roleTokens["trainee"]) {
-          localStorage.setItem(
-            "trainee",
-            JSON.stringify(data.roleTokens["trainee"])
-          );
-          userContext.setUserRole({ role: "trainee" });
-        }
       }
       navigate("/");
     } catch (error) {
@@ -69,7 +48,7 @@ export default function Login() {
     console.log(errors);
   }
   return (
-    <div className="min-h-screen flex  items-center justify-around">
+    <div className="min-h-screen flex  items-center justify-center">
       <div className="flex flex-col bg-gradient-to-r from-indigo-400 to-cyan-300  shadow-md px-2 sm:px-4 md:px-6 lg:px-8 py-3 rounded-md w-full max-w-md">
         <div className="font-medium self-center text-xl sm:text-2xl uppercase text-white">
           LogIn To Your Account

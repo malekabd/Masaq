@@ -381,6 +381,7 @@ const Example = () => {
     createDisplayMode: "modal", //default ('row', and 'custom' are also available)
     editDisplayMode: "modal", //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
+    enableStickyHeader: true,
     getRowId: (row) => row.id,
     muiToolbarAlertBannerProps: isLoadingUsersError
       ? {
@@ -486,7 +487,7 @@ function useCreateUser() {
   return useMutation({
     mutationFn: async (employee) => {
       const { _id, ...rest } = employee;
-     // console.log(rest);
+      // console.log(rest);
       //send api update request here
       const res = await fetch("api/train/addEmployee", {
         method: "POST",
@@ -533,6 +534,7 @@ function useGetUsers() {
       if (data.code == "500") {
         toast.error("Wrong credentials");
       }
+      console.log(data);
       return data.data.employee;
     },
     refetchOnWindowFocus: false,

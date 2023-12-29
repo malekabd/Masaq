@@ -19,72 +19,61 @@ import MainLayOut from "./pages/MainLayOut";
 import TrainerLayOut from "./pages/trainer/TrainerLayOut";
 import TrainerRecord from "./pages/trainer/TrainerRecord";
 import TraineeLayOut from "./pages/trainee/TraineeLayOut";
-import NavBar from "./components/NavBar";
 import CompanyPage from "./pages/CompanyPage/CompanyPage";
 import About from "./pages/About/About";
+import RootLayout from "./layouts/RootLayout";
 export default function App() {
   let _user = localStorage.getItem("user");
 
   let isLoggedIn = false;
-  let Role = "";
+
   if (_user) {
-    let user = JSON.parse(_user);
     isLoggedIn = true;
-    //console.log(user);
   }
 
   const [user, setUser] = useState({
     isAuthenticated: isLoggedIn,
   });
   const [userRole, setUserRole] = useState({
-    role: Role,
+    admin: "",
+    trainer: "",
+    trainee: "",
   });
   return (
     <UserContext.Provider value={{ user, setUser, userRole, setUserRole }}>
-      <div className=" h-screen">
-        <BrowserRouter>
-          <NavBar />
+      <BrowserRouter>
+        <RootLayout>
           <Routes>
-
-
             <Route element={<MainLayOut />}>
               <Route path="/" element={<Home />} />
+              <Route path="/signin" element={<SignIn />} />
               <Route path="/about" element={<About />} />
               <Route path="/companypage" element={<CompanyPage />} />
-              <Route path="/signin" element={<SignIn />} />
             </Route>
-
-
-
 
             <Route element={<LayOut />}>
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/employees" element={<Employees />} />
-              <Route path="/rooms" element={<Rooms />} />
-              <Route path="/programs" element={<Programs />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/announcements" element={<Announcements />} />
-              <Route path="/Absence" element={<RecordingAbsence />} />
+              <Route path="schedule" element={<Schedule />} />
+              <Route path="employees" element={<Employees />} />
+              <Route path="rooms" element={<Rooms />} />
+              <Route path="programs" element={<Programs />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="announcements" element={<Announcements />} />
+              <Route path="Absence" element={<RecordingAbsence />} />
             </Route>
-
-
 
             <Route element={<TraineeLayOut />}>
-              <Route path="/trainee" element={<TraineeRecord />} />
-              <Route path="/evaluation" element={<Evaluations />} />
+              <Route path="trainee" element={<TraineeRecord />} />
+              <Route path="evaluation" element={<Evaluations />} />
             </Route>
-
 
             <Route element={<TrainerLayOut />}>
-              <Route path="/trainer" element={<TrainerRecord />} />
+              <Route path="trainer" element={<TrainerRecord />} />
             </Route>
-
-
-            
             <Route path="/forbidden" element={<h1>UnAuthorized</h1>} />
           </Routes>
-        </BrowserRouter>
-      </div>
+        </RootLayout>
+      </BrowserRouter>
+
       <Toaster
         position="top-center"
         gutter={12}
