@@ -70,16 +70,16 @@ export default function Login() {
   }
   return (
     <div className="min-h-screen flex  items-center justify-around">
-      <div className="flex flex-col bg-gradient-to-r from-indigo-400 to-cyan-300  shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
+      <div className="flex flex-col bg-gradient-to-r from-indigo-400 to-cyan-300  shadow-md px-2 sm:px-4 md:px-6 lg:px-8 py-3 rounded-md w-full max-w-md">
         <div className="font-medium self-center text-xl sm:text-2xl uppercase text-white">
-          SIGN IN To Your Account
+          LogIn To Your Account
         </div>
-        <div className="mt-10">
+        <div className="mt-2">
           <form onSubmit={handleSubmit(onSubmit, onError)}>
-            <div className="flex flex-col mb-6">
+            <div className="flex flex-col ">
               <label
                 htmlFor="email"
-                className="mb-1 text-xs sm:text-sm tracking-wide  text-white"
+                className="mb-2 text-xs sm:text-sm tracking-wide  text-white mt-2 "
               >
                 Job Number:
               </label>
@@ -107,10 +107,10 @@ export default function Login() {
                 <span className="text-red-500">{errors.jobNumber.message}</span>
               )}
             </div>
-            <div className="flex flex-col mb-6">
+            <div className="flex flex-col mb-4">
               <label
                 htmlFor="password"
-                className="mb-1 text-xs sm:text-sm tracking-wide text-white"
+                className=" text-xs sm:text-sm tracking-wide text-white mt-2 mb-2"
               >
                 Password:
               </label>
@@ -174,21 +174,21 @@ export default function Login() {
                   </span>
                 )}
             </div>
-            <div className="flex w-full ">
+            <div className="flex w-full justify-center">
               <button
                 type="submit"
-                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-indigo-500 hover:bg-indigo-900 rounded-full py-2 w-full transition duration-150 ease-in"
+                className="flex  justify-center focus:outline-none text-white text-sm sm:text-base bg-indigo-500 hover:bg-indigo-900 rounded-full py-2 w-40  transition duration-150 ease-in"
               >
-                <span className="mr-2 uppercase">SIGN IN</span>
+                <span className="mr-2 uppercase">Log IN</span>
                 <span>
-                  <svg
+                  {/* <svg
                     className="h-6 w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
                     <path d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  </svg> */}
                 </span>
               </button>
             </div>
