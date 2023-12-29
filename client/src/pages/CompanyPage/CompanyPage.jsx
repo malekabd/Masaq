@@ -13,20 +13,7 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        OVERSEAE COMPANY
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const cards = [1, 2, 3, 4, 5, 6];
+const cards = [1, 2, 3];
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -35,21 +22,14 @@ export default function CompanyPage() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      {/*   <AppBar position="relative">
-        <Toolbar>
-          <WavesIcon sx={{ mr: 2 }} />
-          <Typography variant="h6" color="inherit" noWrap>
-            OVERSEAS COMPANY
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
+
       <main>
         {/* Hero unit */}
         <Box
           sx={{
             bgcolor: "background.paper",
-            pt: 8,
-            pb: 6,
+            pt: 6,
+          
           }}
         >
           <Container maxWidth="sm">
@@ -112,12 +92,6 @@ export default function CompanyPage() {
           </Grid>
         </Container>
       </main>
-
-      {/* Footer */}
-      <Box sx={{ bgcolor: "text.disabled", p: 6 }} component="footer">
-        <Copyright />
-      </Box>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

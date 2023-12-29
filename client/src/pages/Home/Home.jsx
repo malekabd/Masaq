@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center p-4 sm:flex-row sm:justify-center sm:items-center sm:pt-10 flex-wrap">
-      <div className="box2 bg-gradient-to-r from-indigo-400 to-cyan-300 shadow-xl mb-2 sm:mb-0 sm:mr-4">
+      {/* <div className="box2 bg-gradient-to-r from-indigo-400 to-cyan-300 shadow-xl mb-2 sm:mb-0 sm:mr-4">
         <Link
           to="/schedule"
           className="btn bg-blue-300 rounded-full font-serif text-center font-bold text-white p-2 "
@@ -60,7 +60,7 @@ export default function Home() {
         >
           Trainee Role
         </Link>
-      </div>
+      </div> */}
 
       <div className="bg-gradient-to-r from-indigo-400 to-cyan-300 rounded-lg shadow-md overflow-y-auto h-48 w-64 mb-4 sm:mb-0 sm:w-1/2 p-4">
         {announcements.map((announcement, i) => (

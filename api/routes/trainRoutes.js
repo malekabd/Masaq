@@ -44,57 +44,57 @@ import {
 import { protect } from "../Controllers/authController.js";
 const router = express.Router();
 
-router.get("/getEmployee", getEmployee);
-router.get("/getAllEmployee", getAllEmployee);
-router.post("/addEmployee", addEmployee);
-router.patch("/editEmployee", EditEmployee);
-router.delete("/deleteEmployee", deleteEmployee);
+router.get("/getEmployee", protect, getEmployee);
+router.get("/getAllEmployee", protect, getAllEmployee);
+router.post("/addEmployee", protect, addEmployee);
+router.patch("/editEmployee", protect, EditEmployee);
+router.delete("/deleteEmployee", protect, deleteEmployee);
 
 //Done
-router.get("/getTrainingHall", getTrainingHall);
-router.get("/getAllTrainingHall", getAllTrainingHall);
-router.post("/addTrainingHall", addTrainingHall);
-router.patch("/editTrainingHall", EditTrainingHall);
-router.delete("/deleteTrainingHall", deleteTrainingHall);
+router.get("/getTrainingHall", protect, getTrainingHall);
+router.get("/getAllTrainingHall", protect, getAllTrainingHall);
+router.post("/addTrainingHall", protect, addTrainingHall);
+router.patch("/editTrainingHall", protect, EditTrainingHall);
+router.delete("/deleteTrainingHall", protect, deleteTrainingHall);
 
 //Done
-router.get("/getIncludedProgram", getIncludedProgram);
-router.get("/getAllIncludedProgram", getAllIncludedProgram);
-router.post("/addIncludedProgram", addIncludedProgram);
-router.patch("/editIncludedProgram", EditIncludedProgram);
+router.get("/getIncludedProgram", protect, getIncludedProgram);
+router.get("/getAllIncludedProgram", protect, getAllIncludedProgram);
+router.post("/addIncludedProgram", protect, addIncludedProgram);
+router.patch("/editIncludedProgram", protect, EditIncludedProgram);
 router.delete(
   "/deleteIncludedProgram",
-
+  protect,
   deleteIncludedProgramController
 );
 
 //Done
-router.get("/getImplementedProgram", getImplementedProgram);
-router.get("/getAllImplementedProgram", getAllImplementedProgram);
-router.post("/addImplementedProgram", addImplementedProgram);
-router.patch("/editImplementedProgram", EditImplementedProgram);
-router.delete("/deleteImplementedProgram", deleteImplementedProgram);
+router.get("/getImplementedProgram", protect, getImplementedProgram);
+router.get("/getAllImplementedProgram", protect, getAllImplementedProgram);
+router.post("/addImplementedProgram", protect, addImplementedProgram);
+router.patch("/editImplementedProgram", protect, EditImplementedProgram);
+router.delete("/deleteImplementedProgram", protect, deleteImplementedProgram);
 
 //Done
-router.get("/getRegistrationOfTrainee", getRegistrationOfTrainee);
+router.get("/getRegistrationOfTrainee", protect, getRegistrationOfTrainee);
 router.get(
   "/getAllRegistrationOfTrainee",
-
+  protect,
   getAllRegistrationOfTrainee
 );
-router.post("/addRegistrationOfTrainee", addRegistrationOfTrainee);
-router.patch("/editRegistrationOfTrainee", EditRegistrationOfTrainee);
+router.post("/addRegistrationOfTrainee", protect, addRegistrationOfTrainee);
+router.patch("/editRegistrationOfTrainee", protect, EditRegistrationOfTrainee);
 router.delete(
   "/deleteRegistrationOfTrainee",
-
+  protect,
   deleteRegistrationOfTrainee
 );
 
 //Done
-router.get("/getProgramEvaluation", getProgramEvaluation);
-router.get("/getAllProgramEvaluation", getAllProgramEvaluation);
-router.post("/addProgramEvaluation", addProgramEvaluation);
-router.patch("/editProgramEvaluation", EditProgramEvaluation);
-router.delete("/deleteProgramEvaluation", deleteProgramEvaluation);
+router.get("/getProgramEvaluation", protect, getProgramEvaluation);
+router.get("/getAllProgramEvaluation", protect, getAllProgramEvaluation);
+router.post("/addProgramEvaluation", protect, addProgramEvaluation);
+router.patch("/editProgramEvaluation", protect, EditProgramEvaluation);
+router.delete("/deleteProgramEvaluation", protect, deleteProgramEvaluation);
 
 export default router;

@@ -1,6 +1,5 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../../components/Sidebar";
 import { AuthCard } from "../../components/AuthCard";
 
 export default function TraineeLayOut() {

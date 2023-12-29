@@ -22,6 +22,7 @@ import TraineeLayOut from "./pages/trainee/TraineeLayOut";
 import CompanyPage from "./pages/CompanyPage/CompanyPage";
 import About from "./pages/About/About";
 import RootLayout from "./layouts/RootLayout";
+import { AuthCard } from "./components/AuthCard";
 export default function App() {
   let _user = localStorage.getItem("user");
 
@@ -69,7 +70,7 @@ export default function App() {
             <Route element={<TrainerLayOut />}>
               <Route path="trainer" element={<TrainerRecord />} />
             </Route>
-            <Route path="/forbidden" element={<h1>UnAuthorized</h1>} />
+            <Route path="/forbidden" element={<AuthCard />} />
           </Routes>
         </RootLayout>
       </BrowserRouter>

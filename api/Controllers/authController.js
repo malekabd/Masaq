@@ -163,9 +163,8 @@ export const protect = async (req, res, next) => {
     }
     console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const freshUser = await Employee.findById(decoded.id);
 
-    console.log(freshUser);
+    const freshUser = await Employee.findById(decoded.id);
     if (freshUser.admin != "true") {
       return res.status(403).json({
         message: "You don't have access to this route",

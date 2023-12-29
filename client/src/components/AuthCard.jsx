@@ -7,24 +7,13 @@ export const AuthCard = () => {
   const navigate = useNavigate();
 
   return (
-    <Card sx={{ maxWidth: 1000 }}>
+    <Card sx={{ maxWidth: 1000, mt: 2 }}>
       <CardMedia
         component="img"
         height="194"
-        image="https://media.istockphoto.com/id/517346408/photo/stop-sign-with-blue-sky-background-and-copy-space.jpg?s=612x612&w=is&k=20&c=4f6ZAAeBh_gaF7TesNLyDKgok-gtxYhtInSXsUA_2N0="
+        image="https://i.pinimg.com/originals/33/42/e4/3342e4ba684ff017acff7382cad86c7f.jpg"
         alt="Unauthorized"
       />
-      <Button
-        onClick={() => {
-          navigate("/");
-        }}
-        variant="outlined"
-        size="medium"
-        color="error"
-      >
-        {" "}
-        Home
-      </Button>
     </Card>
   );
 };
