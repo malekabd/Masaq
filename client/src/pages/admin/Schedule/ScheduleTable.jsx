@@ -227,7 +227,7 @@ const Example = () => {
         accessorKey: "attendanceType",
         header: "Attendance Type",
         editVariant: "select",
-        editSelectOptions: ["online", "offline"],
+        editSelectOptions: ["online", "OnCampus", "Hybrid"],
 
         muiTableHeadCellProps: {
           align: "center",

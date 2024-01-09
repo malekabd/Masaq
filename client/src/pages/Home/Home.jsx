@@ -1,92 +1,221 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import WidgetBox from "../../components/WidgetBox";
+import { BarChart } from "@mui/x-charts/BarChart";
+import { PieChart } from "@mui/x-charts/PieChart";
 import "./Home.css";
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
+function countRole(role, employees) {
+  // Ensure role is either 'trainee' or 'trainer'
+  if (role !== "trainee" && role !== "trainer") {
+    console.error('Invalid role provided. Please use "trainee" or "trainer".');
+    return 0; // Return 0 if an invalid role is provided
+  }
+
+  // Filter employees based on the specified role
+  const filteredEmployees = employees.filter(
+    (employee) => employee[role] === "true"
+  );
+
+  // Return the count of employees with the specified role
+  return filteredEmployees.length;
+}
+function getLengthByAttendanceType(data, typeToCheck) {
+  const filteredArray = data.filter(
+    (item) => item.attendanceType === typeToCheck
+  );
+  return filteredArray.length;
+}
+function getLengthByMonth(data, monthToCheck) {
+  const filteredArray = data.filter((item) => {
+    const monthFromCreatedAt = new Date(item.date).toLocaleString("en-US", {
+      month: "short",
+    });
+    console.log(monthFromCreatedAt);
+    return monthFromCreatedAt === monthToCheck;
+  });
+  return filteredArray.length;
+}
 
 export default function Home() {
-  const [announcements, setAnnouncements] = useState([]);
-  const [programs, setPrograms] = useState([]);
+  const [programs, setPrograms] = React.useState([]);
+  const [rooms, setRooms] = React.useState([]);
+  const [employees, setEmployees] = React.useState([]);
 
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        const response = await fetch("/api/announcement/getAllAnnouncement");
-        const result = await response.json();
-        setAnnouncements(result.announcements);
-      } catch (error) {
-        console.error("Error fetching announcements:", error);
-      }
-    };
-
+  React.useEffect(() => {
     const fetchProgramsList = async () => {
       try {
         const response = await fetch("/api/train/getAllImplementedProgram");
         const result = await response.json();
         setPrograms(result.data.implementedProgram);
+        console.log(programs);
+        console.log(getLengthByMonth(programs, "Dec"));
       } catch (error) {
         console.error("Error fetching programs:", error);
       }
     };
+    const fetchRoomsList = async () => {
+      try {
+        const response = await fetch("/api/train/getAllTrainingHall");
+        const result = await response.json();
+        setRooms(result.data);
+        console.log(rooms.length);
+        //console.log(result.data.implementedProgram);
+      } catch (error) {
+        console.error("Error fetching programs:", error);
+      }
+    };
+    const fetchTrainersList = async () => {
+      try {
+        const response = await fetch("/api/train/getAllEmployee");
+        const result = await response.json();
+
+        setEmployees(result.data.employee);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
     fetchProgramsList();
-    fetchAnnouncements();
+    fetchTrainersList();
+    fetchRoomsList();
   }, []);
 
-  function isWithinNextSevenDays(dateString) {
-    const currentDate = new Date();
-    const comparedDate = new Date(dateString);
-    const timeDifference = comparedDate - currentDate;
-    const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-    return daysDifference >= 0 && daysDifference <= 7;
-  }
-
   return (
-    <div className="flex flex-col items-center p-4 sm:flex-row sm:justify-center sm:items-center sm:pt-10 flex-wrap">
-      {/* <div className="box2 bg-gradient-to-r from-indigo-400 to-cyan-300 shadow-xl mb-2 sm:mb-0 sm:mr-4">
-        <Link
-          to="/schedule"
-          className="btn bg-blue-300 rounded-full font-serif text-center font-bold text-white p-2 "
+    <div>
+      <h1 className="mb-5">Training Center Dashboard</h1>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={1} justifyContent="center">
+          <Grid item xs={12} sm={8} md={6} lg={4}>
+            <Item>
+              <WidgetBox
+                title="Rooms"
+                number={rooms.length}
+                imgLink="https://cdn-icons-png.flaticon.com/128/13567/13567429.png"
+              />
+            </Item>
+          </Grid>
+          <Grid item xs={12} sm={8} md={6} lg={4}>
+            <Item>
+              <WidgetBox
+                title="Trainees"
+                number={countRole("trainee", employees)}
+                imgLink="https://cdn-icons-png.flaticon.com/128/13567/13567426.png"
+              />
+            </Item>
+          </Grid>
+          <Grid item xs={12} sm={8} md={6} lg={4}>
+            <Item>
+              <WidgetBox
+                title="Programs"
+                number={programs.length}
+                imgLink="https://cdn-icons-png.flaticon.com/128/13567/13567451.png"
+              />
+            </Item>
+          </Grid>
+          <Grid item xs={12} sm={8} md={6} lg={4}>
+            <Item>
+              <WidgetBox
+                title="Trainers"
+                number={countRole("trainer", employees)}
+                imgLink="https://cdn-icons-png.flaticon.com/128/1436/1436664.png"
+              />
+            </Item>
+          </Grid>
+        </Grid>
+        <br />
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-around"
+          alignItems="stretch"
+          spacing={1}
+          sx={{}}
         >
-          Admin Role
-        </Link>
-        <Link
-          to="/trainer"
-          className="btn bg-indigo-400 rounded-full font-serif text-center text-white font-bold p-2 mt-2"
-        >
-          Trainer Role
-        </Link>
-        <Link
-          to="/trainee"
-          className="btn bg-cyan-300 rounded-full font-serif text-center font-bold p-2 mt-2 text-white"
-        >
-          Trainee Role
-        </Link>
-      </div> */}
-
-      <div className="bg-gradient-to-r from-indigo-400 to-cyan-300 rounded-lg shadow-md overflow-y-auto h-48 w-64 mb-4 sm:mb-0 sm:w-1/2 p-4">
-        {announcements.map((announcement, i) => (
-          <div key={i} className="border-b border-indigo-500 mb-4">
-            <p className="chat-notification-message font-semibold text-white p-3">
-              {announcement.announcement}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div className="chat-notification sm:mb-0">
-        <div className="chat-notification-logo-wrapper text-blue-700 flex flex-col flex-shrink">
-          <h4 className="chat-notification-title bg-gradient-to-r from-indigo-400 to-cyan-300 text-center font-bold font-sans text-white">
-            The Week Programs
-          </h4>
-          <table className="myTable">
-            {programs
-              .filter((data) => isWithinNextSevenDays(data.date))
-              .map((data, index) => (
-                <tr key={index}>
-                  <td>{data.programName}</td>
-                </tr>
-              ))}
-          </table>
-        </div>
+          <Grid
+            item
+            /*   xs={12}
+            md={isMediumScreen ? 11 : isSmallScreen ? 10 : 9}
+            lg={7} */
+            xs={12}
+            sm={12}
+            md={6}
+            lg={6}
+          >
+            <Item justifyContent="center">
+              <div className="chart-container">
+                <BarChart
+                  xAxis={[
+                    {
+                      id: "barCategories",
+                      data: ["Oct", "Nov", "Dec"],
+                      scaleType: "band",
+                    },
+                  ]}
+                  series={[
+                    {
+                      data: [
+                        getLengthByMonth(programs, "Oct"),
+                        getLengthByMonth(programs, "Nov"),
+                        getLengthByMonth(programs, "Dec"),
+                      ],
+                    },
+                  ]}
+                  width={400}
+                  height={300}
+                />
+              </div>
+            </Item>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6} sx={{ marginTop: 5 }}>
+            <Item>
+              <div className="chart-container">
+                <PieChart
+                  series={[
+                    {
+                      data: [
+                        {
+                          id: 0,
+                          value: getLengthByAttendanceType(programs, "online"),
+                          label: "Online ",
+                        },
+                        {
+                          id: 1,
+                          value: getLengthByAttendanceType(
+                            programs,
+                            "OnCampus"
+                          ),
+                          label: "On-campus ",
+                        },
+                        {
+                          id: 2,
+                          value: getLengthByAttendanceType(programs, "Hybrid"),
+                          label: "Hybrid",
+                        },
+                      ],
+                    },
+                  ]}
+                  width={400}
+                  height={200}
+                />
+              </div>
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
+      <div>
+        <h2>Programs taken in the last Quarter of 2023</h2>
       </div>
     </div>
   );

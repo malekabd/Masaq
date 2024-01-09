@@ -115,7 +115,7 @@ const SideBar = () => {
     <>
       <div
         onClick={() => setOpen(false)}
-        className={`md:hidden fixed inset-0 max-h-screen z-[998] bg-black/50 ${
+        className={`md:hidden fixed inset-0 max-h-screen z-[998]  bg-black/50 ${
           open ? "block" : "hidden"
         } `}
       ></div>
@@ -125,10 +125,10 @@ const SideBar = () => {
         initial={{ x: isTabletMid ? -250 : 0 }}
         animate={open ? "open" : "closed"}
         className=" bg-white text-gray shadow-xl z-[999] max-w-[16rem]  w-[16rem] 
-            overflow-hidden md:relative fixed
+            overflow-hidden  md:relative fixed
          h-screen "
       >
-        <div className="flex items-center gap-2.5 font-medium border-b py-3 border-slate-300  mx-3">
+        <div className="flex items-center  gap-2.5 font-medium border-b py-3 border-slate-300  mx-3">
           <img
             src="https://img.icons8.com/color/512/firebase.png"
             width={45}
@@ -137,8 +137,8 @@ const SideBar = () => {
           <span className="text-xl whitespace-pre">Over Seas</span>
         </div>
 
-        <div className="flex flex-col  h-full">
-          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
+        <div className="flex flex-col  h-full ">
+          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden  scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
             <li>
               <NavLink to={"/"} className="link">
                 <AiOutlineAppstore size={23} className="min-w-max" />
@@ -177,7 +177,7 @@ const SideBar = () => {
               </NavLink>
             </li> */}
           </ul>
-          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-20 flex flex-col gap-1  font-medium overflow-x-hidden  ">
+          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-20 flex flex-col gap-1  font-medium overflow-x-hidden overflow-y-hidden ">
             <li>
               {isLoggedIn ? (
                 <>
@@ -187,7 +187,7 @@ const SideBar = () => {
                     ) : (
                       ""
                     )}
-                    <div className="flex gap-2 items-center cursor-pointer">
+                    <div className="flex gap-2 pb-32 items-center cursor-pointer ">
                       {open || isTabletMid ? <span>Log Out</span> : ""}
                       <FaSignOutAlt
                         onClick={() => {
