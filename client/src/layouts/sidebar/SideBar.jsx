@@ -128,9 +128,10 @@ const SideBar = () => {
             overflow-hidden  md:relative fixed
          h-screen "
       >
-        <div className="flex items-center  gap-2.5 font-medium border-b py-3 border-slate-300  mx-3">
+        <div className="flex items-center   gap-2.5 font-medium border-b py-3 border-slate-300  mx-3">
           <img
-            src="https://img.icons8.com/color/512/firebase.png"
+            className="rounded-full object-fit"
+            src="https://i.postimg.cc/T1VYdTCM/logo2.png"
             width={45}
             alt=""
           />

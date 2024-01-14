@@ -45,21 +45,21 @@ import { protect } from "../Controllers/authController.js";
 const router = express.Router();
 
 router.get("/getEmployee", protect, getEmployee);
-router.get("/getAllEmployee", protect, getAllEmployee);
+router.get("/getAllEmployee", getAllEmployee);
 router.post("/addEmployee", protect, addEmployee);
 router.patch("/editEmployee", protect, EditEmployee);
 router.delete("/deleteEmployee", protect, deleteEmployee);
 
 //Done
 router.get("/getTrainingHall", protect, getTrainingHall);
-router.get("/getAllTrainingHall", protect, getAllTrainingHall);
+router.get("/getAllTrainingHall", getAllTrainingHall);
 router.post("/addTrainingHall", protect, addTrainingHall);
 router.patch("/editTrainingHall", protect, EditTrainingHall);
 router.delete("/deleteTrainingHall", protect, deleteTrainingHall);
 
 //Done
 router.get("/getIncludedProgram", protect, getIncludedProgram);
-router.get("/getAllIncludedProgram", protect, getAllIncludedProgram);
+router.get("/getAllIncludedProgram", getAllIncludedProgram);
 router.post("/addIncludedProgram", protect, addIncludedProgram);
 router.patch("/editIncludedProgram", protect, EditIncludedProgram);
 router.delete(
@@ -70,7 +70,7 @@ router.delete(
 
 //Done
 router.get("/getImplementedProgram", protect, getImplementedProgram);
-router.get("/getAllImplementedProgram", protect, getAllImplementedProgram);
+router.get("/getAllImplementedProgram", getAllImplementedProgram);
 router.post("/addImplementedProgram", protect, addImplementedProgram);
 router.patch("/editImplementedProgram", protect, EditImplementedProgram);
 router.delete("/deleteImplementedProgram", protect, deleteImplementedProgram);
@@ -79,7 +79,7 @@ router.delete("/deleteImplementedProgram", protect, deleteImplementedProgram);
 router.get("/getRegistrationOfTrainee", protect, getRegistrationOfTrainee);
 router.get(
   "/getAllRegistrationOfTrainee",
-  protect,
+
   getAllRegistrationOfTrainee
 );
 router.post("/addRegistrationOfTrainee", protect, addRegistrationOfTrainee);
@@ -92,7 +92,7 @@ router.delete(
 
 //Done
 router.get("/getProgramEvaluation", protect, getProgramEvaluation);
-router.get("/getAllProgramEvaluation", protect, getAllProgramEvaluation);
+router.get("/getAllProgramEvaluation", getAllProgramEvaluation);
 router.post("/addProgramEvaluation", protect, addProgramEvaluation);
 router.patch("/editProgramEvaluation", protect, EditProgramEvaluation);
 router.delete("/deleteProgramEvaluation", protect, deleteProgramEvaluation);
