@@ -8,21 +8,21 @@ const PotoCarousel1 = () => (
       <Paper>
         <CardMedia
           component="img"
-          image="https://firebasestorage.googleapis.com/v0/b/project1-8af56.appspot.com/o/homePage.png?alt=media&token=4e5d4435-5167-4fb6-ab79-66f3a4c63bc0"
+          image="https://firebasestorage.googleapis.com/v0/b/masaqproject-74aaa.appspot.com/o/main.png?alt=media&token=d06a53ff-819e-493f-8d2e-bf308d8320ce"
           alt="home Page"
         />
       </Paper>
       <Paper>
         <CardMedia
           component="img"
-          image="https://firebasestorage.googleapis.com/v0/b/project1-8af56.appspot.com/o/loginpage.png?alt=media&token=9ca5d7c9-1601-430c-a02f-dd1f7f14fbf2"
+          image="https://firebasestorage.googleapis.com/v0/b/masaqproject-74aaa.appspot.com/o/signin.png?alt=media&token=e5867c46-bede-49fd-8002-4787be95fe60"
           alt="loginpage"
         />
       </Paper>
       <Paper>
         <CardMedia
           component="img"
-          image="https://firebasestorage.googleapis.com/v0/b/project1-8af56.appspot.com/o/unauthorized.png?alt=media&token=31c4a630-8516-4932-9e32-aaadcd3f3d3e"
+          image="https://firebasestorage.googleapis.com/v0/b/masaqproject-74aaa.appspot.com/o/UnAuth.png?alt=media&token=64c2d7dc-97fc-46c3-9cda-5579dbc976bf"
           alt="unauthorized"
         />
       </Paper>

@@ -8,14 +8,14 @@ const PotoCarousel3 = () => (
       <Paper>
         <CardMedia
           component="img"
-          image="https://firebasestorage.googleapis.com/v0/b/project1-8af56.appspot.com/o/homePage.png?alt=media&token=4e5d4435-5167-4fb6-ab79-66f3a4c63bc0"
+          image="https://firebasestorage.googleapis.com/v0/b/masaqproject-74aaa.appspot.com/o/main.png?alt=media&token=d06a53ff-819e-493f-8d2e-bf308d8320ce"
           alt="homePage"
         />
       </Paper>
       <Paper>
         <CardMedia
           component="img"
-          image="https://firebasestorage.googleapis.com/v0/b/project1-8af56.appspot.com/o/traineePage.png?alt=media&token=d75bb961-e5a3-4f19-8f64-26bb120a3409"
+          image="https://firebasestorage.googleapis.com/v0/b/masaqproject-74aaa.appspot.com/o/trainee.png?alt=media&token=58ef4676-8c07-44b3-ad4c-0bf7294e90e9"
           alt="traineePage"
         />
       </Paper>
